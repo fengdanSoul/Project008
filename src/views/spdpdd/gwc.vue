@@ -59,6 +59,15 @@
           </el-option>
         </el-select>
 
+        <el-date-picker class="filter-item right"
+                        style="width:160px"
+                        v-model="delivery_time"
+                        type="date"
+                        placeholder="配送日期"
+                        format="yyyy-MM-dd"
+                        value-format="yyyy-MM-dd"
+                        :picker-options="pickerOptions1">
+        </el-date-picker>
 
       </div>
 
@@ -86,8 +95,13 @@ export default {
       memberList: [
       ],
       member_id: '',
-      product_car_ids: ''
-
+      product_car_ids: '',
+      delivery_time: '',
+      pickerOptions1: {
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 8.64e7
+        }
+      }
     }
   },
   computed: {
@@ -190,11 +204,15 @@ export default {
         this.$message.error('请选择商品')
         return
       }
+      if (this.delivery_time.length <= 0) {
+        this.$message.error('请选择配送日期')
+        return
+      }
       if (this.member_id.length <= 0) {
         this.$message.error('请选择会员')
         return
       }
-      shopOrderAdd({ product_car_id: this.product_car_ids, member_id: this.member_id }).then(res => {
+      shopOrderAdd({ product_car_id: this.product_car_ids, member_id: this.member_id, delivery_time: this.delivery_time }).then(res => {
         this.$message.success('加单成功')
         this.init()
         this.vip_total_price = 0
