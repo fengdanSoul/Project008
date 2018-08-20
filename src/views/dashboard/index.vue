@@ -8,6 +8,7 @@
 import { mapGetters } from 'vuex'
 import adminDashboard from './admin'
 import editorDashboard from './editor'
+import { todayRemind } from '@/api/homeInfo'
 
 export default {
   name: 'dashboard',
@@ -18,13 +19,25 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'roles'
-    ])
+    ...mapGetters({
+      uuid: 'uuid',
+      token: 'token'
+    })
   },
   created() {
+    this.fetchData()
     if (!this.roles.includes('admin')) {
       this.currentRole = 'editorDashboard'
+    }
+  },
+  method: {
+    fetchData() {
+      todayRemind(this.uuid, this.token).then(response => {
+        const data = response.data
+        console.log(data)
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }

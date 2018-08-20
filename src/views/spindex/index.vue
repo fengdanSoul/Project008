@@ -135,6 +135,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import { todayRemind } from '@/api/homeInfo'
 export default {
   data() {
     return {
@@ -164,6 +166,28 @@ export default {
         details: '  由于双十一活动期间订单量的激增，配送时效会略受影响，您订购的商品我们会尽快为你配送，因此给您带来的不便深表歉意，敬请谅解。'
       }]
 
+    }
+  },
+  computed: {
+    ...mapGetters({
+      uuid: 'uuid',
+      token: 'token'
+    })
+  },
+  created() {
+    this.fetchData()
+    if (!this.roles.includes('admin')) {
+      this.currentRole = 'editorDashboard'
+    }
+  },
+  methods: {
+    fetchData() {
+      todayRemind(this.uuid, this.token).then(response => {
+        const data = response.data
+        console.log(data)
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }
