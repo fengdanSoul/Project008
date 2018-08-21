@@ -4,27 +4,34 @@
       今日提醒
     </p>
     <el-row :gutter='20'>
-
-      <el-col :span="6"  v-for="item in jrtxs">
+      <el-col :span="6" v-if="jrtxs.promotion_1">
         <el-card shadow="always">
           <div class="jrtx_box">
               <div class="jrtx_left">
-                    {{item.title}}
+                    {{jrtxs.promotion_1.title}}
               </div>
               <div class="jrtx_right">
-                    {{item.text}}
-
-
+                    {{jrtxs.promotion_1.content}}
               </div>
               <div class="clear_both">
-
               </div>
           </div>
         </el-card>
       </el-col>
-
-
-
+      <el-col :span="6" v-if="jrtxs.promotion_2">
+        <el-card shadow="always">
+          <div class="jrtx_box">
+            <div class="jrtx_left">
+              {{jrtxs.promotion_2.title}}
+            </div>
+            <div class="jrtx_right">
+              {{jrtxs.promotion_2.content}}
+            </div>
+            <div class="clear_both">
+            </div>
+          </div>
+        </el-card>
+      </el-col>
     </el-row>
 
     <p class="warn-content sp_title">
@@ -140,13 +147,7 @@ import { todayRemind } from '@/api/homeInfo'
 export default {
   data() {
     return {
-      jrtxs: [{
-        title: '预报公告',
-        text: '由于双十一活动期间订单量的激增，配送时效会略受影响，您订购的商品我们会尽快为你配送，因此给您带来的不便深表歉意，敬请谅解。'
-      }, {
-        title: '店铺促销',
-        text: '由于双十一活动期间订单量的激增，配送时效会略受影响，您订购的商品我们会尽快为你配送，因此给您带来的不便深表歉意，敬请谅解。'
-      }],
+      jrtxs: {},
       dfk_num: '6',
       dqd_num: '6',
       dfh_num: '6',
@@ -185,6 +186,7 @@ export default {
       todayRemind(this.uuid, this.token).then(response => {
         const data = response.data
         console.log(data)
+        this.jrtxs = data
       }).catch(error => {
         console.log(error)
       })
