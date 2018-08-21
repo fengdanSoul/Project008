@@ -63,14 +63,14 @@ export default {
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!isvalidUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+        callback(new Error('请输入正确用户名'))
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+        callback(new Error('密码不少于6位'))
       } else {
         callback()
       }
@@ -108,7 +108,7 @@ export default {
             this.loading = false
           })
         } else {
-          console.log('error submit!!')
+          console.log('登录出错')
           return false
         }
       })

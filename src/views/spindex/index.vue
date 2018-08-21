@@ -176,9 +176,9 @@ export default {
   },
   created() {
     this.fetchData()
-    if (!this.roles.includes('admin')) {
-      this.currentRole = 'editorDashboard'
-    }
+    // if (!this.roles.includes('admin')) {
+    //   this.currentRole = 'editorDashboard'
+    // }
   },
   methods: {
     fetchData() {
