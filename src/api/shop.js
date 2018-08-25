@@ -1,3 +1,4 @@
+// 商户
 import request from '@/utils/request'
 
 // 支付方式
@@ -8,3 +9,4 @@ export function payModify(query) {
     data: query
   })
 }
+

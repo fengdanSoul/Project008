@@ -46,7 +46,7 @@
         <el-card shadow="always">
           <div class="dcl_part a_hover_box">
             <p>待付款</p>
-            <span >({{dfk_num}})</span>
+            <span >({{orderInfo.wait_pay}})</span>
 
 
           </div>
@@ -61,8 +61,8 @@
 
         <el-card shadow="always">
           <div class="dcl_part a_hover_box">
-            <p>待确定</p>
-            <span>({{dqd_num}})</span>
+            <p>待确认</p>
+            <span>({{orderInfo.wait_affirm}})</span>
 
           </div>
         </el-card>
@@ -76,7 +76,7 @@
         <el-card shadow="always">
           <div class="dcl_part a_hover_box">
           <p>待发货</p>
-          <span>({{dfh_num}})</span>
+          <span>({{orderInfo.wait_send}})</span>
         </div>
         </el-card>
           <a class="a_hover" href="#"></a>
@@ -87,7 +87,7 @@
         <el-card shadow="always">
           <div class="dcl_part ">
           <p>待签收</p>
-          <span>({{dqs_num}})</span>
+          <span>({{orderInfo.wait_receive}})</span>
 
         </div>
         </el-card>
@@ -99,7 +99,7 @@
           <el-card shadow="always">
             <div class="dcl_part ">
             <p>已完成</p>
-            <span>({{ywc_num}})</span>
+            <span>({{orderInfo.wait_finish}})</span>
             <a class="a_hover" href="#"></a>
           </div>
           </el-card>
@@ -121,17 +121,17 @@
       :data="tableData"
       style="width: 100%">
       <el-table-column
-        prop="type"
+        prop="title"
         label="信息类型"
         width="180">
       </el-table-column>
       <el-table-column
-        prop="date"
+        prop="sort"
         label="日期"
         width="180">
       </el-table-column>
       <el-table-column
-        prop="details"
+        prop="content"
         label="信息详情">
       </el-table-column>
     </el-table>
@@ -143,50 +143,48 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { todayRemind } from '@/api/homeInfo'
+import { todayRemind, shopOrder, platformeminding } from '@/api/homeInfo'
 export default {
   data() {
     return {
       jrtxs: {},
-      dfk_num: '6',
-      dqd_num: '6',
-      dfh_num: '6',
-      dqs_num: '6',
-      ywc_num: '7',
-      tableData: [{
-        type: '系统升级',
-        date: '2018-08-09',
-        details: '  由于双十一活动期间订单量的激增，配送时效会略受影响，您订购的商品我们会尽快为你配送，因此给您带来的不便深表歉意，敬请谅解。'
-      }, {
-        type: '系统升级',
-        date: '2018-08-09',
-        details: '  由于双十一活动期间订单量的激增，配送时效会略受影响，您订购的商品我们会尽快为你配送，因此给您带来的不便深表歉意，敬请谅解。'
-      }, {
-        type: '系统升级',
-        date: '2018-08-09',
-        details: '  由于双十一活动期间订单量的激增，配送时效会略受影响，您订购的商品我们会尽快为你配送，因此给您带来的不便深表歉意，敬请谅解。'
-      }]
+      orderInfo: {},
+      tableData: []
 
     }
   },
   computed: {
     ...mapGetters({
-      uuid: 'uuid',
-      token: 'token'
+      role: 'role'
     })
   },
   created() {
     this.fetchData()
+    this.fetchShopOrder()
+    this.fetchRmeminding()
     // if (!this.roles.includes('admin')) {
     //   this.currentRole = 'editorDashboard'
     // }
   },
   methods: {
     fetchData() {
-      todayRemind(this.uuid, this.token).then(response => {
+      todayRemind().then(response => {
         const data = response.data
-        console.log(data)
         this.jrtxs = data
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    fetchShopOrder() {
+      shopOrder().then(response => {
+        this.orderInfo = response.data
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    fetchRmeminding() {
+      platformeminding(this.role).then(response => {
+        this.tableData.push(response.data)
       }).catch(error => {
         console.log(error)
       })

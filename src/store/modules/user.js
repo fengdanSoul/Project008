@@ -1,5 +1,8 @@
 import { login, logout, getInfo } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken,
+  getUUID, setUUID, removeUUID,
+  getRole, setRole, removeRole,
+  getShopId, setShopId, removeShopId } from '@/utils/auth'
 
 const user = {
   state: {
@@ -7,9 +10,9 @@ const user = {
     status: '',
     code: '',
     token: getToken(),
-    uuid: '',
-    shop_id: '',
-    role: 0,
+    uuid: getUUID(),
+    shop_id: getShopId(),
+    role: getRole(),
     name: '',
     avatar: '',
     introduction: '',
@@ -63,6 +66,9 @@ const user = {
         login(username, userInfo.password).then(response => {
           const data = response.data
           setToken(data.token)
+          setUUID(data.uuid)
+          setRole(data.role)
+          setShopId(data.shop_id)
           commit('SET_TOKEN', data.token)
           commit('SET_UUID', data.uuid)
           commit('SET_SHOPID', data.shop_id)
@@ -120,6 +126,7 @@ const user = {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           removeToken()
+          removeUUID()
           resolve()
         }).catch(error => {
           reject(error)
@@ -131,7 +138,13 @@ const user = {
     FedLogOut({ commit }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
+        commit('SET_UUID', '')
+        commit('SET_SHOPID', '')
+        commit('SET_ROLE', '')
         removeToken()
+        removeUUID()
+        removeRole()
+        removeShopId()
         resolve()
       })
     },

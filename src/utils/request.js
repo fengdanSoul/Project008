@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '../store'
-// import { getToken } from '@/utils/auth'
+import { getToken, getUUID } from '@/utils/auth'
 
 // 创建axios实例
 const service = axios.create({
@@ -14,6 +14,13 @@ const service = axios.create({
     let ret = ''
     for (var item in data) {
       ret += encodeURIComponent(item) + '=' + encodeURIComponent(data[item]) + '&'
+    }
+
+    if (store.getters.token) {
+      ret += 'token=' + getToken()
+    }
+    if (store.getters.uuid) {
+      ret += '&uuid=' + getUUID()
     }
     return ret
   }]
