@@ -6,7 +6,7 @@
         <span class="color_six top_label">店铺分类：</span>
         <el-input  style="width: 200px;" class="filter-item search_ipt" placeholder="">
         </el-input>
-        <el-button class="filter-item search_btn" type="primary" v-waves icon="el-icon-search" >搜索</el-button>
+        <el-button class="filter-item search_btn" type="primary" icon="el-icon-search" >搜索</el-button>
 
         <el-button class="filter-item right ggcxtjbtn add_btn" style="margin-left: 10px;" @click="dialogVisible = true"   type="primary" icon="el-icon-edit">创建店铺分类</el-button>
       </div>
@@ -14,9 +14,9 @@
       <el-table :data="tableData" border style="width: 100%">
         <el-table-column align='center' prop="id" label="ID" width="180">
         </el-table-column>
-        <el-table-column align='center' prop="grade" label="分类权重" width="180">
+        <el-table-column align='center' prop="sort" label="分类权重" width="180">
         </el-table-column>
-        <el-table-column align='center' prop="classname" label="分类名称">
+        <el-table-column align='center' prop="class_name" label="分类名称">
         </el-table-column>
 
         <el-table-column align='center' label="操作">
@@ -28,7 +28,7 @@
       </el-table>
 
       <div class="pagination-container">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[20, 30, 40, 50]" :page-size="20" layout="total, sizes, prev, pager, next, jumper" :total="count">
         </el-pagination>
       </div>
 
@@ -60,34 +60,46 @@
 </template>
 
 <script>
+import { shopList } from '@/api/adminUserManagement'
 export default {
   data() {
     return {
       dialogVisible: false,
       tableData: [
-        {
-          id: '1',
-          grade: '1',
-          classname: '生鲜牛奶'
-        },
-        {
-          id: '2',
-          grade: '1',
-          classname: '生鲜牛奶'
-        },
-        {
-          id: '3',
-          grade: '1',
-          classname: '生鲜牛奶'
-        }
-
       ],
       form: {
         standard: '',
         name: ''
       },
-      currentPage: '1'
-
+      currentPage: 1,
+      count: 0
+    }
+  },
+  created() {
+    this.fetchShopList()
+  },
+  methods: {
+    fetchShopList() {
+      shopList({ page: 1, like_name: '' }).then(response => {
+        const data = response.data
+        this.count = Number(data.count)
+        this.tableData = data.list
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`)
+    },
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done()
+        })
+        .catch(_ => {})
     }
   }
 

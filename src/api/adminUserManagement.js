@@ -1,9 +1,9 @@
 // admin
 import request from '@/utils/request'
 
-export function updatePassword(params) {
+export function shopList(params) {
   return request({
-    url: '/api/AdminLogin/setPassword',
+    url: '/api/AdminClasss/classsList',
     method: 'post',
     data: params
   })
