@@ -225,9 +225,16 @@ export default {
         remarks: '',
         address: ''
       },
-      currentPage: 1
-
+      count: 0,
+      page: 1,
+      member_level: '',
+      attestation_status: '',
+      district_id: '',
+      like_name: ''
     }
+  },
+  created() {
+    this.adminMemberList(1, '')
   },
   methods: {
     onSubmit() {
@@ -239,7 +246,6 @@ export default {
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg'
       const isLt2M = file.size / 1024 / 1024 < 2
-
       if (!isJPG) {
         this.$message.error('上传头像图片只能是 JPG 格式!')
       }
@@ -248,9 +254,7 @@ export default {
       }
       return isJPG && isLt2M
     }
-
   }
-
 }
 </script>
 
