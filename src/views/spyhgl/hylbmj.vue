@@ -25,7 +25,7 @@
           <span class="color_six top_label top_sslabel">会员状态：</span>
           <el-radio-group v-model="attestation_status" @change="selectAttestationStatus">
             <el-radio label="" border>全部</el-radio>
-            <el-radio label="0" border>待审核</el-radio>
+            <el-radio label="0" border>未激活</el-radio>
             <el-radio label="1" border>已激活</el-radio>
             <el-radio label="99" border>已冻结</el-radio>
           </el-radio-group>
@@ -65,20 +65,20 @@
         </el-table-column>
         <el-table-column align='center' prop="receiving_address" label="门店地址">
         </el-table-column>
-        <el-table-column align='center' label="等级">
-          <template slot-scope="props">
-            <el-select v-model="props.row.member_level" size="mini">
-              <el-option label="VIP" value="1"></el-option>
-              <el-option label="黄金" value="2"></el-option>
-              <el-option label="钻石" value="3"></el-option>
-            </el-select>
-          </template>
+        <el-table-column align='center' prop="district_name" label="区域">
+        </el-table-column>
+        <el-table-column align='center' prop="member_level" :formatter="formatMemberevel" label="等级">
+        </el-table-column>
+        <el-table-column align='center' prop="attestation_status" :formatter="formatAttestationStatus" label="状态">
         </el-table-column>
 
-        <el-table-column align='center' label="操作">
+        <el-table-column align='center' width="200" fixed="right" label="操作">
           <template slot-scope="scope">
-            <el-button type="primary" size="mini" @click="activeCurrentRow(scope.row)" >激活</el-button>
-            <el-button @click="editCurrentRow(scope.row)" type="text" size="mini">编辑</el-button>
+            <el-button type="text" size="mini" @click="activeCurrentRow(scope.$index)" >激活</el-button>
+            <el-button type="text" size="mini" @click="frozenCurrentRow(scope.$index)" >冻结</el-button>
+            <el-button type="text" size="mini" @click="editCurrentRow(scope.$index)">编辑</el-button>
+            <el-button type="danger" size="mini" @click="deleteCurrentRow(scope.$index)">删除</el-button>
+
           </template>
         </el-table-column>
       </el-table>
@@ -88,10 +88,13 @@
         </el-pagination>
       </div>
 
-      <el-dialog title="会员ID" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      <el-dialog title="会员信息编辑" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
 
         <div class="form_part center">
-          <el-form ref="form" :model="form" label-width="120px">
+          <el-form ref="form" :model="form" :rules="formRules" label-width="120px">
+            <el-form-item label="会员ID：">
+              <el-input v-model="form.id" disabled="false"></el-input>
+            </el-form-item>
             <el-form-item label="买家店铺名称：">
               <el-input v-model="form.shop_name"></el-input>
             </el-form-item>
@@ -115,8 +118,12 @@
 
             <el-form-item label="所在区域：">
               <el-select v-model="form.district_id" placeholder="请选择">
-                <el-option label="宝山区" value="1"></el-option>
-                <el-option label="徐汇区" value="2"></el-option>
+                <el-option
+                  v-for="item in districtList"
+                  :key="item.id"
+                  :label="item.district_name"
+                  :value="item.id">
+                </el-option>
               </el-select>
             </el-form-item>
 
@@ -129,7 +136,7 @@
             </el-form-item>
 
             <el-form-item>
-              <el-button type="primary" @click="dialogVisible = false">确认</el-button>
+              <el-button type="primary" @click="updateMember">确认</el-button>
               <el-button @click="dialogVisible = false">取消</el-button>
             </el-form-item>
 
@@ -144,7 +151,7 @@
 </template>
 
 <script>
-import { adminMemberList, shopDistrictList, adminMemberFlag, adminMemberDetails } from '@/api/adminUserManagement'
+import { adminMemberList, shopDistrictList, adminMemberFlag, adminMemberDelete, adminMemberModify } from '@/api/adminUserManagement'
 export default {
   data() {
     return {
@@ -153,15 +160,21 @@ export default {
       ],
       form: {
         sex: '',
-        phone: '',
         district_id: '',
         shop_name: '',
         member_name: '',
         member_mobile: '',
         member_level: '',
         receiving_address: '',
-        attestation_status: '',
         district_name: ''
+      },
+      formRules: {
+        district_id: [{ required: true, message: '选择所在区域' }],
+        shop_name: [{ required: true, message: '输入门店名称' }],
+        member_name: [{ required: true, message: '输入店主姓名' }],
+        member_mobile: [{ required: true, message: '输入联系电话' }],
+        member_level: [{ required: true, message: '选择会员等级' }],
+        receiving_address: [{ required: true, message: '输入收货地址' }]
       },
       count: 0,
       page: 1,
@@ -210,13 +223,28 @@ export default {
       this.dialogVisible = true
       this.form = this.tableData[index]
       // this.isAdd = false
-      adminMemberDetails()
+    },
+    deleteCurrentRow(index) {
+      const data = this.tableData[index]
+      this.$confirm('确认删除会员：' + data.member_name)
+        .then(_ => {
+          adminMemberDelete(data.id).then(response => {
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            })
+            this.adminMemberList(1, '', '', '', '')
+          }).catch(error => {
+            console.log(error)
+          })
+        })
+        .catch(_ => {})
     },
     activeCurrentRow(index) {
       const data = this.tableData[index]
       this.$confirm('确认激活')
         .then(_ => {
-          adminMemberFlag({ id: data.id, adminMemberFlag: data.member_level }).then(response => {
+          adminMemberFlag({ id: data.id, adminMemberFlag: 1 }).then(response => {
             this.$message({
               message: '激活成功',
               type: 'success'
@@ -228,30 +256,33 @@ export default {
         })
         .catch(_ => {})
     },
-    addAndUpdateData() {
-      if (this.isAdd) {
-        adminMemberDetails(this.form).then(response => {
-          this.dialogVisible = false
-          this.$message({
-            message: '创建店铺分类成功',
-            type: 'success'
+    frozenCurrentRow(index) {
+      const data = this.tableData[index]
+      this.$confirm('确认冻结')
+        .then(_ => {
+          adminMemberFlag({ id: data.id, adminMemberFlag: 99 }).then(response => {
+            this.$message({
+              message: '激活成功',
+              type: 'success'
+            })
+            this.adminMemberList(1, '', '', '', '')
+          }).catch(error => {
+            console.log(error)
           })
-          this.fetchShopList(1, '')
-        }).catch(error => {
-          console.log(error)
         })
-      } else {
-        adminMemberDetails(this.form).then(response => {
-          this.dialogVisible = false
-          this.$message({
-            message: '修改店铺分类成功',
-            type: 'success'
-          })
-          this.fetchShopList(1, '')
-        }).catch(error => {
-          console.log(error)
+        .catch(_ => {})
+    },
+    updateMember() {
+      adminMemberModify(this.form).then(response => {
+        this.dialogVisible = false
+        this.$message({
+          message: '修改会员信息成功',
+          type: 'success'
         })
-      }
+        this.adminMemberList(1, '', '', '', '')
+      }).catch(error => {
+        console.log(error)
+      })
     },
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`)
@@ -280,6 +311,16 @@ export default {
         return '黄金'
       } else if (row.member_level === '3') {
         return '钻石'
+      }
+      return '未知'
+    },
+    formatAttestationStatus(row) {
+      if (row.attestation_status === '0') {
+        return '未激活'
+      } else if (row.member_level === '1') {
+        return '已激活'
+      } else if (row.member_level === '99') {
+        return '已冻结'
       }
       return '未知'
     }

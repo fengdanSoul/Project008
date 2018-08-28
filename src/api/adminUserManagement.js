@@ -99,3 +99,20 @@ export function adminMemberFlag(params) {
     data: params
   })
 }
+// 店铺会员删除
+export function adminMemberDelete(id) {
+  return request({
+    url: '/api/AdminMember/adminMemberDelete',
+    method: 'post',
+    data: { id: id }
+  })
+}
+// 店铺会员编辑
+export function adminMemberModify(params) {
+  return request({
+    url: '/api/AdminMember/adminMemberModify',
+    method: 'post',
+    data: params
+  })
+}
+

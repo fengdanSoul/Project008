@@ -6,7 +6,10 @@
 //   const valid_map = ['admin', 'editor']
 //   return valid_map.indexOf(str.trim()) >= 0
 // }
-
+export function isPhone(str) {
+  const regex = /^1[1-9]{10}$/
+  return regex.test(str)
+}
 export function isvalidUsername(str) {
   const regex = /^[a-zA-Z0-9]{5,20}$/
   return regex.test(str)
