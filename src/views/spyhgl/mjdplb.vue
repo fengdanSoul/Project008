@@ -4,55 +4,75 @@
     <div class="filter-container">
       <div class="bg_white serchadd">
         <span class="color_six top_label">店铺管理员列表</span>
-        <el-input  style="width: 200px;" class="filter-item search_ipt" placeholder="">
+        <el-input  style="width: 200px;" class="filter-item search_ipt" v-model="like_name" placeholder="">
         </el-input>
-        <el-button class="filter-item search_btn" type="primary" v-waves icon="el-icon-search" >搜索</el-button>
+        <el-button class="filter-item search_btn" type="primary"  @click="searchData" icon="el-icon-search" >搜索</el-button>
 
-        <el-button class="filter-item right ggcxtjbtn add_btn" style="margin-left: 10px;"  type="primary" icon="el-icon-edit">创建店铺管理员</el-button>
+        <!--<el-button class="filter-item right ggcxtjbtn add_btn" style="margin-left: 10px;"  type="primary" icon="el-icon-edit">创建店铺管理员</el-button>-->
 
       </div>
       <div class="bg_white ss_box">
 
         <div class="ss_part">
           <span class="color_six top_label top_sslabel">管理员状态：</span>
-          <el-button type="primary">全部</el-button>
-          <el-button>未激活</el-button>
-          <el-button>已激活</el-button>
-          <el-button>已冻结</el-button>
+          <el-radio-group v-model="attestation_status" @change="selectAttestationStatus">
+            <el-radio label="" border>全部</el-radio>
+            <el-radio label="0" border>未激活</el-radio>
+            <el-radio label="1" border>已激活</el-radio>
+            <el-radio label="99" border>已冻结</el-radio>
+          </el-radio-group>
         </div>
 
       </div>
 
+      <!--"role": "2",-->
+      <!--"class_id": "3",-->
+      <!--"district_id": "5002",-->
+      <!--"company_name": "",-->
+      <!--"admin_name": "",-->
+      <!--"shop_type": "1",-->
+      <!--"shop_mobile": "",-->
+      <!--"start_money": "0.00",-->
+      <!--"business_scope": "",-->
+      <!--"shop_address": "",-->
+      <!--"shop_img": "",-->
+      <!--"business_img": "",-->
+      <!--"attestation_status": "1",-->
+      <!--"create_time": "2018-08-05 12:49:08",-->
+      <!--"district_name": "上海徐汇",-->
+      <!--"class_name": "豆汁食品"-->
       <el-table :data="tableData" border style="width: 100%">
-        <el-table-column align='center' prop="date" label="注册时间" >
+        <el-table-column align='center' prop="create_time" label="注册时间" >
         </el-table-column>
-        <el-table-column align='center' prop="id" label="管理员ID" >
+        <el-table-column align='center' prop="class_id" label="管理员ID" >
         </el-table-column>
-        <el-table-column align='center' prop="shopname" label="门店铺名称" >
+        <el-table-column align='center' prop="company_name" label="门店铺名称" >
         </el-table-column>
-        <el-table-column align='center' prop="shopkeeper" label="店铺管理员" >
+        <el-table-column align='center' prop="admin_name" label="店铺管理员" >
         </el-table-column>
-        <el-table-column align='center' prop="storepro" label="店铺性质" >
+        <el-table-column align='center' prop="class_name" label="店铺性质" >
         </el-table-column>
-        <el-table-column align='center' prop="phone" label="联系方式" >
+        <el-table-column align='center' prop="shop_mobile" label="联系方式" >
         </el-table-column>
-        <el-table-column align='center' prop="address" label="公司地址">
+        <el-table-column align='center' prop="shop_address" label="公司地址">
+        </el-table-column>
+        <el-table-column align='center' prop="attestation_status" :formatter="formatAttestationStatus" label="状态">
         </el-table-column>
         <el-table-column align='center' label="操作">
           <template slot-scope="scope">
-                <el-button type="primary" size="mini" @click="dialogVisible = true" >编辑</el-button>
-                <el-button type="danger" size="mini" >删除</el-button>
+            <el-button type="text" size="mini" @click="editCurrentRow(scope.$index)">编辑</el-button>
+            <el-button type="danger" size="mini" @click="deleteCurrentRow(scope.$index)">删除</el-button>
             </template>
         </el-table-column>
         <el-table-column align='center' label="状态操作">
           <template slot-scope="scope">
-                <el-button type="success" size="mini" >激活</el-button>
-            </template>
+            <el-button type="success" size="mini" @click="dealAttestationStatus(scope.$index)" >{{scope.row.attestation_status === '1' ? '冻结' : '激活'}}</el-button>
+           </template>
         </el-table-column>
       </el-table>
 
       <div class="pagination-container">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+        <el-pagination @current-change="handleCurrentChange" :current-page="page"  :page-size="10" layout="total, prev, pager, next, jumper" :total="count">
         </el-pagination>
       </div>
 
@@ -147,72 +167,12 @@
 </template>
 
 <script>
+import { adminShopList, adminShopDelete, adminShopFlag } from '@/api/adminUserManagement'
 export default {
   data() {
     return {
       dialogVisible: false,
       tableData: [
-        {
-          date: '2018-08-13',
-          id: '1',
-          shopname: '生活专送',
-          shopkeeper: '李嘻嘻',
-          storepro: '日配',
-          phone: '14565845452',
-          address: '上海市徐汇区45号',
-          grade: 'VIP'
-        },
-        {
-          date: '2018-08-13',
-          id: '1',
-          shopname: '生活专送',
-          shopkeeper: '李嘻嘻',
-          storepro: '日配',
-          phone: '14565845452',
-          address: '上海市徐汇区45号',
-          grade: 'VIP'
-        },
-        {
-          date: '2018-08-13',
-          id: '1',
-          shopname: '生活专送',
-          shopkeeper: '李嘻嘻',
-          storepro: '日配',
-          phone: '14565845452',
-          address: '上海市徐汇区45号',
-          grade: 'VIP'
-        },
-        {
-          date: '2018-08-13',
-          id: '1',
-          shopname: '生活专送',
-          shopkeeper: '李嘻嘻',
-          storepro: '日配',
-          phone: '14565845452',
-          address: '上海市徐汇区45号',
-          grade: 'VIP'
-        },
-        {
-          date: '2018-08-13',
-          id: '1',
-          shopname: '生活专送',
-          shopkeeper: '李嘻嘻',
-          storepro: '日配',
-          phone: '14565845452',
-          address: '上海市徐汇区45号',
-          grade: 'VIP'
-        },
-        {
-          date: '2018-08-13',
-          id: '1',
-          shopname: '生活专送',
-          shopkeeper: '李嘻嘻',
-          storepro: '日配',
-          phone: '14565845452',
-          address: '上海市徐汇区45号',
-          grade: 'VIP'
-        }
-
       ],
       form: {
         storename: '',
@@ -227,16 +187,130 @@ export default {
       },
       count: 0,
       page: 1,
-      member_level: '',
       attestation_status: '',
-      district_id: '',
       like_name: ''
     }
   },
   created() {
-    this.adminMemberList(1, '')
+    this.fectchAdminShopList(1, '', '')
   },
   methods: {
+    fectchAdminShopList(page, attestation_status, like_name) {
+      adminShopList({ page, attestation_status, like_name }).then(response => {
+        const data = response.data
+        this.count = Number(data.count)
+        this.tableData = data.list
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    selectAttestationStatus() {
+      this.like_name = ''
+      this.fectchAdminShopList(1, this.attestation_status, '')
+    },
+    editCurrentRow(index) {
+      this.dialogVisible = true
+      this.form = this.tableData[index]
+      // this.isAdd = false
+    },
+    deleteCurrentRow(index) {
+      const data = this.tableData[index]
+      this.$confirm('确认删除会员：' + data.company_name)
+        .then(_ => {
+          adminShopDelete(data.shop_id).then(response => {
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            })
+            this.page = 1
+            this.fectchAdminShopList(1, '', '')
+          }).catch(error => {
+            console.log(error)
+          })
+        })
+        .catch(_ => {})
+    },
+    dealAttestationStatus(index) {
+      const data = this.tableData[index]
+      if (data.attestation_status === '1') {
+        this.frozenCurrentRow(index)
+      } else {
+        this.activeCurrentRow(index)
+      }
+    },
+    activeCurrentRow(index) {
+      const data = this.tableData[index]
+      this.$confirm('确认激活')
+        .then(_ => {
+          adminShopFlag({ shop_id: data.shop_id, attestation_status: 1 }).then(response => {
+            this.$message({
+              message: '激活成功',
+              type: 'success'
+            })
+            this.page = 1
+            this.fectchAdminShopList(1, '', '')
+          }).catch(error => {
+            console.log(error)
+          })
+        })
+        .catch(_ => {})
+    },
+    frozenCurrentRow(index) {
+      const data = this.tableData[index]
+      this.$confirm('确认冻结')
+        .then(_ => {
+          adminShopFlag({ shop_id: data.shop_id, attestation_status: 99 }).then(response => {
+            this.$message({
+              message: '冻结成功',
+              type: 'success'
+            })
+            this.page = 1
+            this.fectchAdminShopList(1, '', '')
+          }).catch(error => {
+            console.log(error)
+          })
+        })
+        .catch(_ => {})
+    },
+    updateMember() {
+      // adminMemberModify(this.form).then(response => {
+      //   this.dialogVisible = false
+      //   this.$message({
+      //     message: '修改会员信息成功',
+      //     type: 'success'
+      //   })
+      //   this.page = 1
+      //   this.fectchAdminShopList(1, '', '')
+      // }).catch(error => {
+      //   console.log(error)
+      // })
+    },
+    handleCurrentChange(val) {
+      // console.log(`当前页: ${val}`)
+      this.fectchAdminShopList(val, '', this.like_name)
+    },
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done()
+        })
+        .catch(_ => {})
+    },
+    searchData() {
+      this.attestation_status = ''
+      this.page = 1
+      this.fectchAdminShopList(1, '', this.like_name)
+    },
+    formatAttestationStatus(row) {
+      if (row.attestation_status === '0') {
+        return '未激活'
+      } else if (row.attestation_status === '1') {
+        return '已激活'
+      } else if (row.attestation_status === '99') {
+        return '已冻结'
+      }
+      return '未知'
+    },
     onSubmit() {
       console.log('submit!')
     },

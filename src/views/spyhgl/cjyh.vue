@@ -7,7 +7,7 @@
     <div class="bg_white">
       <hr>
       <div class="form_part center">
-        <el-form ref="form" :rules="formRules"  :model="form" label-width="100px">
+        <el-form ref="form" :rules="formRules"  :model="form" label-width="130px">
           <el-form-item label="手机号" prop="phone">
             <el-input v-model="form.phone"></el-input>
           </el-form-item>

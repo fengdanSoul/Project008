@@ -115,4 +115,27 @@ export function adminMemberModify(params) {
     data: params
   })
 }
-
+// 卖家店铺列表
+export function adminShopList(params) {
+  return request({
+    url: '/api/AdminShop/adminShopList',
+    method: 'post',
+    data: params
+  })
+}
+// 卖家店铺删除
+export function adminShopDelete(id) {
+  return request({
+    url: '/api/AdminShop/adminShopDelete',
+    method: 'post',
+    data: { shop_id: id }
+  })
+}
+// 卖家店铺管理
+export function adminShopFlag(params) {
+  return request({
+    url: '/api/AdminShop/adminShopFlag',
+    method: 'post',
+    data: params
+  })
+}

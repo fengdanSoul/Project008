@@ -8,7 +8,7 @@
         </el-input>
         <el-button class="filter-item search_btn" type="primary" @click="searchData" icon="el-icon-search" >搜索</el-button>
 
-        <el-button class="filter-item right ggcxtjbtn add_btn"  @click="dialogVisible = true" style="margin-left: 10px;"  type="primary" icon="el-icon-edit">创建会员</el-button>
+        <!--<el-button class="filter-item right ggcxtjbtn add_btn"  @click="dialogVisible = true" style="margin-left: 10px;"  type="primary" icon="el-icon-edit">创建会员</el-button>-->
 
       </div>
       <div class="bg_white ss_box">
@@ -88,7 +88,7 @@
         </el-pagination>
       </div>
 
-      <el-dialog title="会员信息编辑" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      <el-dialog title="店铺信息" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
 
         <div class="form_part center">
           <el-form ref="form" :model="form" :rules="formRules" label-width="120px">
@@ -209,6 +209,7 @@ export default {
     },
     selectMemberLever() {
       this.like_name = ''
+      this.page = 1
       this.adminMemberList(1, this.member_level, this.attestation_status, this.district_id, '')
     },
     selectAttestationStatus() {
@@ -217,6 +218,7 @@ export default {
     },
     selectDistrictName() {
       this.like_name = ''
+      this.page = 1
       this.adminMemberList(1, this.member_level, this.attestation_status, this.district_id, '')
     },
     editCurrentRow(index) {
@@ -233,6 +235,7 @@ export default {
               message: '删除成功',
               type: 'success'
             })
+            this.page = 1
             this.adminMemberList(1, '', '', '', '')
           }).catch(error => {
             console.log(error)
@@ -244,11 +247,12 @@ export default {
       const data = this.tableData[index]
       this.$confirm('确认激活')
         .then(_ => {
-          adminMemberFlag({ id: data.id, adminMemberFlag: 1 }).then(response => {
+          adminMemberFlag({ id: data.id, attestation_status: 1 }).then(response => {
             this.$message({
               message: '激活成功',
               type: 'success'
             })
+            this.page = 1
             this.adminMemberList(1, '', '', '', '')
           }).catch(error => {
             console.log(error)
@@ -260,11 +264,12 @@ export default {
       const data = this.tableData[index]
       this.$confirm('确认冻结')
         .then(_ => {
-          adminMemberFlag({ id: data.id, adminMemberFlag: 99 }).then(response => {
+          adminMemberFlag({ id: data.id, attestation_status: 99 }).then(response => {
             this.$message({
-              message: '激活成功',
+              message: '冻结成功',
               type: 'success'
             })
+            this.page = 1
             this.adminMemberList(1, '', '', '', '')
           }).catch(error => {
             console.log(error)
@@ -279,6 +284,7 @@ export default {
           message: '修改会员信息成功',
           type: 'success'
         })
+        this.page = 1
         this.adminMemberList(1, '', '', '', '')
       }).catch(error => {
         console.log(error)
@@ -299,6 +305,7 @@ export default {
       this.member_level = ''
       this.attestation_status = ''
       this.district_id = ''
+      this.page = 1
       this.adminMemberList(1, '', '', '', this.like_name)
     },
     formatSex(row) {
@@ -317,9 +324,9 @@ export default {
     formatAttestationStatus(row) {
       if (row.attestation_status === '0') {
         return '未激活'
-      } else if (row.member_level === '1') {
+      } else if (row.attestation_status === '1') {
         return '已激活'
-      } else if (row.member_level === '99') {
+      } else if (row.attestation_status === '99') {
         return '已冻结'
       }
       return '未知'

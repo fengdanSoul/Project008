@@ -8,29 +8,36 @@
       <hr>
 
       <div class="form_part center">
-          <el-form ref="form"  :model="form" label-width="100px">
+          <el-form ref="form" :rules="formRules" :model="form" label-width="100px">
 
-            <el-form-item label="平台商品分类">
-              <el-select v-model="form.storeclass" placeholder="请选择分类">
-                <el-option label="牛奶1" value="1"></el-option>
-                <el-option label="牛奶2" value="2"></el-option>
+            <el-form-item label="平台商品分类" prop="category_id">
+              <el-select v-model="form.category_id" placeholder="请选择" @change="selectDistrictName">
+                <el-option
+                  v-for="item in categoryList"
+                  :key="item.id"
+                  :label="item.category_name"
+                  :value="item.id">
+                </el-option>
               </el-select>
             </el-form-item>
 
-            <el-form-item label="平台商品品牌">
-              <el-select v-model="form.brandclass" placeholder="请选择">
-                <el-option label="伊利" value="1"></el-option>
-                <el-option label="蒙牛" value="2"></el-option>
-                <el-option label="光明" value="3"></el-option>
+            <el-form-item label="平台商品品牌" prop="brand_id">
+              <el-select v-model="form.brand_id" placeholder="请选择">
+                <el-option
+                  v-for="item in brandList"
+                  :key="item.id"
+                  :label="item.brand_name"
+                  :value="item.id">
+                </el-option>
               </el-select>
             </el-form-item>
 
-            <el-form-item label="商品名称">
-              <el-input v-model="form.name"></el-input>
+            <el-form-item label="商品名称" prop="product_name">
+              <el-input v-model="form.product_name"></el-input>
             </el-form-item>
 
-            <el-form-item label="详情描述">
-              <el-input type="textarea" v-model="form.details"></el-input>
+            <el-form-item label="详情描述" prop="product_description">
+              <el-input type="textarea" v-model="form.product_description"></el-input>
             </el-form-item>
 
             <div class="part_top">
@@ -47,11 +54,11 @@
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
             <br/><br/>
-            <el-form-item>
-              <el-button type="primary" @click="onSubmit">创建</el-button>
-              <el-button>取消</el-button>
-             </el-form-item>
 
+            <el-form-item>
+              <el-button type="primary" :loading="loading" @click="submitForm('form')">创建</el-button>
+              <el-button @click="resetForm('form')">重置</el-button>
+            </el-form-item>
 
           </el-form>
       </div>
@@ -62,20 +69,82 @@
 </template>
 
 <script>
+  import { productSpuAdd, brandList, categoryList } from '@/api/adminGoodsDB'
   export default {
     data() {
       return {
         form: {
-          storeclass: '',
-          brandclass: '',
-          name: '',
-          details: ''
-        }
+          category_id: '',
+          brand_id: '',
+          product_name: '',
+          product_img: '',
+          product_code: '',
+          product_description: ''
+        },
+        formRules: {
+          category_id: [{ required: true, message: '选择商品类型' }],
+          brand_id: [{ required: true, message: '选择品牌类型' }],
+          product_name: [{ required: true, message: '输入商品名称' }],
+          product_img: [{ required: true, message: '添加商品图片' }],
+          // product_code: [{ required: true, message: '输入商品编码' }],
+          product_description: [{ required: true, message: '输入商品描述' }]
+        },
+        brandList: [],
+        categoryList: [],
+        loading: false
       }
     },
+    created() {
+      this.fetchBrandList()
+      this.fetchCategoryList()
+    },
     methods: {
-      onSubmit() {
-        console.log('submit!')
+      fetchBrandList() {
+        brandList({ page: 0, like_name: '' }).then(response => {
+          const data = response.data
+          this.brandList = data.list
+        }).catch(error => {
+          console.log(error)
+        })
+      },
+      fetchCategoryList() {
+        categoryList({ page: 0, like_name: '' }).then(response => {
+          const data = response.data
+          this.categoryList = data.list
+        }).catch(error => {
+          console.log(error)
+        })
+      },
+      submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.loading = true
+            productSpuAdd(this.form).then(response => {
+              const data = response
+              this.loading = false
+              if (data.status === 'ok') {
+                this.resetForm(formName)
+                this.$message({
+                  message: data.message,
+                  type: 'success',
+                  duration: 2 * 1000
+                })
+              }
+            }).catch(error => {
+              this.$message({
+                message: error,
+                type: 'error',
+                duration: 2.5 * 1000
+              })
+              this.loading = false
+            })
+          } else {
+            return false
+          }
+        })
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields()
       },
       handleAvatarSuccess(res, file) {
         this.imageUrl = URL.createObjectURL(file.raw)
