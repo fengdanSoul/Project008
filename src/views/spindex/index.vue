@@ -225,8 +225,6 @@ export default {
   padding-right: 20px
 
 }
-
-
   .el-row {
     margin-bottom: 20px;
     &:last-child {

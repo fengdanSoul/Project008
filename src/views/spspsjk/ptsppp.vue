@@ -68,10 +68,10 @@
             <hr style="margin-bottom:18px">
             <el-upload
               class="avatar-uploader"
-              action="https://life.tstmobile.com/api/UploadImage/uploadDisplayImage"
+              action=""
               :show-file-list="false"
               :accept="accepts"
-              :data="imgForm"
+              :http-request="uploadImage"
               :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload">
               <img v-if="imageUrl" :src="imageUrl" class="avatar">
@@ -99,6 +99,8 @@
 
 <script>
   import { brandList, brandAdd, brandModify, brandDelete } from '@/api/adminGoodsDB'
+  import { uploadDisplayImage } from '@/api/upload'
+
   export default {
     data() {
       return {
@@ -212,19 +214,18 @@
         this.imageUrl = URL.createObjectURL(file.raw)
       },
       beforeAvatarUpload(file) {
-        // const isJPG = file.type === 'image/jpeg'
         const isLt2M = file.size / 1024 / 1024 < 2
-
-        // if (!isJPG) {
-        //   this.$message.error('上传头像图片只能是 JPG 格式!')
-        // }
         if (!isLt2M) {
           this.$message.error('上传头像图片大小不能超过 2MB!')
         }
-        if (isLt2M) {
-          this.imgForm.img = file
-        }
         return isLt2M
+      },
+      uploadImage(params) {
+        uploadDisplayImage(params.file).then(response => {
+          console.log(response)
+        }).catch(error => {
+          console.log(error)
+        })
       },
       formateFHotlag(row) {
         return row.hot_flag === '1' ? '是' : '否'
