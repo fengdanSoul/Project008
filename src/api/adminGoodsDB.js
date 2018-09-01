@@ -1,5 +1,15 @@
 // admin
 import request from '@/utils/request'
+
+// 所有店铺商品列表
+export function productSkuAllList(params) {
+  return request({
+    url: '/api/AdminProduct/productSkuAllList',
+    method: 'post',
+    data: params
+  })
+}
+
 // 平台品牌列表
 export function brandList(params) {
   return request({

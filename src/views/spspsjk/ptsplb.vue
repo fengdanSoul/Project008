@@ -14,14 +14,14 @@
       <div class="bg_white ss_box">
         <div class="ss_part">
           <span class="color_six top_label top_sslabel">平台商品分类：</span>
-          <el-radio-group v-model="brand_id" @change="selectBrandId" size="small">
+          <el-radio-group v-model="category_id" @change="selectBrandId" size="small">
             <el-radio label="" border>全部</el-radio>
             <el-radio v-for="item in categoryList" :label="item.id" border>{{item.category_name}}</el-radio>
           </el-radio-group>
         </div>
         <div class="ss_part">
           <span class="color_six top_label top_sslabel">平台商品品牌：</span>
-          <el-radio-group v-model="category_id" @change="selectCategoryId" size="small">
+          <el-radio-group v-model="brand_id" @change="selectCategoryId" size="small">
             <el-radio label="" border>全部</el-radio>
             <el-radio v-for="item in brandList" :label="item.id" border>{{item.brand_name}}</el-radio>
           </el-radio-group>

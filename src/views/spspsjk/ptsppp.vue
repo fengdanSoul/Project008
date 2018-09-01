@@ -46,6 +46,9 @@
               <el-select v-model="form.sort" placeholder="请选择">
                 <el-option label="1" value="1"></el-option>
                 <el-option label="2" value="2"></el-option>
+                <el-option label="3" value="3"></el-option>
+                <el-option label="4" value="4"></el-option>
+                <el-option label="5" value="5"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="热门推荐：">
@@ -65,8 +68,10 @@
             <hr style="margin-bottom:18px">
             <el-upload
               class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              action=""
               :show-file-list="false"
+              :accept="accepts"
+              :http-request="uploadImage"
               :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload">
               <img v-if="imageUrl" :src="imageUrl" class="avatar">
@@ -94,12 +99,16 @@
 
 <script>
   import { brandList, brandAdd, brandModify, brandDelete } from '@/api/adminGoodsDB'
+  import { uploadDisplayImage } from '@/api/upload'
+
   export default {
     data() {
       return {
         dialogVisible: false,
         isAdd: true,
         loading: false,
+        accepts: 'image/jpeg,image/jpg,image/png,image/gif',
+        imageUrl: '',
         tableData: [
         ],
         form: {
@@ -107,6 +116,9 @@
           hot_flag: '',
           sort: 1,
           brand_img: ''
+        },
+        imgForm: {
+          img: ''
         },
         formRules: {
           sort: [{ required: true, message: '选择分类权重' }],
@@ -202,16 +214,18 @@
         this.imageUrl = URL.createObjectURL(file.raw)
       },
       beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg'
         const isLt2M = file.size / 1024 / 1024 < 2
-
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!')
-        }
         if (!isLt2M) {
           this.$message.error('上传头像图片大小不能超过 2MB!')
         }
-        return isJPG && isLt2M
+        return isLt2M
+      },
+      uploadImage(params) {
+        uploadDisplayImage(params.file).then(response => {
+          console.log(response)
+        }).catch(error => {
+          console.log(error)
+        })
       },
       formateFHotlag(row) {
         return row.hot_flag === '1' ? '是' : '否'
