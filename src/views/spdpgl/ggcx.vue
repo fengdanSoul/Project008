@@ -20,7 +20,7 @@
     </div>
 
     <el-table :data="tableData" border style="width: 100%">
-      <el-table-column align='center' prop="id" label="创建时间">
+      <el-table-column align='center' prop="create_time" label="创建时间">
       </el-table-column>
       <el-table-column align='center' prop="sort" label="权重">
       </el-table-column>

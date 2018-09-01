@@ -21,8 +21,10 @@
         </el-table-column>
 
         <el-table-column align='center' prop="img" label="品牌图片" width="180">
+          <template slot-scope="scope">
+            <img :src="scope.row.brand_img" alt="img" width="50" height="50">
+          </template>
         </el-table-column>
-
         <el-table-column align='center' prop="brand_name" label="分类名称">
         </el-table-column>
 
@@ -41,8 +43,8 @@
 
       <el-dialog title="创建品牌" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
         <div class="form_part center">
-          <el-form ref="form" :model="form" label-width="130px">
-            <el-form-item label="品牌权重：">
+          <el-form ref="form" :rules="formRules" :model="form" label-width="130px">
+            <el-form-item label="品牌权重：" prop="sort">
               <el-select v-model="form.sort" placeholder="请选择">
                 <el-option label="1" value="1"></el-option>
                 <el-option label="2" value="2"></el-option>
@@ -51,40 +53,39 @@
                 <el-option label="5" value="5"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="热门推荐：">
+            <el-form-item label="热门推荐：" prop="hot_flag">
               <el-select v-model="form.hot_flag" placeholder="请选择">
                 <el-option label="是" value="1"></el-option>
                 <el-option label="否" value="0"></el-option>
               </el-select>
             </el-form-item>
 
-            <el-form-item label="品牌名称：">
+            <el-form-item label="品牌名称：" prop="brand_name">
               <el-input v-model="form.brand_name"></el-input>
             </el-form-item>
 
-            <div class="part_top">
-                <p class="color_zywz">品牌图片</p>
-            </div>
-            <hr style="margin-bottom:18px">
-            <el-upload
-              class="avatar-uploader"
-              action=""
-              :show-file-list="false"
-              :accept="accepts"
-              :http-request="uploadImage"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload">
-              <img v-if="imageUrl" :src="imageUrl" class="avatar">
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
+            <el-form-item label="品牌图片：" prop="brand_img">
+              <el-upload
+                class="avatar-uploader"
+                action=""
+                :http-request="uploadImage"
+                :show-file-list="false"
+                :accept="accepts"
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeAvatarUpload">
+                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+            </el-form-item>
+
+            <!--action="http://life.tstmobile.com/api/UploadImage/uploadDisplayImage"-->
+            <!--:http-request="uploadImage"-->
 
 
             <el-form-item>
               <el-button type="primary" @click="addAndUpdateData">确认</el-button>
               <el-button @click="dialogVisible = false">取消</el-button>
             </el-form-item>
-
-
 
           </el-form>
         </div>
@@ -116,9 +117,6 @@
           hot_flag: '',
           sort: 1,
           brand_img: ''
-        },
-        imgForm: {
-          img: ''
         },
         formRules: {
           sort: [{ required: true, message: '选择分类权重' }],
@@ -172,29 +170,33 @@
           .catch(_ => {})
       },
       addAndUpdateData() {
-        if (this.isAdd) {
-          brandAdd(this.form).then(response => {
-            this.dialogVisible = false
-            this.$message({
-              message: '创建商品品牌成功',
-              type: 'success'
-            })
-            this.fetchShopList(1, '')
-          }).catch(error => {
-            console.log(error)
-          })
-        } else {
-          brandModify(this.form).then(response => {
-            this.dialogVisible = false
-            this.$message({
-              message: '修改商品品牌成功',
-              type: 'success'
-            })
-            this.fetchShopList(1, '')
-          }).catch(error => {
-            console.log(error)
-          })
-        }
+        this.$refs.form.validate(valid => {
+          if (valid) {
+            if (this.isAdd) {
+              brandAdd(this.form).then(response => {
+                this.dialogVisible = false
+                this.$message({
+                  message: '创建商品品牌成功',
+                  type: 'success'
+                })
+                this.fetchShopList(1, '')
+              }).catch(error => {
+                console.log(error)
+              })
+            } else {
+              brandModify(this.form).then(response => {
+                this.dialogVisible = false
+                this.$message({
+                  message: '修改商品品牌成功',
+                  type: 'success'
+                })
+                this.fetchShopList(1, '')
+              }).catch(error => {
+                console.log(error)
+              })
+            }
+          }
+        })
       },
       handleCurrentChange(val) {
         // console.log(`当前页: ${val}`)
@@ -221,8 +223,12 @@
         return isLt2M
       },
       uploadImage(params) {
-        uploadDisplayImage(params.file).then(response => {
-          console.log(response)
+        console.log(params)
+        const form = new FormData()
+        // 后端接受参数 ，可以接受多个参数
+        form.append('file', params.file)
+        uploadDisplayImage(form).then(response => {
+          this.$set(this.form, 'brand_img', response.data)
         }).catch(error => {
           console.log(error)
         })
