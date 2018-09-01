@@ -93,7 +93,7 @@
                   <el-button type='primary' class="right" style='margin-left:10px'>创建商品</el-button>
                 </a>
                 <a :href="'#/spspgl/dgsplb/'+ item.product_spu_id">
-                  <el-button type='primary' class="right" style='margin-left:10px'>查看</el-button>
+                  <el-button type='primary' class="right" style='margin-left:10px' :disabled="item.shop_product_count === 0">查看</el-button>
                 </a>
 
                 <div class="clear">

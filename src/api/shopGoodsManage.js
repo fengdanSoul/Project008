@@ -29,7 +29,7 @@ export function shopProductAdd(params) {
 // 店铺商品详情规格列表(基于平台spu)
 export function shopProductSpuSkuList(params) {
   return request({
-    url: '/api//ShopProductSku/shopProductSpuSkuList',
+    url: '/api/ShopProductSku/shopProductSpuSkuList',
     method: 'post',
     data: params
   })

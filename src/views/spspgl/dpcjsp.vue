@@ -6,7 +6,7 @@
     </div>
     <hr>
     <div class="form_part center">
-      <el-form ref="form" :rules="formRules" :model="form" label-width="130px" :disabled="true">
+      <el-form ref="form" :rules="formRules" :model="form" label-width="130px" >
         <el-form-item label="店铺商品分类" prop="shop_category_id">
           <el-select v-model="form.shop_category_id" placeholder="请选择分类">
             <el-option v-for="item in categoryList" :label="item.category_name" :value="item.id" :key="item.id"></el-option>
@@ -115,7 +115,6 @@ export default {
         start_day: '',
         remark: '',
         promotion_msg: ''
-
       },
       formRules: {
         shop_category_id: [

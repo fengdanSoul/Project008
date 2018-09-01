@@ -72,7 +72,7 @@ export function shopOrderCancel(params) {
   })
 }
 // 店铺订单支付
-export function shopOrderPay(params) {
+export function shopOrderPay(params) { // order_id	pay_type:1	pay_method:alipay:支付宝;bank:银行卡
   return request({
     url: '/api/ShopOrder/shopOrderPay',
     method: 'post',
