@@ -9,7 +9,7 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
     proxyTable: {
       '/api': {    //将www.exaple.com印射为/apis
         target: 'https://life.tstmobile.com',  // 接口域名
@@ -75,7 +75,7 @@ module.exports = {
      * then assetsPublicPath should be set to "/bar/".
      * In most cases please use '/' !!!
      */
-    assetsPublicPath: '/vue-element-admin/', // If you are deployed on the root path, please use '/'
+    assetsPublicPath: './', // If you are deployed on the root path, please use '/'
 
     /**
      * Source Maps
