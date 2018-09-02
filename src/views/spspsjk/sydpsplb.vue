@@ -15,14 +15,14 @@
           <span class="color_six top_label top_sslabel">平台商品分类：</span>
           <el-radio-group v-model="category_id" @change="selectGoods" size="small">
             <el-radio label="" border>全部</el-radio>
-            <el-radio v-for="item in categoryList" :label="item.id" border>{{item.category_name}}</el-radio>
+            <el-radio v-for="item in categoryList" :key="item.id" :label="item.id" border>{{item.category_name}}</el-radio>
           </el-radio-group>
         </div>
         <div class="ss_part">
           <span class="color_six top_label top_sslabel">平台商品品牌：</span>
           <el-radio-group v-model="brand_id" @change="selectGoods" size="mini">
             <el-radio label="" border>全部</el-radio>
-            <el-radio v-for="item in brandList" :label="item.id" border>{{item.brand_name}}</el-radio>
+            <el-radio v-for="item in brandList" :key="item.id" :label="item.id" border>{{item.brand_name}}</el-radio>
           </el-radio-group>
         </div>
         <div class="ss_part">
@@ -38,13 +38,13 @@
           <span class="color_six top_label top_sslabel">店铺筛选：</span>
           <el-radio-group v-model="shop_id" @change="selectGoods" size="mini">
             <el-radio label="" border>全部</el-radio>
-            <el-radio v-for="item in shopList" :label="item.shop_id" border>{{item.company_name}}</el-radio>
+            <el-radio v-for="item in shopList" :key="item.shop_id" :label="item.shop_id" border>{{item.company_name}}</el-radio>
           </el-radio-group>
         </div>
       </div>
 
       <el-row :gutter="20">
-        <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" v-for='item in tableData' class="splb_box" >
+        <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" v-for='item in tableData' :key="item.id" class="splb_box" >
           <div class="gwcsp_box box_shadow">
               <div class="spcheck">
                 <p class="ptsmbh">商品编码：{{item.auxiliary_code}}

@@ -71,9 +71,8 @@
                 :http-request="uploadImage"
                 :show-file-list="false"
                 :accept="accepts"
-                :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                <img v-if="form.brand_img" :src="form.brand_img" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
             </el-form-item>
@@ -100,7 +99,7 @@
 
 <script>
   import { brandList, brandAdd, brandModify, brandDelete } from '@/api/adminGoodsDB'
-  import { uploadDisplayImage } from '@/api/upload'
+  import { uploadProductImage } from '@/api/upload'
 
   export default {
     data() {
@@ -212,9 +211,6 @@
       searchData() {
         this.fetchShopList(1, this.like_name)
       },
-      handleAvatarSuccess(res, file) {
-        this.imageUrl = URL.createObjectURL(file.raw)
-      },
       beforeAvatarUpload(file) {
         const isLt2M = file.size / 1024 / 1024 < 2
         if (!isLt2M) {
@@ -223,11 +219,7 @@
         return isLt2M
       },
       uploadImage(params) {
-        console.log(params)
-        const form = new FormData()
-        // 后端接受参数 ，可以接受多个参数
-        form.append('file', params.file)
-        uploadDisplayImage(form).then(response => {
+        uploadProductImage(params.file).then(response => {
           this.$set(this.form, 'brand_img', response.data)
         }).catch(error => {
           console.log(error)

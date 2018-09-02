@@ -16,11 +16,25 @@
       </div>
       <div  class="ss_part">
         <span  class="color_six top_label">时间范围：</span>
-        <el-date-picker class="filter-item" style="width:160px" v-model="start_time" type="date" placeholder="开始时间">
+        <el-date-picker class="filter-item"
+                        style="width:160px"
+                        v-model="start_time"
+                        type="date"
+                        placeholder="开始时间"
+                        format="yyyy-MM-dd"
+                        value-format="yyyy-MM-dd">
         </el-date-picker>
         <span class="color_zwwz">至</span>
-        <el-date-picker class="filter-item" style="width:160px" v-model="end_time" type="date" placeholder="结束时间">
+        <el-date-picker class="filter-item"
+                        style="width:160px"
+                        v-model="end_time"
+                        type="date"
+                        format="yyyy-MM-dd"
+                        value-format="yyyy-MM-dd"
+                        placeholder="结束时间">
         </el-date-picker>
+        <el-button  class="filter-item" type="primary" @click="checkWithDate" align="top">查询</el-button>
+        <el-button class="filter-item" @click="resetDate" align="top">重置</el-button>
       </div>
     </div>
 
@@ -49,8 +63,10 @@
       </el-table-column>
       <el-table-column align='center' label="操作">
         <template slot-scope="scope">
-              <el-button type="primary" size="mini" @click="handleDealFlag(scope.row.id)" :disabled="scope.row.deal_flag === '1'">{{scope.row.deal_flag === '1' ? '已处理' : '处理'}}</el-button>
-          </template>
+          <el-button type="primary" size="mini" @click="handleDealFlag(scope.row.id)" :disabled="scope.row.deal_flag === '1'">{{scope.row.deal_flag === '1' ? '已处理' : '处理'}}</el-button>
+          <el-button type="danger" size="mini" @click="handleDelete(scope.row.id)" >删除</el-button>
+
+        </template>
       </el-table-column>
     </el-table>
 
@@ -118,9 +134,41 @@
         this.page = 1
         this.fectchFeedbackList('', '', '', this.like_name, this.page)
       },
+      checkWithDate() {
+        if (!this.start_time.length) {
+          this.$message.error('请选择开始日期')
+          return
+        }
+        if (!this.end_time.length) {
+          this.$message.error('请选择截止日期')
+          return
+        }
+        this.page = 1
+        this.fectchFeedbackList(this.start_time, this.end_time, this.deal_flag, this.like_name, this.page)
+      },
+      resetDate() {
+        this.start_time = ''
+        this.end_time = ''
+        this.page = 1
+        this.fectchFeedbackList(this.start_time, this.end_time, this.deal_flag, this.like_name, this.page)
+      },
       selectDealFlag() {
         this.page = 1
-        this.fectchFeedbackList('', '', this.deal_flag, this.like_name, this.page)
+        this.fectchFeedbackList(this.start_time, this.end_time, this.deal_flag, this.like_name, this.page)
+      },
+      handleDelete(id) {
+        this.$confirm('确认删除？').then(_ => {
+          feedbackDelete({ id }).then(response => {
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            })
+            this.page = 1
+            this.fectchFeedbackList(this.start_time, this.end_time, this.deal_flag, this.like_name, this.page)
+          }).catch(error => {
+            console.log(error)
+          })
+        })
       },
       handleDealFlag(id) {
         feedbackFlag({ id, dealFlag: 1 }).then(response => {
@@ -129,65 +177,9 @@
             type: 'success'
           })
           this.page = 1
-          this.fectchShopMessageList(1)
+          this.fectchFeedbackList(this.start_time, this.end_time, this.deal_flag, this.like_name, this.page)
         }).catch(error => {
           console.log(error)
-        })
-      },
-      selectPromotionType() {
-        this.fectchFeedbackList('', '', '', '')
-      },
-      editCurrentRow(index) {
-        this.dialogVisible = true
-        this.form = this.tableData[index]
-        this.isAdd = false
-      },
-      deleteCurrentRow(index) {
-        const data = this.tableData[index]
-        this.$confirm('确认删除促销信息：')
-          .then(_ => {
-            feedbackDelete({ id: data.id }).then(response => {
-              this.$message({
-                message: '删除成功',
-                type: 'success'
-              })
-              this.page = 1
-              this.fectchShopMessageList(1)
-            }).catch(error => {
-              console.log(error)
-            })
-          })
-          .catch(_ => {})
-      },
-      onSubmit() {
-        this.$refs.form.validate(valid => {
-          if (valid) {
-            // if (this.isAdd) {
-            //   shopMessageAdd(this.form).then(response => {
-            //     this.dialogVisible = false
-            //     this.$message({
-            //       message: '添加促销公告成功',
-            //       type: 'success'
-            //     })
-            //     this.page = 1
-            //     this.fectchShopMessageList(1)
-            //   }).catch(error => {
-            //     console.log(error)
-            //   })
-            // } else {
-            //   shopMessageModify(this.form).then(response => {
-            //     this.dialogVisible = false
-            //     this.$message({
-            //       message: '修改促销公告成功',
-            //       type: 'success'
-            //     })
-            //     this.page = 1
-            //     this.fectchShopMessageList(1)
-            //   }).catch(error => {
-            //     console.log(error)
-            //   })
-            // }
-          }
         })
       },
       handleCurrentChange(val) {

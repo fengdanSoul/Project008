@@ -6,24 +6,28 @@
         <el-input  style="width: 200px;" v-model="like_name" class="filter-item search_ipt" placeholder="">
         </el-input>
         <el-button class="filter-item search_btn" type="primary" @click="searchData" icon="el-icon-search" >搜索</el-button>
-
-        <el-button class="filter-item right ggcxtjbtn add_btn" style="margin-left: 10px;"  type="primary" icon="el-icon-edit">创建平台商品</el-button>
-
+        <!--#/spspsjk/ptcjsp-->
+        <!--<el-button class="filter-item right ggcxtjbtn add_btn" style="margin-left: 10px;"  type="primary" icon="el-icon-edit">创建平台商品</el-button>-->
+        <!--<el-menu class="el-menu-demo right"  router>-->
+          <!--<el-menu-item index="ptcjsp">-->
+            <!--<el-button class="filter-item right ggcxtjbtn add_btn" style="margin-left: 10px;"  type="primary" icon="el-icon-edit">创建平台商品</el-button>-->
+          <!--</el-menu-item>-->
+        <!--</el-menu>-->
       </div>
 
       <div class="bg_white ss_box">
         <div class="ss_part">
           <span class="color_six top_label top_sslabel">平台商品分类：</span>
-          <el-radio-group v-model="category_id" @change="selectBrandId" size="small">
+          <el-radio-group v-model="category_id" @change="selectCategoryId" size="small">
             <el-radio label="" border>全部</el-radio>
-            <el-radio v-for="item in categoryList" :label="item.id" border>{{item.category_name}}</el-radio>
+            <el-radio v-for="item in categoryList" :label="item.id" border :key="item.id">{{item.category_name}}</el-radio>
           </el-radio-group>
         </div>
         <div class="ss_part">
           <span class="color_six top_label top_sslabel">平台商品品牌：</span>
-          <el-radio-group v-model="brand_id" @change="selectCategoryId" size="small">
+          <el-radio-group v-model="brand_id" @change="selectBrandId" size="small">
             <el-radio label="" border>全部</el-radio>
-            <el-radio v-for="item in brandList" :label="item.id" border>{{item.brand_name}}</el-radio>
+            <el-radio v-for="item in brandList" :label="item.id" border :key="item.id">{{item.brand_name}}</el-radio>
           </el-radio-group>
         </div>
         <div class="ss_part">
@@ -58,7 +62,7 @@
       <!--"/uploads///image/20180803/be74d5f7cc7b134fe701c628948a8982.jpg"-->
       <!--]-->
       <el-row :gutter="20">
-        <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" v-for='item in tableData' class="splb_box" >
+        <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" v-for='item in tableData' :key="item.id" class="splb_box" >
           <div class="gwcsp_box box_shadow">
               <div class="spcheck">
                 <p class="ptsmbh">商品编码：{{item.product_code}}
@@ -281,6 +285,9 @@
         this.product_flag = ''
         this.page = 1
         this.fetchProductSpuList(1, '', '', '', this.like_name)
+      },
+      activeIndex() {
+        return this.$route.path.replace('/', '#/spspsjk/ptcjsp')
       }
     }
 

@@ -8,10 +8,10 @@
       <hr>
 
       <div class="form_part center">
-          <el-form ref="form" :rules="formRules" :model="form" label-width="100px">
+          <el-form ref="form" :rules="formRules" :model="form" label-width="130px">
 
             <el-form-item label="平台商品分类" prop="category_id">
-              <el-select v-model="form.category_id" placeholder="请选择" @change="selectDistrictName">
+              <el-select v-model="form.category_id" placeholder="请选择">
                 <el-option
                   v-for="item in categoryList"
                   :key="item.id"
@@ -35,25 +35,38 @@
             <el-form-item label="商品名称" prop="product_name">
               <el-input v-model="form.product_name"></el-input>
             </el-form-item>
+            <el-form-item label="商品编码" prop="product_code">
+              <el-input v-model="form.product_code"></el-input>
+            </el-form-item>
 
             <el-form-item label="详情描述" prop="product_description">
               <el-input type="textarea" v-model="form.product_description"></el-input>
             </el-form-item>
 
-            <div class="part_top">
-                <p class="color_zywz">商品照片</p>
-            </div>
-            <hr style="margin-bottom:18px">
-            <el-upload
-              class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload">
-              <img v-if="imageUrl" :src="imageUrl" class="avatar">
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
-            <br/><br/>
+            <el-form-item label="商品照片" prop="product_img">
+              <!--<el-upload-->
+                <!--class="avatar-uploader"-->
+                <!--accept="image/jpeg,image/jpg,image/png,image/gif"-->
+                <!--action=""-->
+                <!--:show-file-list="false"-->
+                <!--:before-upload="beforeAvatarUpload">-->
+                <!--<img v-if="form.product_img" :src="form.product_img" class="avatar">-->
+                <!--<i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+              <!--</el-upload>-->
+
+              <el-upload
+                class="upload-demo"
+                accept="image/jpeg,image/jpg,image/png,image/gif"
+                action=""
+                :http-request="uploadImage"
+                :on-remove="handleRemove"
+                :before-upload="beforeAvatarUpload"
+                :file-list="fileList"
+                list-type="picture">
+                <el-button size="small" type="success">点击上传图片</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传小于2M的图片文件</div>
+              </el-upload>
+            </el-form-item>
 
             <el-form-item>
               <el-button type="primary" :loading="loading" @click="submitForm('form')">创建</el-button>
@@ -70,6 +83,8 @@
 
 <script>
   import { productSpuAdd, brandList, categoryList } from '@/api/adminGoodsDB'
+  import { uploadDisplayImage } from '@/api/upload'
+
   export default {
     data() {
       return {
@@ -86,11 +101,15 @@
           brand_id: [{ required: true, message: '选择品牌类型' }],
           product_name: [{ required: true, message: '输入商品名称' }],
           product_img: [{ required: true, message: '添加商品图片' }],
-          // product_code: [{ required: true, message: '输入商品编码' }],
+          product_code: [{ required: true, message: '输入商品编码' }],
           product_description: [{ required: true, message: '输入商品描述' }]
         },
         brandList: [],
         categoryList: [],
+        fileList: [
+        ],
+        fileUrlList: [
+        ],
         loading: false
       }
     },
@@ -145,21 +164,37 @@
       },
       resetForm(formName) {
         this.$refs[formName].resetFields()
-      },
-      handleAvatarSuccess(res, file) {
-        this.imageUrl = URL.createObjectURL(file.raw)
+        this.fileList = []
       },
       beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg'
         const isLt2M = file.size / 1024 / 1024 < 2
-
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!')
-        }
         if (!isLt2M) {
           this.$message.error('上传头像图片大小不能超过 2MB!')
         }
-        return isJPG && isLt2M
+        return isLt2M
+      },
+      handleRemove(file, fileList) {
+        this.fileList = fileList
+        this.fileUrlList = this.fileUrlList.filter(t => {
+          return t.uid !== file.uid
+        })
+        this.setBrandImg()
+      },
+      uploadImage(params) {
+        uploadDisplayImage(params.file).then(response => {
+          this.fileList.push(params.file)
+          this.fileUrlList.push({ name: params.file.name, uid: params.file.uid, url: response.data })
+          this.setBrandImg()
+        }).catch(error => {
+          console.log(error)
+        })
+      },
+      setBrandImg() {
+        var arr = []
+        this.fileUrlList.forEach(item => {
+          arr.push(item.url)
+        })
+        this.$set(this.form, 'product_img', arr.join(';'))
       }
 
     }

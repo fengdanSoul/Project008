@@ -2,26 +2,50 @@
   <div class="app-container">
     <div class="filter-container ">
       <el-row :gutter="20">
-        <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" v-for='item in gwcsps' >
+        <!--"product_car_id": "1",-->
+        <!--"product_spu_id": "17",-->
+        <!--"shop_product_sku_id": "1",-->
+        <!--"shop_id": "9",-->
+        <!--"member_id": "0",-->
+        <!--"product_number": "3",-->
+        <!--"product_name": "蒙牛牛奶",-->
+        <!--"product_description": "中国第一好牛奶",-->
+        <!--"brand_id": "1",-->
+        <!--"category_id": "19",-->
+        <!--"shop_category_id": "25",-->
+        <!--"start_day": "88",-->
+        <!--"remark": "要进行冷藏保存",-->
+        <!--"promotion_msg": "买五送一",-->
+        <!--"product_code": "2018080611",-->
+        <!--"product_specification": "180g*10",-->
+        <!--"auxiliary_code": "2018080611",-->
+        <!--"inventory": "3000",-->
+        <!--"vip_price": "30.00",-->
+        <!--"gold_price": "28.00",-->
+        <!--"diamond_price": "26.00",-->
+        <!--"this_vip_total_price": 90,-->
+        <!--"this_gold_total_price": 84,-->
+        <!--"this_diamond_total_price": 78,-->
+        <!--"product_img":-->
+        <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" :key="item.shop_product_sku_id" v-for='item in products' >
           <div class="gwcsp_box box_shadow">
               <div class="spcheck">
-                <el-checkbox v-model="item.checked">商品编码：{{item.comcode}}/辅助码：{{item.addcode}}</el-checkbox>
-
+                <el-checkbox v-model="item.checked">商品编码：{{item.product_code}}/辅助码：{{item.auxiliary_code}}</el-checkbox>
               </div>
 
               <hr>
               <div class="comimgtitie">
                   <div class="comimg left">
-                    <img :src="item.src" alt="商品图片">
+                    <img :src="item.product_img[0]" alt="商品图片">
                   </div>
                   <div class="comtitle right">
                       <p>
-                        {{item.name}}
+                        {{item.product_name}}
                       </p>
-                      <p class="color_six">单价：￥{{item.price}}</p>
-                      <p class="color_six">库存数量：{{item.stock}}</p>
+                      <p class="color_six">VIP单价：￥{{item.vip_price}}</p>
+                      <p class="color_six">库存数量：{{item.inventory}}</p>
 
-                      <el-input-number style="width:150px; margin-top:10px" v-model="item.num"  :min="1" :max="10" label="描述文字"></el-input-number>
+                      <el-input-number style="width:150px; margin-top:10px" v-model="item.product_number"  :min="1" :max="100" label="描述文字"></el-input-number>
                   </div>
                   <div class="clear">
 
@@ -29,7 +53,7 @@
               </div>
               <hr>
               <div class="spamount">
-                  <span class="amtspan">金额：￥ {{item.subtatol}}</span>
+                  <span class="amtspan">金额：￥ {{item.this_vip_total_price}}</span>
                   <el-button class="right" >删除
                   </el-button>
                   <div class="clear">
@@ -47,7 +71,7 @@
             删除
         </el-button>
 
-        <span style="margin-left:50px">合计：{{tatol}}</span>
+        <span style="margin-left:50px">合计：{{vip_total_price}}</span>
 
         <el-button type='primary' class="right">加单</el-button>
         <el-select v-model="value" placeholder="请绑定会员" class="right" style="margin-right:10px">
@@ -68,55 +92,17 @@
 </template>
 
 <script>
+import { shopProductCarList } from '@/api/shopCart'
 export default {
   data() {
     return {
-      tatol: '9999.99',
+      count: '',
+      product_total_count: '',
+      vip_total_price: '',
+      gold_total_price: '',
+      diamond_total_price: '',
       checked: true,
-      gwcsps: [{
-        checked: true,
-        comcode: '20180811',
-        addcode: '20180812',
-        src: 'https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png',
-        name: '(1月121批次)光明莫斯利安钻石装简装200g',
-        price: '20.00',
-        stock: '999',
-        subtatol: '9999.99',
-        num: '1'
-      },
-      {
-        checked: true,
-        comcode: '20180811',
-        addcode: '20180812',
-        src: 'https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png',
-        name: '(1月121批次)光明莫斯利安钻石装简装200g',
-        price: '20.00',
-        stock: '999',
-        subtatol: '9999.99',
-        num: '1'
-      },
-      {
-        checked: true,
-        comcode: '20180811',
-        addcode: '20180812',
-        src: 'https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png',
-        name: '(1月121批次)光明莫斯利安钻石装简装200g',
-        price: '20.00',
-        stock: '999',
-        subtatol: '9999.99',
-        num: '1'
-      },
-      {
-        checked: true,
-        comcode: '20180811',
-        addcode: '20180812',
-        src: 'https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png',
-        name: '(1月121批次)光明莫斯利安钻石装简装200g',
-        price: '20.00',
-        stock: '999',
-        subtatol: '9999.99',
-        num: '1'
-      }
+      products: [
       ],
       options: [{
         value: '1',
@@ -136,6 +122,16 @@ export default {
       }],
       value: ''
 
+    }
+  },
+  created() {
+    this.fetchProductCarList()
+  },
+  methods: {
+    fetchProductCarList() {
+      shopProductCarList().then(response => {
+        this.products = response.data.list
+      })
     }
   }
 }

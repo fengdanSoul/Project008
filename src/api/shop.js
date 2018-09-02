@@ -1,6 +1,21 @@
 // 商户
 import request from '@/utils/request'
-
+// 店铺信息
+export function shopDetails(query) {
+  return request({
+    url: '/api/Shop/shopDetails',
+    method: 'post',
+    data: query
+  })
+}
+// 店铺信息修改
+export function shopModify(query) {
+  return request({
+    url: '/api/Shop/shopModify',
+    method: 'post',
+    data: query
+  })
+}
 // 支付方式
 export function payModify(query) {
   return request({

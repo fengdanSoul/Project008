@@ -159,9 +159,25 @@ export const constantRouterMap = [
       {
         path: 'ptsplb',
         component: () => import('@/views/spspgl/ptsplb'),
-        name: 'ptsplb',
+        name: 'sp-ptsplb',
         meta: {
           title: '平台商品列表'
+        }
+      },
+      {
+        path: 'dpsysplb',
+        component: () => import('@/views/spspgl/dpsysplb'),
+        name: 'dpsysplb',
+        meta: {
+          title: '店铺所有商品列表'
+        }
+      },
+      {
+        path: 'dpspfl',
+        component: () => import('@/views/spspgl/dpspfl'),
+        name: 'dpspfl',
+        meta: {
+          title: '店铺商品分类'
         }
       },
       {
@@ -186,22 +202,6 @@ export const constantRouterMap = [
         name: 'dpspxq',
         meta: {
           title: '店铺商品详情'
-        }
-      },
-      {
-        path: 'dpsysplb',
-        component: () => import('@/views/spspgl/dpsysplb'),
-        name: 'dpsysplb',
-        meta: {
-          title: '店铺所有商品列表'
-        }
-      },
-      {
-        path: 'dpspfl',
-        component: () => import('@/views/spspgl/dpspfl'),
-        name: 'dpspfl',
-        meta: {
-          title: '店铺商品分类'
         }
       }
     ]
