@@ -5,17 +5,27 @@
     <breadcrumb class="breadcrumb-container"></breadcrumb>
 
     <div class="right-menu">
-      <error-log class="errLog-container right-menu-item"></error-log>
+      <!--<error-log class="errLog-container right-menu-item"></error-log>-->
+
+      <div class="right-menu-item">
+        <el-badge :value="cartTotalQuantity" :max="99" class="item">
+          <el-button @click="gotoCart" type="text">
+            <svg-icon icon-class="cart" style="width: 28px;height: 28px;"></svg-icon>
+          </el-button>
+        </el-badge>
+      </div>
 
       <el-tooltip effect="dark" :content="$t('navbar.screenfull')" placement="bottom">
         <screenfull class="screenfull right-menu-item"></screenfull>
       </el-tooltip>
 
+      <!--<svg-icon :icon-class="cart"></svg-icon>-->
+
       <!--<lang-select class="international right-menu-item"></lang-select>-->
 
-      <el-tooltip effect="dark" :content="$t('navbar.theme')" placement="bottom">
-        <theme-picker class="theme-switch right-menu-item"></theme-picker>
-      </el-tooltip>
+      <!--<el-tooltip effect="dark" :content="$t('navbar.theme')" placement="bottom">-->
+        <!--<theme-picker class="theme-switch right-menu-item"></theme-picker>-->
+      <!--</el-tooltip>-->
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
@@ -50,7 +60,6 @@ import ErrorLog from '@/components/ErrorLog'
 import Screenfull from '@/components/Screenfull'
 import LangSelect from '@/components/LangSelect'
 import ThemePicker from '@/components/ThemePicker'
-
 export default {
   components: {
     Breadcrumb,
@@ -64,7 +73,8 @@ export default {
     ...mapGetters([
       'sidebar',
       'name',
-      'avatar'
+      'avatar',
+      'cartTotalQuantity'
     ])
   },
   methods: {
@@ -75,6 +85,10 @@ export default {
       this.$store.dispatch('FedLogOut').then(() => {
         location.reload()// In order to re-instantiate the vue-router object to avoid bugs
       })
+    },
+    gotoCart() {
+      // this.$router.push({ name: 'spgwc' })
+      this.$router.push({ path: '/spdpdd/spgwc' })
     }
   }
 }

@@ -1,4 +1,4 @@
-import { shopProductCarAdd } from '@/api/shopCart'
+// import { shopProductCarAdd } from '@/api/shopCart'
 
 // initial state
 const state = {
@@ -11,9 +11,9 @@ const getters = {}
 // actions
 const actions = {
   getAllProducts({ commit }) {
-    shopProductCarAdd(products => {
-      commit('setProducts', products)
-    })
+    // shopProductCarAdd(products => {
+    //   commit('setProducts', products)
+    // })
   }
 }
 

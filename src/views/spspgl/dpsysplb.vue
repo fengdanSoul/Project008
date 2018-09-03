@@ -41,26 +41,30 @@
         </div>
       </div>
 
-      <!--"id": "16",-->
-      <!--"product_name": "伊利牛奶",-->
-      <!--"product_description": "中国第一好牛奶",-->
-      <!--"product_code": "20180804000",-->
-      <!--"brand_id": "2",-->
-      <!--"shop_category_id": "20",-->
-      <!--"sort": "1",-->
-      <!--"sku_flag": "1",-->
-      <!--"audit_flag": "1",-->
-      <!--"delete_flag": "1",-->
-      <!--"create_time": "2018-08-04 11:58:46",-->
-      <!--"update_time": "0000-00-00 00:00:00",-->
-      <!--"brand_name": "品牌2",-->
-      <!--"category_name": "分类二",-->
-      <!--"product_img":-->
-      <!--[-->
-      <!--"/uploads///image/20180803/be74d5f7cc7b134fe701c628948a8982.jpg",-->
-      <!--"/uploads///image/20180803/be74d5f7cc7b134fe701c628948a8982.jpg",-->
-      <!--"/uploads///image/20180803/be74d5f7cc7b134fe701c628948a8982.jpg"-->
-      <!--]-->
+      <!--product_spu_id	23-->
+      <!--shop_prdouct_info_id	6-->
+      <!--shop_product_sku_id	55-->
+      <!--product_name	光明优酸乳-->
+      <!--product_description	中国第一好牛奶光明优酸乳-->
+      <!--brand_id	2-->
+      <!--category_id	20-->
+      <!--brand_name	品牌2-->
+      <!--category_name	分类二-->
+      <!--shop_id	9-->
+      <!--company_name	光明支公司-->
+      <!--shop_category_id	21-->
+      <!--start_day	0-->
+      <!--remark	生产日期2018.8.1-->
+      <!--promotion_msg	扫码享优惠-->
+      <!--shop_category_name	碳酸饮料-->
+      <!--product_code	11111-->
+      <!--product_specification	330ml*6-->
+      <!--auxiliary_code	2222-->
+      <!--inventory	100-->
+      <!--vip_price	12.00-->
+      <!--gold_price	13.00-->
+      <!--diamond_price	14.00-->
+      <!--sku_flag	0-->
       <el-row :gutter="20">
         <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" v-for='item in tableData' :key="item.id" class="splb_box" >
           <div class="gwcsp_box box_shadow">
@@ -80,11 +84,17 @@
                 <img :src="item.imgData[0]" alt="商品图片">
               </div>
               <div class="comtitle right">
-                <p>
-                  {{item.product_name}}
-                </p>
-                <p class="color_six">商品详情：{{item.product_description}}</p>
+                <el-row>
+                  <el-col>VIP：{{item.vip_price}}</el-col>
+                  <el-col>黄金：{{item.gold_price}}</el-col>
+                  <el-col>钻石：{{item.diamond_price}}</el-col>
+                  <el-col>库存数量：{{item.inventory}}</el-col>
+                </el-row>
+                  <el-button class="right" @click="addProductToCart(item)" type="text" style="margin-right: 30px">
+                    <svg-icon icon-class="cart" style="width: 28px;height: 28px;"></svg-icon>
+                  </el-button>
               </div>
+
               <div class="clear">
               </div>
             </div>
@@ -123,9 +133,9 @@
 
 </template>
 <script>
+  import { mapActions } from 'vuex'
   import { shopCategoryList } from '@/api/shopGoodsManage'
   import { shopProductSkuAllList } from '@/api/shopGoodsManage'
-
   import { brandList, productSpuDelete, productSpuFlag, productSpuModify } from '@/api/adminGoodsDB'
   export default {
     data() {
@@ -166,6 +176,7 @@
       this.fetchCategoryList()
     },
     methods: {
+      ...mapActions(['addProductToCart']),
       fetchProductSpuList(page, shop_category_id, brand_id, sku_flag, like_name) {
         shopProductSkuAllList({ page, shop_category_id, brand_id, sku_flag, like_name }).then(response => {
           const data = response.data

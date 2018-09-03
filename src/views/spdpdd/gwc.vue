@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { shopProductCarList } from '@/api/shopCart'
+import shopCart from '@/api/shopCart'
 export default {
   data() {
     return {
@@ -129,7 +129,7 @@ export default {
   },
   methods: {
     fetchProductCarList() {
-      shopProductCarList().then(response => {
+      shopCart.shopProductCarList().then(response => {
         this.products = response.data.list
       })
     }
