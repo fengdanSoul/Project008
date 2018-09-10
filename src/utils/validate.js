@@ -7,7 +7,7 @@
 //   return valid_map.indexOf(str.trim()) >= 0
 // }
 export function isPhone(str) {
-  const regex = /^1[1-9]{10}$/
+  const regex = /^1[123456789]\d{9}$/
   return regex.test(str)
 }
 export function isvalidUsername(str) {
