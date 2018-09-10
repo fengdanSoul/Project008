@@ -27,10 +27,10 @@
         <!--"this_gold_total_price": 84,-->
         <!--"this_diamond_total_price": 78,-->
         <!--"product_img":-->
-        <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" :key="item.shop_product_sku_id" v-for='item in products' >
+        <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" :key="item.shop_product_sku_id" v-for='item in items' >
           <div class="gwcsp_box box_shadow">
               <div class="spcheck">
-                <el-checkbox v-model="item.checked">商品编码：{{item.product_code}}/辅助码：{{item.auxiliary_code}}</el-checkbox>
+                <el-checkbox v-model="item.check_status" @change="handleCheckedProductChange(item)">商品编码：{{item.product_code}}/辅助码：{{item.auxiliary_code}}</el-checkbox>
               </div>
 
               <hr>
@@ -45,19 +45,17 @@
                       <p class="color_six">VIP单价：￥{{item.vip_price}}</p>
                       <p class="color_six">库存数量：{{item.inventory}}</p>
 
-                      <el-input-number style="width:150px; margin-top:10px" v-model="item.product_number"  :min="1" :max="100" label="描述文字"></el-input-number>
+                      <el-input-number @change="handleChangeProductNumber" style="width:150px; margin-top:10px" v-model="item.product_number"  :min="1" :max="100" label="描述文字"></el-input-number>
                   </div>
                   <div class="clear">
-
                   </div>
               </div>
               <hr>
               <div class="spamount">
                   <span class="amtspan">金额：￥ {{item.this_vip_total_price}}</span>
-                  <el-button class="right" >删除
+                  <el-button class="right" :disabled="item.product_number<=0" @click="deleteProductFromCar(item)">删除
                   </el-button>
                   <div class="clear">
-
                   </div>
               </div>
           </div>
@@ -65,15 +63,17 @@
       </el-row>
 
       <div class=" cz_btm bg_white">
-        <el-checkbox v-model="checked" >全选</el-checkbox>
+        <el-checkbox  v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
 
-        <el-button style="margin-left:20px">
+        <!--<el-checkbox v-model="checked" >全选</el-checkbox>-->
+
+        <el-button style="margin-left:20px" :disabled="!items.length" >
             删除
         </el-button>
 
         <span style="margin-left:50px">合计：{{vip_total_price}}</span>
 
-        <el-button type='primary' class="right">加单</el-button>
+        <el-button type='primary' class="right" :disabled="!items.length" >加单</el-button>
         <el-select v-model="value" placeholder="请绑定会员" class="right" style="margin-right:10px">
           <el-option
             v-for="item in options"
@@ -92,18 +92,18 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import shopCart from '@/api/shopCart'
 export default {
   data() {
     return {
-      count: '',
-      product_total_count: '',
-      vip_total_price: '',
-      gold_total_price: '',
-      diamond_total_price: '',
-      checked: true,
-      products: [
-      ],
+      // count: '',
+      // product_total_count: '',
+      // vip_total_price: '',
+      // gold_total_price: '',
+      // diamond_total_price: '',
+      checkAll: false,
+      isIndeterminate: true,
       options: [{
         value: '1',
         label: '黄金糕'
@@ -124,14 +124,35 @@ export default {
 
     }
   },
+  computed: {
+    ...mapGetters([
+      'items',
+      'count',
+      'product_total_count',
+      'vip_total_price',
+      'gold_total_price',
+      'diamond_total_price'
+    ])
+  },
   created() {
-    this.fetchProductCarList()
+    // this.fetchProductCarList()
+    this.getCartProducts()
   },
   methods: {
+    ...mapActions([
+      'getCartProducts',
+      'deleteProductFromCar',
+      'handleCheckAllChange',
+      'handleCheckedProductChange'
+    ]),
     fetchProductCarList() {
       shopCart.shopProductCarList().then(response => {
         this.products = response.data.list
       })
+    },
+    handleChangeProductNumber(value) {
+      // console.log(item)
+      console.log(value)
     }
   }
 }

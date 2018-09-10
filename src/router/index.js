@@ -159,25 +159,9 @@ export const constantRouterMap = [
       {
         path: 'ptsplb',
         component: () => import('@/views/spspgl/ptsplb'),
-        name: 'sp-ptsplb',
+        name: 'ptsplb',
         meta: {
           title: '平台商品列表'
-        }
-      },
-      {
-        path: 'dpsysplb',
-        component: () => import('@/views/spspgl/dpsysplb'),
-        name: 'dpsysplb',
-        meta: {
-          title: '店铺所有商品列表'
-        }
-      },
-      {
-        path: 'dpspfl',
-        component: () => import('@/views/spspgl/dpspfl'),
-        name: 'dpspfl',
-        meta: {
-          title: '店铺商品分类'
         }
       },
       {
@@ -202,6 +186,22 @@ export const constantRouterMap = [
         name: 'dpspxq',
         meta: {
           title: '店铺商品详情'
+        }
+      },
+      {
+        path: 'dpsysplb',
+        component: () => import('@/views/spspgl/dpsysplb'),
+        name: 'dpsysplb',
+        meta: {
+          title: '店铺所有商品列表'
+        }
+      },
+      {
+        path: 'dpspfl',
+        component: () => import('@/views/spspgl/dpspfl'),
+        name: 'dpspfl',
+        meta: {
+          title: '店铺商品分类'
         }
       }
     ]
@@ -342,6 +342,38 @@ export const constantRouterMap = [
       icon: 'table'
     },
     children: [
+      {
+        path: 'sycgddgl',
+        component: () => import('@/views/spbbhz/sycgddgl'),
+        name: 'sycgddgl',
+        meta: {
+          title: '所有常规订单管理'
+        }
+      },
+      {
+        path: 'sycgddglxq',
+        component: () => import('@/views/spbbhz/sycgddglxq'),
+        name: 'sycgddglxq',
+        meta: {
+          title: '订单详情'
+        }
+      },
+      {
+        path: 'symdjdgl',
+        component: () => import('@/views/spbbhz/symdjdgl'),
+        name: 'symdjdgl',
+        meta: {
+          title: '所有门店加单管理'
+        }
+      },
+      {
+        path: 'symdjdxq',
+        component: () => import('@/views/spbbhz/symdjdxq'),
+        name: 'symdjdxq',
+        meta: {
+          title: '非常规订单详情'
+        }
+      },
       {
         path: 'clrw',
         component: () => import('@/views/spbbhz/clrw'),

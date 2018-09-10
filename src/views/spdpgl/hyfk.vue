@@ -108,8 +108,8 @@
         page: 1,
         start_time: '',
         end_time: '',
-        deal_flag: 'a',
-        like_name: ''
+        like_name: '',
+        deal_flag: 'a'
       }
     },
     computed: {

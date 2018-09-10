@@ -1,4 +1,5 @@
 import shopCart from '@/api/shopCart'
+import { Message } from 'element-ui'
 
 const state = {
   items: [],
@@ -7,11 +8,19 @@ const state = {
   product_total_count: 0,
   vip_total_price: 0,
   gold_total_price: 0,
-  diamond_total_price: 0
+  diamond_total_price: 0,
+  itemStatus: []
 }
 
 // getters
 const getters = {
+  items: state => state.items,
+  count: state => state.count,
+  product_total_count: state => state.product_total_count,
+  vip_total_price: state => state.vip_total_price,
+  gold_total_price: state => state.gold_total_price,
+  diamond_total_price: state => state.diamond_total_price,
+  // checkAllStats: state =>
   // cartProducts: (state, getters, rootState) => {
   //   return state.items.map(({ id, quantity }) => {
   //     const product = rootState.products.all.find(product => product.id === id)
@@ -28,6 +37,9 @@ const getters = {
   //   }, 0)
   // },
   cartTotalQuantity: (state, getters) => {
+    if (!state.items.length) {
+      return 0
+    }
     return state.items.reduce((total, product) => {
       return total + product.quantity
     }, 0)
@@ -38,29 +50,57 @@ const getters = {
 const actions = {
   getCartProducts({ state, commit }) {
     shopCart.shopProductCarList().then(res => {
-      commit('setCartItems', { items: res.data.list })
+      commit('setCartInfo', { data: res.data })
     })
   },
   addProductToCart({ state, commit }, product) {
     // commit('setCheckoutStatus', null)
-    if (product.inventory > 0) {
+    if (product.inventory > 0 && product.sku_flag === '1') {
       const cartItem = state.items.find(item => item.shop_product_sku_id === product.shop_product_sku_id)
       if (!cartItem) {
         shopCart.shopProductCarAdd({ shop_product_sku_id: product.shop_product_sku_id }).then(res => {
           if (res.status === 'ok') {
-            commit('pushProductToCart', product)
+            shopCart.shopProductCarList().then(res => {
+              commit('setCartInfo', { data: res.data })
+            })
+            // commit('pushProductToCart', product)
           }
         })
       } else {
         shopCart.shopProductCarSetInc({ product_car_id: product.product_car_id }).then(res => {
           if (res.status === 'ok') {
-            commit('incrementItemQuantity', cartItem)
+            shopCart.shopProductCarList().then(res => {
+              commit('setCartInfo', { data: res.data })
+            })
+            // commit('incrementItemQuantity', cartItem)
           }
         })
       }
       // remove 1 item from stock
       // commit('products/decrementProductInventory', { shop_product_sku_id: product.shop_product_sku_id }, { root: true })
+    } else {
+      Message({
+        message: '确认还有库存或者以上架',
+        type: 'info',
+        duration: 3.6 * 1000
+      })
     }
+  },
+  deleteProductFromCar({ state, commit }, product) {
+    shopCart.shopProductCarDelete({ product_car_id: product.product_car_id }).then(res => {
+      if (res.status === 'ok') {
+        shopCart.shopProductCarList().then(res => {
+          commit('setCartInfo', { data: res.data })
+        })
+        // commit('incrementItemQuantity', cartItem)
+      }
+    })
+  },
+  handleCheckedProductChange({ state, commit }, product) {
+    commit('handleCheckedProductChange', product)
+  },
+  handleCheckAllChange({ state, commit }, val) {
+    commit('handleCheckAllChange', val)
   },
   checkout({ commit, state }, products) {
     const savedCartItems = [...state.items]
@@ -94,7 +134,33 @@ const mutations = {
   setCartItems(state, { items }) {
     state.items = items
   },
-
+  setCartInfo(state, { data }) {
+    state.items = data.list
+    state.items.forEach(p => {
+      p.check_status = true
+    })
+    state.count = data.count
+    state.product_total_count = data.product_total_count
+    state.vip_total_price = data.vip_total_price
+    state.gold_total_price = data.gold_total_price
+    state.diamond_total_price = data.diamond_price
+  },
+  handleCheckedProductChange(state, product) {
+    console.log(product.check_status)
+    // state.items.forEach(item => {
+    //   if (item.product_car_id === product.product_car_id) {
+    //     item.check_status = !item.check_status
+    //     return
+    //   }
+    // })
+    // const cartItem = state.items.find(item => item.shop_product_sku_id === product.shop_product_sku_id)
+    // cartItem.check_status = !cartItem.check_status
+  },
+  handleCheckAllChange(state, val) {
+    state.items.forEach(item => {
+      item.check_status = val
+    })
+  },
   setCheckoutStatus(state, status) {
     state.checkoutStatus = status
   }

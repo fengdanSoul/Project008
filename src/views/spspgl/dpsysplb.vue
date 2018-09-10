@@ -102,12 +102,12 @@
 
             <div class="spamount">
 
-              <el-button type='primary' class="right" @click="stopSale(item.id, item.product_name)"  style='margin-left:10px' v-if="item.sku_flag === '1'" >下架
+              <el-button type='primary' class="right" @click="stopSale(item.shop_product_sku_id, item.product_name)"  style='margin-left:10px' v-if="item.sku_flag === '1'" >下架
               </el-button>
-              <el-button type='primary' class="right" @click="onSale(item.id, item.product_name)"  style='margin-left:10px' v-else >上架
+              <el-button type='primary' class="right" @click="onSale(item.shop_product_sku_id, item.product_name)"  style='margin-left:10px' v-else >上架
               </el-button>
 
-              <el-button type='primary' class="right" @click="deleteCurrentRow(item.id, item.product_name)" style='margin-left:10px'  >删除
+              <el-button type='primary' class="right" @click="deleteCurrentRow(item.shop_product_sku_id, item.product_name)" style='margin-left:10px'  >删除
               </el-button>
               <el-button type='primary' class="right" >编辑
               </el-button>
@@ -134,9 +134,9 @@
 </template>
 <script>
   import { mapActions } from 'vuex'
-  import { shopCategoryList } from '@/api/shopGoodsManage'
+  import { shopCategoryList, shopProductSkuFlag, shopProductSkuDelete, shopProductSkuModify } from '@/api/shopGoodsManage'
   import { shopProductSkuAllList } from '@/api/shopGoodsManage'
-  import { brandList, productSpuDelete, productSpuFlag, productSpuModify } from '@/api/adminGoodsDB'
+  import { brandList } from '@/api/adminGoodsDB'
   export default {
     data() {
       return {
@@ -221,10 +221,10 @@
         this.form = this.tableData[index]
         // this.isAdd = false
       },
-      stopSale(id, name) {
+      stopSale(shop_product_sku_id, name) {
         this.$confirm('确认下架商品：' + name)
           .then(_ => {
-            productSpuFlag(id, 99).then(response => {
+            shopProductSkuFlag({ shop_product_sku_id, skuFlag: 99 }).then(response => {
               this.$message({
                 message: '下架成功',
                 type: 'success'
@@ -237,10 +237,10 @@
           })
           .catch(_ => {})
       },
-      onSale(id, name) {
+      onSale(shop_product_sku_id, name) {
         this.$confirm('确认上架商品：' + name)
           .then(_ => {
-            productSpuFlag(id, 1).then(response => {
+            shopProductSkuFlag({ shop_product_sku_id, skuFlag: 1 }).then(response => {
               this.$message({
                 message: '上架成功',
                 type: 'success'
@@ -253,10 +253,10 @@
           })
           .catch(_ => {})
       },
-      deleteCurrentRow(id, product_name) {
+      deleteCurrentRow(shop_product_sku_id, product_name) {
         this.$confirm('确认删除商品：' + product_name)
           .then(_ => {
-            productSpuDelete(id).then(response => {
+            shopProductSkuDelete({ shop_product_sku_id }).then(response => {
               this.$message({
                 message: '删除成功',
                 type: 'success'
@@ -270,7 +270,7 @@
           .catch(_ => {})
       },
       updateMember() {
-        productSpuModify(this.form).then(response => {
+        shopProductSkuModify(this.form).then(response => {
           this.dialogVisible = false
           this.$message({
             message: '修改商品信息成功',
