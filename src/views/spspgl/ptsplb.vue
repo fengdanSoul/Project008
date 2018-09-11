@@ -220,12 +220,12 @@
         this.fetchProductSpuList(1, '', '', '', this.like_name)
       },
       createGoods(id) {
-        // this.$router.push({ name: 'dpcjsp', params: { id }})
-        this.$router.push({ path: '/spspgl/dpcjsp', query: { id }})
+        this.$router.push({ name: 'dpcjsp', params: { id }})
+        // this.$router.push({ path: '#/dpcjsp', query: { id }})
       },
       previewCurrentRow(id) {
-        // this.$router.push({ name: 'dgsplb', params: { id }})
-        this.$router.push({ path: '/spspgl/dgsplb', query: { id }})
+        this.$router.push({ name: 'dgsplb', params: { id }})
+        // this.$router.push({ path: '/dgsplb', query: { id }})
       }
     }
   }

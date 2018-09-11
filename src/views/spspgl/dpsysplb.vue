@@ -68,65 +68,67 @@
       <el-row :gutter="20">
         <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" v-for='item in tableData' :key="item.id" class="splb_box" >
           <el-card :body-style="{ padding: '0px' }" shadow="hover">
-
-            <img src="" class="image">
-            <div style="padding: 14px;">
-              <span>好吃的汉堡</span>
-              <div class="bottom clearfix">
-                <time class="time">{{ currentDate }}</time>
-                <el-button type="text" class="button">操作按钮</el-button>
+            <div class="gwcsp_box box_shadow">
+              <div class="spcheck">
+                <p class="ptsmbh">商品编码：{{item.product_code}}/辅助码：{{item.auxiliary_code}}
+                  <span class="right color_nine" v-if="item.sku_flag === '0'">未上架</span>
+                  <span class="right color_nine" v-else-if="item.sku_flag === '1'">已上架</span>
+                  <span class="right color_nine" v-else-if="item.sku_flag === '99'">已下架</span>
+                  <span class="right color_nine" v-else>未知</span>
+                </p>
               </div>
-            </div>
-          </el-card>
 
-
-          <div class="gwcsp_box box_shadow">
-            <div class="spcheck">
-              <p class="ptsmbh">商品编码：{{item.product_code}}/辅助码：{{item.auxiliary_code}}
-                <span class="right color_nine" v-if="item.sku_flag === '0'">未上架</span>
-                <span class="right color_nine" v-else-if="item.sku_flag === '1'">已上架</span>
-                <span class="right color_nine" v-else-if="item.sku_flag === '99'">已下架</span>
-                <span class="right color_nine" v-else>未知</span>
-              </p>
-            </div>
-
-            <hr>
-            <div class="comimgtitie">
-              <div class="comimg left">
-                <img :src="item.imgData[0]" alt="商品图片">
-              </div>
-              <div class="comtitle right">
-                <el-row>
-                  <el-col>VIP：{{item.vip_price}}</el-col>
-                  <el-col>黄金：{{item.gold_price}}</el-col>
-                  <el-col>钻石：{{item.diamond_price}}</el-col>
-                  <el-col>库存数量：{{item.inventory}}</el-col>
-                </el-row>
+              <hr>
+              <div class="comimgtitie">
+                <div class="comimg left">
+                  <img :src="item.imgData[0]" alt="商品图片">
+                </div>
+                <div class="comtitle right">
+                  <el-row>
+                    <el-col>VIP：{{item.vip_price}}</el-col>
+                    <el-col>黄金：{{item.gold_price}}</el-col>
+                    <el-col>钻石：{{item.diamond_price}}</el-col>
+                    <el-col>库存数量：{{item.inventory}}</el-col>
+                  </el-row>
                   <el-button class="right" @click="addProductToCart(item)" type="text" style="margin-right: 30px">
                     <svg-icon icon-class="cart" style="width: 28px;height: 28px;"></svg-icon>
                   </el-button>
-              </div>
+                </div>
 
-              <div class="clear">
+                <div class="clear">
+                </div>
+              </div>
+              <hr>
+
+              <div class="spamount">
+
+                <el-button type='primary' class="right" @click="stopSale(item.shop_product_sku_id, item.product_name)"  style='margin-left:10px' v-if="item.sku_flag === '1'" >下架
+                </el-button>
+                <el-button type='primary' class="right" @click="onSale(item.shop_product_sku_id, item.product_name)"  style='margin-left:10px' v-else >上架
+                </el-button>
+
+                <el-button type='primary' class="right" @click="deleteCurrentRow(item.shop_product_sku_id, item.product_name)" style='margin-left:10px'  >删除
+                </el-button>
+                <el-button type='primary' class="right" >编辑
+                </el-button>
+                <div class="clear">
+                </div>
               </div>
             </div>
-            <hr>
 
-            <div class="spamount">
 
-              <el-button type='primary' class="right" @click="stopSale(item.shop_product_sku_id, item.product_name)"  style='margin-left:10px' v-if="item.sku_flag === '1'" >下架
-              </el-button>
-              <el-button type='primary' class="right" @click="onSale(item.shop_product_sku_id, item.product_name)"  style='margin-left:10px' v-else >上架
-              </el-button>
+            <!--<img src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1725538169,1526917406&fm=26&gp=0.jpg" class="image">-->
+            <!--<div style="padding: 14px;">-->
+              <!--<span>好吃的汉堡</span>-->
+              <!--<div class="bottom clearfix">-->
+                <!--<time class="time">{{ currentDate }}</time>-->
+                <!--<el-button type="text" class="button">操作按钮</el-button>-->
+              <!--</div>-->
+            <!--</div>-->
+          </el-card>
 
-              <el-button type='primary' class="right" @click="deleteCurrentRow(item.shop_product_sku_id, item.product_name)" style='margin-left:10px'  >删除
-              </el-button>
-              <el-button type='primary' class="right" >编辑
-              </el-button>
-              <div class="clear">
-              </div>
-            </div>
-          </div>
+
+
         </el-col>
       </el-row>
 

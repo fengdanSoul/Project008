@@ -161,7 +161,8 @@ export default {
         .catch(_ => {})
     },
     editCurrent(shop_product_sku_id) {
-      this.$router.push({ name: 'dpspxq', params: { id: shop_product_sku_id }})
+      // this.$router.push({ name: 'dpspxq', params: { id: shop_product_sku_id }})
+      this.$router.push({ path: '/dpspxq', query: { id: shop_product_sku_id }})
     }
   }
 }
