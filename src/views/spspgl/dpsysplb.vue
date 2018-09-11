@@ -67,6 +67,19 @@
       <!--sku_flag	0-->
       <el-row :gutter="20">
         <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" v-for='item in tableData' :key="item.id" class="splb_box" >
+          <el-card :body-style="{ padding: '0px' }" shadow="hover">
+
+            <img src="" class="image">
+            <div style="padding: 14px;">
+              <span>好吃的汉堡</span>
+              <div class="bottom clearfix">
+                <time class="time">{{ currentDate }}</time>
+                <el-button type="text" class="button">操作按钮</el-button>
+              </div>
+            </div>
+          </el-card>
+
+
           <div class="gwcsp_box box_shadow">
             <div class="spcheck">
               <p class="ptsmbh">商品编码：{{item.product_code}}/辅助码：{{item.auxiliary_code}}
@@ -74,7 +87,6 @@
                 <span class="right color_nine" v-else-if="item.sku_flag === '1'">已上架</span>
                 <span class="right color_nine" v-else-if="item.sku_flag === '99'">已下架</span>
                 <span class="right color_nine" v-else>未知</span>
-
               </p>
             </div>
 

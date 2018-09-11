@@ -29,7 +29,24 @@ export const constantRouterMap = [
   { path: '/authredirect', component: () => import('@/views/login/authredirect'), hidden: true },
   { path: '/404', component: () => import('@/views/errorPage/404'), hidden: true },
   { path: '/401', component: () => import('@/views/errorPage/401'), hidden: true },
-
+  {
+    path: '/spspgl/dpcjsp',
+    component: () => import('@/views/spspgl/dpcjsp')
+    // name: 'dpcjsp'
+    // meta: { title: '店铺创建商品' }
+  },
+  {
+    path: '/spspgl/dgsplb',
+    component: () => import('@/views/spspgl/dgsplb')
+    // name: 'dgsplb'
+    // meta: { title: '单个SPU商品列表' }
+  },
+  {
+    path: '/spspgl/dpspxq',
+    component: () => import('@/views/spspgl/dpspxq')
+    // name: 'dpspxq'
+    // meta: { title: '店铺商品详情' }
+  },
   {
     path: '',
     component: Layout,
@@ -162,30 +179,6 @@ export const constantRouterMap = [
         name: 'ptsplb',
         meta: {
           title: '平台商品列表'
-        }
-      },
-      {
-        path: 'dpcjsp',
-        component: () => import('@/views/spspgl/dpcjsp'),
-        name: 'dpcjsp',
-        meta: {
-          title: '店铺创建商品'
-        }
-      },
-      {
-        path: 'dgsplb',
-        component: () => import('@/views/spspgl/dgsplb'),
-        name: 'dgsplb',
-        meta: {
-          title: '单个SPU商品列表'
-        }
-      },
-      {
-        path: 'dpspxq',
-        component: () => import('@/views/spspgl/dpspxq'),
-        name: 'dpspxq',
-        meta: {
-          title: '店铺商品详情'
         }
       },
       {
