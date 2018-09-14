@@ -38,10 +38,7 @@
         <div class="form_part center">
           <el-form ref="form" :rules="formRules" :model="form" label-width="130px">
             <el-form-item label="商品分类权重：" prop="sort">
-              <el-select v-model="form.sort" placeholder="请选择">
-                <el-option label="1" value="1"></el-option>
-                <el-option label="2" value="2"></el-option>
-              </el-select>
+              <el-input v-model.number="form.sort"></el-input>
             </el-form-item>
             <el-form-item label="商品分类名称：" prop="class_name">
               <el-input v-model="form.class_name"></el-input>
@@ -76,7 +73,7 @@ export default {
         class_name: ''
       },
       formRules: {
-        sort: [{ required: true, message: '选择分类权重' }],
+        sort: [{ required: true, message: '请输入数字0-999' }],
         class_name: [{ required: true, message: '输入商品分类名称' }]
       },
       currentPage: 1,

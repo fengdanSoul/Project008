@@ -45,13 +45,8 @@
         <div class="form_part center">
           <el-form ref="form" :rules="formRules" :model="form" label-width="130px">
             <el-form-item label="品牌权重：" prop="sort">
-              <el-select v-model="form.sort" placeholder="请选择">
-                <el-option label="1" value="1"></el-option>
-                <el-option label="2" value="2"></el-option>
-                <el-option label="3" value="3"></el-option>
-                <el-option label="4" value="4"></el-option>
-                <el-option label="5" value="5"></el-option>
-              </el-select>
+              <el-input v-model.number="form.sort"></el-input>
+
             </el-form-item>
             <el-form-item label="热门推荐：" prop="hot_flag">
               <el-select v-model="form.hot_flag" placeholder="请选择">
@@ -118,7 +113,7 @@
           brand_img: ''
         },
         formRules: {
-          sort: [{ required: true, message: '选择分类权重' }],
+          sort: [{ required: true, message: '请输入数字0-999' }],
           brand_name: [{ required: true, message: '输入商品品牌名称' }],
           hot_flag: [{ required: true, message: '是否热门' }]
         },

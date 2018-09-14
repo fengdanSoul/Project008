@@ -106,10 +106,8 @@
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
 
         <el-form-item label="权重" prop="quanzhong">
-          <el-select class="filter-item" v-model="temp.quanzhong" placeholder="请选择">
-            <el-option v-for="item in quanzhongs" :key="item.key" :label="item.display_name" :value="item.key">
-            </el-option>
-          </el-select>
+          <el-input v-model.number="form.sort"></el-input>
+
         </el-form-item>
 
         <el-form-item label="分类" prop="fenlei">

@@ -4,7 +4,9 @@
       <div class="bg_white serchadd">
         <p class="color_zywz inline_block top_label">平台商品编号  </p>
 
-        <el-button class="filter-item right ggcxtjbtn add_btn" style="margin-left: 10px;" @click="createGoods" type="primary" icon="el-icon-edit">创建商品</el-button>
+        <a :href="'#/spspgl/dpcjsp/'+ product_spu_id">
+          <el-button class="filter-item right ggcxtjbtn add_btn" style="margin-left: 10px;" type="primary" icon="el-icon-edit">创建商品</el-button>
+        </a>
         <div class="clear">
         </div>
       </div>
@@ -45,10 +47,10 @@
 
               <hr>
               <div class="comimgtitie">
-                  <div class="comimg left">
-                    <img :src="tableData.productSpuImg[0]" alt="商品图片">
-                  </div>
-                  <div class="comtitle right">
+                  <!--<div class="comimg left">-->
+                    <!--<img :src="tableData.productSpuImg[0]" alt="商品图片">-->
+                  <!--</div>-->
+                  <div class="comtitle center">
                       <p>
                         {{tableData.product_name}}
                       </p>
@@ -56,7 +58,7 @@
                           <span>VIP:￥{{item.vip_price}}</span>
                           <span>黄金:￥{{item.gold_price}}</span>
                           <span>钻石:￥{{item.diamond_price}}</span>
-                          <span>库存:￥{{item.inventory}}</span>
+                          <span>库存:{{item.inventory}}</span>
                       </div>
                   </div>
                   <div class="clear">
@@ -73,8 +75,9 @@
 
                 <el-button type='primary' class="right" @click="deleteCurrentRow(item.shop_product_sku_id)" style='margin-left:10px'  >删除
                 </el-button>
-                <el-button type='primary' class="right" @click="editCurrent(item.shop_product_sku_id)">编辑
-                </el-button>
+                <a :href="'#/spspgl/dpspxq/'+ item.shop_product_sku_id">
+                  <el-button type='primary' class="right" style='margin-left:10px'>查看</el-button>
+                </a>
                   <div class="clear">
 
                   </div>

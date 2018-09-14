@@ -88,7 +88,7 @@
         </el-table-column>
         <el-table-column align='center'  label="订单号" width="180">
           <template slot-scope="scope">
-            <a class="table_href" href="#/spbbhz/sycgddglxq">{{scope.row.order_number}}</a>
+            <a class="table_href" :href="'#/spbbhz/symdjdxq/'+scope.row.order_id">{{scope.row.order_number}}</a>
           </template>
         </el-table-column>
         <el-table-column align='center' prop="remark" label="订单内容">

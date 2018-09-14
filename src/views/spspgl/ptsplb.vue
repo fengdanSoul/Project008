@@ -59,45 +59,53 @@
       <!--"shop_product_count": "0"-->
       <el-row :gutter="20">
         <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" v-for='item in tableData' :key="item.product_spu_id" class="splb_box" >
-          <div class="gwcsp_box box_shadow">
-            <div class="spcheck">
-              <p class="ptsmbh">商品编码：{{item.product_code}}
-                <span class="right color_nine" v-if="item.product_flag === '0'">未上架</span>
-                <span class="right color_nine" v-else-if="item.product_flag === '1'">已上架</span>
-                <span class="right color_nine" v-else-if="item.product_flag === '99'">已下架</span>
-                <span class="right color_nine" v-else>未知</span>
+          <el-card :body-style="{ padding: '0px' }">
+            <div class="gwcsp_box box_shadow">
+              <div class="spcheck">
+                <p class="ptsmbh">商品编码：{{item.product_code}}
+                  <span class="right color_nine" v-if="item.product_flag === '0'">未上架</span>
+                  <span class="right color_nine" v-else-if="item.product_flag === '1'">已上架</span>
+                  <span class="right color_nine" v-else-if="item.product_flag === '99'">已下架</span>
+                  <span class="right color_nine" v-else>未知</span>
 
-              </p>
-            </div>
-
-            <hr>
-            <div class="comimgtitie">
-              <div class="comimg left">
-                <img :src="item.product_img[0]" alt="商品图片">
-              </div>
-              <div class="comtitle right">
-                <p>
-                  {{item.product_name}}
                 </p>
-                <p class="color_six">商品详情：{{item.product_description}}</p>
               </div>
-              <div class="clear">
+
+              <hr>
+              <div class="comimgtitie" style="height: 150px">
+                <div class="comimg left">
+                  <img :src="item.product_img[0]" alt="商品图片">
+                </div>
+                <div class="comtitle right">
+                  <p>
+                    {{item.product_name}}
+                  </p>
+                  <p class="color_six">商品详情：{{item.product_description}}</p>
+                </div>
+                <div class="clear">
+                </div>
+              </div>
+              <hr>
+
+              <div class="spamount bottom">
+                <span>共{{item.shop_product_count}}种</span>
+                <a :href="'#/spspgl/dpcjsp/'+ item.product_spu_id">
+                  <el-button type='primary' class="right" style='margin-left:10px'>创建商品</el-button>
+                </a>
+                <a :href="'#/spspgl/dgsplb/'+ item.product_spu_id">
+                  <el-button type='primary' class="right" style='margin-left:10px'>查看</el-button>
+                </a>
+
+                <div class="clear">
+                </div>
               </div>
             </div>
-            <hr>
+          </el-card>
 
-            <div class="spamount">
-              <span>共{{item.shop_product_count}}种</span>
-              <el-button type='primary' class="right" @click="createGoods(item.product_spu_id)" style='margin-left:10px'>创建商品
-                <!--<router-link :to="{name: 'dpcjsp', params: {id: item.product_spu_id}}">创建</router-link>-->
-              </el-button>
-              <el-button type='primary' class="right" @click="previewCurrentRow(item.product_spu_id)"  >查看
-              </el-button>
 
-              <div class="clear">
-              </div>
-            </div>
-          </div>
+
+
+
         </el-col>
       </el-row>
 

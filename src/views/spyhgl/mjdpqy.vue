@@ -36,10 +36,7 @@
         <div class="form_part center">
           <el-form ref="form" :model="form" label-width="130px">
             <el-form-item label="店铺区域权重：">
-              <el-select v-model="form.sort" placeholder="请选择">
-                <el-option label="1" value="1"></el-option>
-                <el-option label="2" value="2"></el-option>
-              </el-select>
+              <el-input v-model.number="form.sort"></el-input>
             </el-form-item>
             <el-form-item label="店铺区域名称：">
               <el-input v-model="form.district_name"></el-input>
@@ -74,7 +71,7 @@ export default {
         district_name: ''
       },
       formRules: {
-        sort: [{ required: true, message: '选择分类权重' }],
+        sort: [{ required: true, message: '请输入数字0-999' }],
         district_name: [{ required: true, message: '输入商品分类名称' }]
       },
       currentPage: 1,

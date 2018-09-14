@@ -38,10 +38,7 @@
         <div class="form_part center">
           <el-form ref="form" :model="form" label-width="130px">
             <el-form-item label="平台信息权重：">
-              <el-select v-model="form.standard" placeholder="请选择">
-                <el-option label="1" value="1"></el-option>
-                <el-option label="2" value="2"></el-option>
-              </el-select>
+              <el-input v-model.number="form.sort"></el-input>
             </el-form-item>
             <el-form-item label="平台信息标题：">
               <el-input v-model="form.title"></el-input>

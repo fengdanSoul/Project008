@@ -182,6 +182,27 @@ export const constantRouterMap = [
         }
       },
       {
+        path: 'dpcjsp/:id',
+        component: () => import('@/views/spspgl/dpcjsp'),
+        hidden: true,
+        name: 'dpcjsp',
+        meta: { title: '店铺创建商品' }
+      },
+      {
+        path: 'dgsplb/:id',
+        component: () => import('@/views/spspgl/dgsplb'),
+        hidden: true,
+        name: 'dgsplb',
+        meta: { title: '单个SPU商品列表' }
+      },
+      {
+        path: 'dpspxq/:id',
+        component: () => import('@/views/spspgl/dpspxq'),
+        hidden: true,
+        name: 'dpspxq',
+        meta: { title: '店铺商品详情' }
+      },
+      {
         path: 'dpsysplb',
         component: () => import('@/views/spspgl/dpsysplb'),
         name: 'dpsysplb',
@@ -196,27 +217,6 @@ export const constantRouterMap = [
         meta: {
           title: '店铺商品分类'
         }
-      },
-      {
-        path: '/dpcjsp',
-        component: () => import('@/views/spspgl/dpcjsp'),
-        hidden: true,
-        name: 'dpcjsp',
-        meta: { title: '店铺创建商品' }
-      },
-      {
-        path: '/dgsplb/:id',
-        component: () => import('@/views/spspgl/dgsplb'),
-        hidden: true,
-        name: 'dgsplb',
-        meta: { title: '单个SPU商品列表' }
-      },
-      {
-        path: '/dpspxq',
-        component: () => import('@/views/spspgl/dpspxq'),
-        hidden: true,
-        name: 'dpspxq',
-        meta: { title: '店铺商品详情' }
       }
     ]
   },
@@ -365,8 +365,10 @@ export const constantRouterMap = [
         }
       },
       {
-        path: 'sycgddglxq',
+        path: 'sycgddglxq/:id',
         component: () => import('@/views/spbbhz/sycgddglxq'),
+        hidden: true,
+        props: (route) => ({ query: route.query.q }),
         name: 'sycgddglxq',
         meta: {
           title: '订单详情'
@@ -381,54 +383,55 @@ export const constantRouterMap = [
         }
       },
       {
-        path: 'symdjdxq',
+        path: 'symdjdxq/:id',
         component: () => import('@/views/spbbhz/symdjdxq'),
+        hidden: true,
         name: 'symdjdxq',
         meta: {
           title: '非常规订单详情'
         }
-      },
-      {
-        path: 'clrw',
-        component: () => import('@/views/spbbhz/clrw'),
-        name: 'clrw',
-        meta: {
-          title: '陈列任务'
-        }
-      },
-      {
-        path: 'cjclrw',
-        component: () => import('@/views/spbbhz/cjclrw'),
-        name: 'cjclrw',
-        meta: {
-          title: '创建陈列任务'
-        }
-      },
-      {
-        path: 'ptxxtz',
-        component: () => import('@/views/spbbhz/ptxxtz'),
-        name: 'ptxxtz',
-        meta: {
-          title: '平台信息通知'
-        }
-      },
-
-      {
-        path: 'appqdpz',
-        component: () => import('@/views/spbbhz/appqdpz'),
-        name: 'appqdpz',
-        meta: {
-          title: 'APP启动配置'
-        }
-      },
-      {
-        path: 'bnpz',
-        component: () => import('@/views/spbbhz/bnpz'),
-        name: 'bnpz',
-        meta: {
-          title: 'APP banner配置'
-        }
       }
+      // {
+      //   path: 'clrw',
+      //   component: () => import('@/views/spbbhz/clrw'),
+      //   name: 'clrw',
+      //   meta: {
+      //     title: '陈列任务'
+      //   }
+      // },
+      // {
+      //   path: 'cjclrw',
+      //   component: () => import('@/views/spbbhz/cjclrw'),
+      //   name: 'cjclrw',
+      //   meta: {
+      //     title: '创建陈列任务'
+      //   }
+      // },
+      // {
+      //   path: 'ptxxtz',
+      //   component: () => import('@/views/spbbhz/ptxxtz'),
+      //   name: 'ptxxtz',
+      //   meta: {
+      //     title: '平台信息通知'
+      //   }
+      // },
+      //
+      // {
+      //   path: 'appqdpz',
+      //   component: () => import('@/views/spbbhz/appqdpz'),
+      //   name: 'appqdpz',
+      //   meta: {
+      //     title: 'APP启动配置'
+      //   }
+      // },
+      // {
+      //   path: 'bnpz',
+      //   component: () => import('@/views/spbbhz/bnpz'),
+      //   name: 'bnpz',
+      //   meta: {
+      //     title: 'APP banner配置'
+      //   }
+      // }
     ]
   }
 

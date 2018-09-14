@@ -53,14 +53,8 @@
       <div class="form_part center">
         <el-form ref="form" :model="form" :rules="formRules" label-width="100px">
           <el-form-item label="促销权重：" prop="sort">
-            <el-select v-model="form.sort" placeholder="请选择">
-              <el-option label="1" value="1"></el-option>
-              <el-option label="2" value="2"></el-option>
-              <el-option label="3" value="3"></el-option>
-              <el-option label="4" value="4"></el-option>
-              <el-option label="5" value="5"></el-option>
-              <el-option label="6" value="6"></el-option>
-            </el-select>
+            <el-input v-model.number="form.sort"></el-input>
+
           </el-form-item>
 
           <el-form-item label="促销分类：" prop="promotion_type">
@@ -112,7 +106,7 @@
           id: ''
         },
         formRules: {
-          sort: [{ required: true, message: '选择分类权重', trigger: 'blur' }],
+          sort: [{ required: true, message: '请输入数字0-999' }],
           title: [{ required: true, message: '输入标题', trigger: 'blur' }],
           content: [{ required: true, message: '输入内容', trigger: 'blur' }],
           promotion_type: [{ required: true, message: '选择促销分类', trigger: 'blur' }]

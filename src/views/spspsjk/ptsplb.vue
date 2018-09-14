@@ -75,7 +75,7 @@
               </div>
 
               <hr>
-              <div class="comimgtitie">
+              <div class="comimgtitie" style="height: 150px">
                   <div class="comimg left">
                     <img :src="item.product_img[0]" alt="商品图片">
                   </div>
