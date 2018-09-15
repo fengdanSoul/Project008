@@ -80,7 +80,7 @@ const actions = {
       // commit('products/decrementProductInventory', { shop_product_sku_id: product.shop_product_sku_id }, { root: true })
     } else {
       Message({
-        message: '确认还有库存或者以上架',
+        message: '确认还有库存或者已上架',
         type: 'info',
         duration: 3.6 * 1000
       })
