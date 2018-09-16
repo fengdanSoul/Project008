@@ -78,7 +78,7 @@
         </el-table-column>
         <el-table-column align='center'  label="订单号" width="180">
           <template slot-scope="scope">
-            <a class="table_href" href="#/spdpdd/dpddxq">{{scope.row.order_number}}</a>
+            <a class="table_href" :href="'#/spdpdd/dpddxq/'+scope.row.order_id">{{scope.row.order_number}}</a>
           </template>
         </el-table-column>
         <el-table-column align='center' prop="remark" label="订单内容">
@@ -93,7 +93,7 @@
         </el-table-column>
         <el-table-column align='center' label="操作">
           <template slot-scope="scope">
-                <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">发货</el-button>
+                <el-button type="primary" size="mini" @click="handleSend(scope.row)">发货</el-button>
             </template>
         </el-table-column>
       </el-table>
@@ -112,7 +112,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { shopOrderList } from '@/api/shopOrder' //, shopOrderDelivery, shopOrderFlag, shopOrderDetails
+  import { shopOrderList, shopOrderDelivery } from '@/api/shopOrder' //, shopOrderDelivery, shopOrderFlag, shopOrderDetails
   export default {
     data() {
       return {
@@ -120,19 +120,6 @@
         loading: false,
         tableData: [
         ],
-        form: {
-          promotion_type: '',
-          title: '',
-          content: '',
-          sort: '',
-          id: ''
-        },
-        formRules: {
-          sort: [{ required: true, message: '请输入数字0-999' }],
-          title: [{ required: true, message: '输入标题', trigger: 'blur' }],
-          content: [{ required: true, message: '输入内容', trigger: 'blur' }],
-          promotion_type: [{ required: true, message: '选择促销分类', trigger: 'blur' }]
-        },
         count: 0,
         page: 1,
         order_state: '',
@@ -190,35 +177,9 @@
         this.page = 1
         this.fectchShopOrderList(this.start_time, this.end_time, this.order_state, this.pay_type, this.like_name, this.page)
       },
-      onSubmit() {
-        this.$refs.form.validate(valid => {
-          if (valid) {
-            // if (this.isAdd) {
-            //   shopMessageAdd(this.form).then(response => {
-            //     this.dialogVisible = false
-            //     this.$message({
-            //       message: '添加促销公告成功',
-            //       type: 'success'
-            //     })
-            //     this.page = 1
-            //     this.fectchShopMessageList(1)
-            //   }).catch(error => {
-            //     console.log(error)
-            //   })
-            // } else {
-            //   shopMessageModify(this.form).then(response => {
-            //     this.dialogVisible = false
-            //     this.$message({
-            //       message: '修改促销公告成功',
-            //       type: 'success'
-            //     })
-            //     this.page = 1
-            //     this.fectchShopMessageList(1)
-            //   }).catch(error => {
-            //     console.log(error)
-            //   })
-            // }
-          }
+      handleSend(item) {
+        shopOrderDelivery({ order_id: item.order_id, delivery_id: item.delivery_id }).then(res => {
+          this.$message.success(res.message)
         })
       },
       handleCurrentChange(val) {

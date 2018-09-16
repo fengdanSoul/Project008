@@ -138,9 +138,10 @@ export const constantRouterMap = [
         }
       },
       {
-        path: 'dpddxq',
+        path: 'dpddxq/:id',
         component: () => import('@/views/spdpdd/dpddxq'),
         name: 'dpddxq',
+        hidden: true,
         meta: {
           title: '订单详情'
         }

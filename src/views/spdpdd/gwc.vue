@@ -27,7 +27,7 @@
         <!--"this_gold_total_price": 84,-->
         <!--"this_diamond_total_price": 78,-->
         <!--"product_img":-->
-        <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" :key="item.shop_product_sku_id" v-for='item in items' >
+        <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" v-for='item in items' :key="item.product_car_id">
           <div class="gwcsp_box box_shadow">
               <div class="spcheck">
                 <el-checkbox v-model="item.check_status" @change="handleCheckedProductChange(item)">商品编码：{{item.product_code}}/辅助码：{{item.auxiliary_code}}</el-checkbox>
@@ -63,13 +63,9 @@
       </el-row>
 
       <div class=" cz_btm bg_white">
-        <el-checkbox  v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-
+        <el-checkbox v-model="checkAll"  @change="handleCheckAllChange(checkAll)">全选</el-checkbox>
         <!--<el-checkbox v-model="checked" >全选</el-checkbox>-->
-
-        <el-button style="margin-left:20px" :disabled="!items.length" >
-            删除
-        </el-button>
+        <el-button style="margin-left:20px" :disabled="!items.length" >删除</el-button>
 
         <span style="margin-left:50px">合计：{{vip_total_price}}</span>
 
@@ -102,7 +98,7 @@ export default {
       // vip_total_price: '',
       // gold_total_price: '',
       // diamond_total_price: '',
-      checkAll: false,
+      checkAll: true,
       isIndeterminate: true,
       options: [{
         value: '1',

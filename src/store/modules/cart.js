@@ -9,7 +9,8 @@ const state = {
   vip_total_price: 0,
   gold_total_price: 0,
   diamond_total_price: 0,
-  itemStatus: []
+  itemStatus: [],
+  allStatus: true
 }
 
 // getters
@@ -20,6 +21,7 @@ const getters = {
   vip_total_price: state => state.vip_total_price,
   gold_total_price: state => state.gold_total_price,
   diamond_total_price: state => state.diamond_total_price,
+  allStatus: state => state.allStatus,
   // checkAllStats: state =>
   // cartProducts: (state, getters, rootState) => {
   //   return state.items.map(({ id, quantity }) => {
@@ -147,16 +149,22 @@ const mutations = {
   },
   handleCheckedProductChange(state, product) {
     console.log(product.check_status)
+    // product.check_status = !product.check_status
     // state.items.forEach(item => {
-    //   if (item.product_car_id === product.product_car_id) {
-    //     item.check_status = !item.check_status
-    //     return
+    //   if (item.product_car_id	 === product.product_car_id) {
+    //     item.check_status = product.check_status
     //   }
     // })
-    // const cartItem = state.items.find(item => item.shop_product_sku_id === product.shop_product_sku_id)
+    // const cartItem = state.items.find(item => item.check_status === false)
+    // if (cartItem) {
+    //   state.allStatus = false
+    // } else {
+    //   state.allStatus = true
+    // }
     // cartItem.check_status = !cartItem.check_status
   },
   handleCheckAllChange(state, val) {
+    state.allStatus = val
     state.items.forEach(item => {
       item.check_status = val
     })
