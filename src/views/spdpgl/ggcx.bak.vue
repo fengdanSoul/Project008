@@ -105,8 +105,8 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
 
-        <el-form-item label="权重" prop="quanzhong">
-          <el-input v-model.number="form.sort"></el-input>
+        <el-form-item label="权重" prop="sort">
+          <el-input v-model.number="form.sort" placeholder="请输入数字0-999"></el-input>
 
         </el-form-item>
 

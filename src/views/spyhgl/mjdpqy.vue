@@ -71,7 +71,10 @@ export default {
         district_name: ''
       },
       formRules: {
-        sort: [{ required: true, message: '请输入数字0-999' }],
+        sort: [
+          { required: true, message: '请输入数字0-999', trigger: 'blur' },
+          { type: 'number', message: '请输入数字', trigger: 'blur' }
+        ],
         district_name: [{ required: true, message: '输入商品分类名称' }]
       },
       currentPage: 1,

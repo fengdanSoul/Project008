@@ -99,7 +99,10 @@
           id: ''
         },
         formRules: {
-          sort: [{ required: true, message: '选择分类权重', trigger: 'blur' }],
+          sort: [
+            { required: true, message: '请输入数字0-999', trigger: 'blur' },
+            { type: 'number', message: '请输入数字', trigger: 'blur' }
+          ],
           title: [{ required: true, message: '输入标题', trigger: 'blur' }],
           content: [{ required: true, message: '输入内容', trigger: 'blur' }],
           promotion_type: [{ required: true, message: '选择促销分类', trigger: 'blur' }]

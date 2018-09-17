@@ -36,7 +36,7 @@
         <div class="form_part center">
           <el-form ref="form" :model="form" label-width="130px">
             <el-form-item label="商品分类权重：" prop="sort">
-              <el-input v-model.number="form.sort"></el-input>
+              <el-input v-model.number="form.sort" placeholder="请输入数字0-999"></el-input>
             </el-form-item>
             <el-form-item label="商品分类名称：" prop="category_name">
               <el-input v-model="form.category_name"></el-input>

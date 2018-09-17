@@ -34,7 +34,7 @@
 
       <el-dialog title="创建平台商品分类" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
         <div class="form_part center">
-          <el-form ref="form" :model="form" label-width="130px">
+          <el-form ref="form" :model="form" :rules="formRules" label-width="130px">
             <el-form-item label="商品分类权重：" prop="sort">
               <el-input v-model.number="form.sort"></el-input>
             </el-form-item>
@@ -71,7 +71,10 @@
           category_name: ''
         },
         formRules: {
-          sort: [{ required: true, message: '请输入数字0-999' }],
+          sort: [
+            { required: true, message: '请输入数字0-999', trigger: 'blur' },
+            { type: 'number', message: '请输入数字', trigger: 'blur' }
+          ],
           category_name: [{ required: true, message: '输入商品分类名称' }]
         },
         currentPage: 1,

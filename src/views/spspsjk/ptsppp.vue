@@ -45,7 +45,7 @@
         <div class="form_part center">
           <el-form ref="form" :rules="formRules" :model="form" label-width="130px">
             <el-form-item label="品牌权重：" prop="sort">
-              <el-input v-model.number="form.sort"></el-input>
+              <el-input v-model.number="form.sort" placeholder="请输入数字0-999"></el-input>
 
             </el-form-item>
             <el-form-item label="热门推荐：" prop="hot_flag">
@@ -65,7 +65,7 @@
                 action=""
                 :http-request="uploadImage"
                 :show-file-list="false"
-                :accept="accepts"
+                accept="image/jpeg,image/jpg,image/png,image/gif"
                 :before-upload="beforeAvatarUpload">
                 <img v-if="form.brand_img" :src="form.brand_img" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -113,7 +113,10 @@
           brand_img: ''
         },
         formRules: {
-          sort: [{ required: true, message: '请输入数字0-999' }],
+          sort: [
+            { required: true, message: '请输入数字0-999', trigger: 'blur' },
+            { type: 'number', message: '请输入数字', trigger: 'blur' }
+          ],
           brand_name: [{ required: true, message: '输入商品品牌名称' }],
           hot_flag: [{ required: true, message: '是否热门' }]
         },

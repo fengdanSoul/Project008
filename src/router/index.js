@@ -391,48 +391,48 @@ export const constantRouterMap = [
         meta: {
           title: '非常规订单详情'
         }
+      },
+      {
+        path: 'clrw',
+        component: () => import('@/views/spbbhz/clrw'),
+        name: 'clrw',
+        meta: {
+          title: '陈列任务'
+        }
+      },
+      {
+        path: 'cjclrw',
+        component: () => import('@/views/spbbhz/cjclrw'),
+        name: 'cjclrw',
+        meta: {
+          title: '创建陈列任务'
+        }
+      },
+      {
+        path: 'ptxxtz',
+        component: () => import('@/views/spbbhz/ptxxtz'),
+        name: 'ptxxtz',
+        meta: {
+          title: '平台信息通知'
+        }
+      },
+
+      {
+        path: 'appqdpz',
+        component: () => import('@/views/spbbhz/appqdpz'),
+        name: 'appqdpz',
+        meta: {
+          title: 'APP启动配置'
+        }
+      },
+      {
+        path: 'bnpz',
+        component: () => import('@/views/spbbhz/bnpz'),
+        name: 'bnpz',
+        meta: {
+          title: 'APP banner配置'
+        }
       }
-      // {
-      //   path: 'clrw',
-      //   component: () => import('@/views/spbbhz/clrw'),
-      //   name: 'clrw',
-      //   meta: {
-      //     title: '陈列任务'
-      //   }
-      // },
-      // {
-      //   path: 'cjclrw',
-      //   component: () => import('@/views/spbbhz/cjclrw'),
-      //   name: 'cjclrw',
-      //   meta: {
-      //     title: '创建陈列任务'
-      //   }
-      // },
-      // {
-      //   path: 'ptxxtz',
-      //   component: () => import('@/views/spbbhz/ptxxtz'),
-      //   name: 'ptxxtz',
-      //   meta: {
-      //     title: '平台信息通知'
-      //   }
-      // },
-      //
-      // {
-      //   path: 'appqdpz',
-      //   component: () => import('@/views/spbbhz/appqdpz'),
-      //   name: 'appqdpz',
-      //   meta: {
-      //     title: 'APP启动配置'
-      //   }
-      // },
-      // {
-      //   path: 'bnpz',
-      //   component: () => import('@/views/spbbhz/bnpz'),
-      //   name: 'bnpz',
-      //   meta: {
-      //     title: 'APP banner配置'
-      //   }
-      // }
     ]
   }
 
