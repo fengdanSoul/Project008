@@ -1,9 +1,30 @@
 import request from '@/utils/request'
 
 export default {
+  displayList: function(params) { // 商品陈列列表member_id/displayer_id/start_time/end_time/like_name
+    return request({
+      url: '/api/AdminDisplay/displayList',
+      method: 'post',
+      data: params
+    })
+  },
+  displayAdd: function(params) { // 商品陈列添加
+    return request({
+      url: '/api/AdminDisplay/displayAdd',
+      method: 'post',
+      data: params
+    })
+  },
   getMemberList: function(params) { // 商品陈列门店列表
     return request({
       url: '/api/AdminDisplay/getMemberList',
+      method: 'post',
+      data: params
+    })
+  },
+  getDisplayerList: function(params) { // 商品陈列业务员列表
+    return request({
+      url: '/api/AdminDisplay/getDisplayerList',
       method: 'post',
       data: params
     })
@@ -38,7 +59,7 @@ export default {
   },
   bannerList: function(params) { // banner列表
     return request({
-      url: '/api/AdminMessage/bannerList',
+      url: '/api/AdminBanner/bannerList',
       method: 'post',
       data: params
     })
@@ -52,7 +73,7 @@ export default {
   },
   bannerDelete: function(params) { // banner删除
     return request({
-      url: '/api/AdminMessage/bannerDelete',
+      url: '/api/AdminBanner/bannerDelete',
       method: 'post',
       data: params
     })
@@ -64,7 +85,7 @@ export default {
       data: params
     })
   },
-  bootAdd: function(params) { // app 启动图列表
+  bootAdd: function(params) { // app
     return request({
       url: '/api/AdminBoot/bootAdd',
       method: 'post',

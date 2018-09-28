@@ -109,8 +109,12 @@
 
                 <el-button type='primary' class="right" @click="deleteCurrentRow(item.shop_product_sku_id, item.product_name)" style='margin-left:10px'  >删除
                 </el-button>
-                <el-button type='primary' class="right" >编辑
-                </el-button>
+                <a :href="'#/spspgl/dpspxq/'+ item.shop_product_sku_id">
+                  <!--<el-button type='primary' class="right" style='margin-left:10px'>查看</el-button>-->
+                  <el-button type='primary' class="right" >编辑
+                  </el-button>
+                </a>
+
                 <div class="clear">
                 </div>
               </div>

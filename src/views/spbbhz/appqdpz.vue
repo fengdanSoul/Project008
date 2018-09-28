@@ -7,6 +7,22 @@
       </div>
 
       <hr>
+      <el-table :data="bannerList" border style="width: 100%">
+        <el-table-column align='center' prop="update_time" label="更新时间" width="180">
+        </el-table-column>
+        <el-table-column align='center' prop="id" label="id">
+        </el-table-column>
+        <el-table-column align='center' prop="boot_src" label="启动图">
+          <template slot-scope="scope">
+            <img  :src="scope.row.boot_src" alt="" style="width: 50px;height: 100px">
+          </template>
+        </el-table-column>
+        <el-table-column align='center' label="操作">
+          <template slot-scope="scope">
+            <el-button type="danger" size="mini" @click="handleDelete(scope.row.id)" disabled="true">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
 
       <el-container style="margin-top: 20px">
         <el-aside width="300px">
@@ -41,10 +57,21 @@
       <div v-if="bannerList.length>0" class="bottom center" style="width: 414px">
         <el-carousel height="736px" >
           <el-carousel-item v-for="item in bannerList" :key="item.id">
-            <img :src="item.banner_src" alt="">
+            <img width="100%" :src="item.boot_src" alt="">
           </el-carousel-item>
         </el-carousel>
       </div>
+      <!--http://life.tstmobile.com/uploads/image/boot/20180901/a3fea27db5a6fd973e9ccd085bd42080.jpg-->
+      <!--<div v-if="bannerList.length>0" class="bottom center" style="width: 414px">-->
+        <!--<el-carousel height="736px" >-->
+          <!--<el-carousel-item >-->
+            <!--<img width="100%" src="http://life.tstmobile.com/uploads/image/boot/20180901/a3fea27db5a6fd973e9ccd085bd42080.jpg" alt="">-->
+          <!--</el-carousel-item>-->
+          <!--<el-carousel-item>-->
+            <!--<img width="100%" src="http://life.tstmobile.com/uploads/image/boot/20180901/a3fea27db5a6fd973e9ccd085bd42080.jpg" alt="">-->
+          <!--</el-carousel-item>-->
+        <!--</el-carousel>-->
+      <!--</div>-->
     </div>
   </div>
 
@@ -77,7 +104,9 @@
     },
     methods: {
       onSubmit() {
-        console.log('submit!')
+        adminReportForm.bootAdd().then(res => {
+          this.bannerList = res.data
+        })
       },
       beforeAvatarUpload(file) {
         const isLt2M = file.size / 1024 / 1024 < 2
@@ -92,8 +121,9 @@
         }).catch(error => {
           console.log(error)
         })
+      },
+      handleDelete(id) {
       }
-
     }
   }
 

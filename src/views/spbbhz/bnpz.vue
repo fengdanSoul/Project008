@@ -6,6 +6,23 @@
           <p class="color_zywz top_label">APP banner图片</p>
       </div>
       <hr>
+      <el-table :data="bannerList" border style="width: 100%">
+        <el-table-column align='center' prop="sort" label="权重">
+        </el-table-column>
+        <el-table-column align='center' prop="id" label="id">
+        </el-table-column>
+        <el-table-column align='center' prop="banner_src" label="启动图">
+          <template slot-scope="scope">
+            <!--http://life.tstmobile.com/uploads/image/boot/20180901/a3fea27db5a6fd973e9ccd085bd42080.jpg-->
+            <img  :src="scope.row.banner_src" alt="" style="width: 100px;height: 50px">
+          </template>
+        </el-table-column>
+        <el-table-column align='center' label="操作">
+          <template slot-scope="scope">
+            <el-button type="danger" size="mini" @click="handleDelete(scope.row.id)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
 
       <div class="form_part center">
           <el-form ref="form"  :model="form" :rules="formRules" label-width="150px">
@@ -34,7 +51,7 @@
       <div v-if="bannerList.length>0" class="bottom center" style="width: 828px">
         <el-carousel type="card" height="200px" >
           <el-carousel-item v-for="item in bannerList" :key="item.id">
-            <img :src="item.banner_src" alt="">
+            <img width="100%" :src="item.banner_src" alt="">
           </el-carousel-item>
         </el-carousel>
       </div>
@@ -71,7 +88,12 @@
     },
     methods: {
       onSubmit() {
-        console.log('submit!')
+        adminReportForm.bannerAdd(this.form).then(res => {
+          this.$message.success('添加成功成功')
+          adminReportForm.bannerList().then(res => {
+            this.bannerList = res.data.list
+          })
+        })
       },
       beforeAvatarUpload(file) {
         const isLt2M = file.size / 1024 / 1024 < 2
@@ -89,8 +111,15 @@
       },
       resetForm() {
         this.$refs.form.resetFields()
+      },
+      handleDelete(id) {
+        adminReportForm.bannerDelete({ id }).then(res => {
+          this.$message.success('删除成功')
+          adminReportForm.bannerList().then(res => {
+            this.bannerList = res.data.list
+          })
+        })
       }
-
     }
   }
 
