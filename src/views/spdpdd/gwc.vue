@@ -41,11 +41,11 @@
       <div class=" cz_btm bg_white">
         <el-checkbox v-model="checkAll"  @change="handleCheckAllChange(checkAll)">全选</el-checkbox>
         <!--<el-checkbox v-model="checked" >全选</el-checkbox>-->
-        <el-button style="margin-left:20px" :disabled="!items.length" >删除</el-button>
+        <el-button style="margin-left:20px" :disabled="!products.length" >删除</el-button>
 
         <span style="margin-left:50px">合计：{{vip_total_price}}</span>
 
-        <el-button type='primary' @click="addOrder" class="right" :disabled="!items.length" >加单</el-button>
+        <el-button type='primary' @click="addOrder" class="right" :disabled="!products.length" >加单</el-button>
         <el-select v-model="member_id" placeholder="请绑定会员" class="right" style="margin-right:10px">
           <el-option
             v-for="item in memberList"
