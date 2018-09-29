@@ -112,6 +112,12 @@ const actions = {
   handleCheckAllChange({ state, commit }, val) {
     commit('handleCheckAllChange', val)
   },
+  handleProductCarSetInc({ state, commit }, product) {
+    shopCart.shopProductCarSetInc({ product_car_id: product.product_car_id }).then(res => {})
+  },
+  handleProductCarSetDec({ state, commit }, product) {
+    shopCart.shopProductCarSetDec({ product_car_id: product.product_car_id }).then(res => {})
+  },
   checkout({ commit, state }, products) {
     const savedCartItems = [...state.items]
     commit('setCheckoutStatus', null)

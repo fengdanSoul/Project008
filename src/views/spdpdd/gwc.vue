@@ -2,32 +2,8 @@
   <div class="app-container">
     <div class="filter-container ">
       <el-row :gutter="20">
-        <!--"product_car_id": "1",-->
-        <!--"product_spu_id": "17",-->
-        <!--"shop_product_sku_id": "1",-->
-        <!--"shop_id": "9",-->
-        <!--"member_id": "0",-->
-        <!--"product_number": "3",-->
-        <!--"product_name": "蒙牛牛奶",-->
-        <!--"product_description": "中国第一好牛奶",-->
-        <!--"brand_id": "1",-->
-        <!--"category_id": "19",-->
-        <!--"shop_category_id": "25",-->
-        <!--"start_day": "88",-->
-        <!--"remark": "要进行冷藏保存",-->
-        <!--"promotion_msg": "买五送一",-->
-        <!--"product_code": "2018080611",-->
-        <!--"product_specification": "180g*10",-->
-        <!--"auxiliary_code": "2018080611",-->
-        <!--"inventory": "3000",-->
-        <!--"vip_price": "30.00",-->
-        <!--"gold_price": "28.00",-->
-        <!--"diamond_price": "26.00",-->
-        <!--"this_vip_total_price": 90,-->
-        <!--"this_gold_total_price": 84,-->
-        <!--"this_diamond_total_price": 78,-->
-        <!--"product_img":-->
-        <el-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" v-for='item in items' :key="item.product_car_id">
+
+        <el-col v-if="products.length" :xs="24" :sm="24" :md="12" :lg="8" :xl="6" v-for='item in products' :key="item.product_car_id">
           <div class="gwcsp_box box_shadow">
               <div class="spcheck">
                 <el-checkbox v-model="item.check_status" @change="handleCheckedProductChange(item)">商品编码：{{item.product_code}}/辅助码：{{item.auxiliary_code}}</el-checkbox>
@@ -45,7 +21,7 @@
                       <p class="color_six">VIP单价：￥{{item.vip_price}}</p>
                       <p class="color_six">库存数量：{{item.inventory}}</p>
 
-                      <el-input-number @change="handleChangeProductNumber" style="width:150px; margin-top:10px" v-model="item.product_number"  :min="1" :max="100" label="描述文字"></el-input-number>
+                      <el-input-number @change="handleChangeProductNumber" style="width:150px; margin-top:10px" v-model="item.product_number"  :min="1" :max="1000" label="描述文字"></el-input-number>
                   </div>
                   <div class="clear">
                   </div>
@@ -88,18 +64,18 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
 import shopCart from '@/api/shopCart'
 import { shopMemberList, shopOrderAdd } from '@/api/shopOrder' //, shopOrderDelivery, shopOrderFlag,
 
 export default {
   data() {
     return {
-      // count: '',
-      // product_total_count: '',
-      // vip_total_price: '',
-      // gold_total_price: '',
-      // diamond_total_price: '',
+      count: '',
+      product_total_count: '',
+      vip_total_price: '',
+      gold_total_price: '',
+      diamond_total_price: '',
+      products: [],
       checkAll: true,
       isIndeterminate: true,
       memberList: [
@@ -110,15 +86,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'items',
-      'count',
-      'product_total_count',
-      'vip_total_price',
-      'gold_total_price',
-      'diamond_total_price',
-      'product_car_ids'
-    ])
   },
   created() {
     // this.fetchProductCarList()
@@ -126,24 +93,33 @@ export default {
     this.fetchShopMemberList()
   },
   methods: {
-    ...mapActions([
-      'getCartProducts',
-      'deleteProductFromCar',
-      'handleCheckAllChange',
-      'handleCheckedProductChange'
-    ]),
     fetchProductCarList() {
       shopCart.shopProductCarList().then(response => {
         this.products = response.data.list
         this.products.forEach(item => {
           this.product_car_id += item.product_car_id + ';'
         })
+        const data = response.data
+        this.count = data.count
+        this.product_total_count = data.product_total_count
+        this.vip_total_price = data.vip_total_price
+        this.gold_total_price = data.gold_total_price
+        this.diamond_total_price = data.diamond_price
       })
     },
     fetchShopMemberList() {
       shopMemberList({}).then(res => {
         this.memberList = res.data.list
       })
+    },
+    deleteProductFromCar(product) {
+      shopCart.shopProductCarDelete({ product_car_id: product.product_car_id }).then(res => {
+        this.fetchProductCarList()
+      })
+    },
+    handleCheckAllChange() {
+    },
+    handleCheckedProductChange() {
     },
     addOrder() {
       if (this.product_car_ids.length <= 0) {
@@ -155,7 +131,6 @@ export default {
       })
     },
     handleChangeProductNumber(value) {
-      // console.log(item)
       console.log(value)
     }
   }

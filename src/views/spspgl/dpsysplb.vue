@@ -90,7 +90,7 @@
                     <el-col>钻石：{{item.diamond_price}}</el-col>
                     <el-col>库存数量：{{item.inventory}}</el-col>
                   </el-row>
-                  <el-button class="right" @click="addProductToCart(item)" type="text" style="margin-right: 30px">
+                  <el-button :disabled="!(item.inventory > 0 && item.sku_flag === '1')" class="right" @click="addProductToCart(item)" type="text" style="margin-right: 30px">
                     <svg-icon icon-class="cart" style="width: 28px;height: 28px;"></svg-icon>
                   </el-button>
                 </div>
@@ -141,8 +141,7 @@
         </el-pagination>
       </div>
 
-
-
+      
 
     </div>
   </div>
@@ -151,7 +150,7 @@
 
 </template>
 <script>
-  import { mapActions } from 'vuex'
+  import shopCart from '@/api/shopCart'
   import { shopCategoryList, shopProductSkuFlag, shopProductSkuDelete, shopProductSkuModify } from '@/api/shopGoodsManage'
   import { shopProductSkuAllList } from '@/api/shopGoodsManage'
   import { brandList } from '@/api/adminGoodsDB'
@@ -194,7 +193,6 @@
       this.fetchCategoryList()
     },
     methods: {
-      ...mapActions(['addProductToCart']),
       fetchProductSpuList(page, shop_category_id, brand_id, sku_flag, like_name) {
         shopProductSkuAllList({ page, shop_category_id, brand_id, sku_flag, like_name }).then(response => {
           const data = response.data
@@ -202,6 +200,14 @@
           this.tableData = data.list
         }).catch(error => {
           console.log(error)
+        })
+      },
+      addProductToCart(product) {
+        shopCart.shopProductCarAdd({ shop_product_sku_id: product.shop_product_sku_id }).then(res => {
+          if (res.status === 'ok') {
+            shopCart.shopProductCarList().then(res => {
+            })
+          }
         })
       },
       fetchBrandList() {
