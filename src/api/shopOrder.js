@@ -34,7 +34,7 @@ export function shopOrderDetails(params) {
 // 店铺订单会员列表
 export function shopMemberList(params) {
   return request({
-    url: ' /api/ShopMember/shopMemberList',
+    url: '/api/ShopMember/shopMemberList',
     method: 'post',
     data: params
   })

@@ -89,7 +89,12 @@
         </el-table-column>
         <el-table-column align='center' prop="member_name" label="会员名">
         </el-table-column>
-        <el-table-column align='center' prop="delivery_distributor" label="配送信息">
+        <el-table-column align='center' prop="delivery_id" label="配送信息">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.delivery_id">
+              <el-option v-for="item in deliveryList" :key="item.id" :value="item.id" :label="item.distributor"></el-option>
+            </el-select>
+          </template>
         </el-table-column>
         <el-table-column align='center' label="操作">
           <template slot-scope="scope">
@@ -112,6 +117,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
+  import { shopDeliveryList } from '@/api/shop'
   import { shopOrderList, shopOrderDelivery } from '@/api/shopOrder' //, shopOrderDelivery, shopOrderFlag, shopOrderDetails
   export default {
     data() {
@@ -126,7 +132,8 @@
         pay_type: '',
         start_time: '',
         end_time: '',
-        like_name: ''
+        like_name: '',
+        deliveryList: []
       }
     },
     computed: {
@@ -136,6 +143,7 @@
     },
     created() {
       this.fectchShopOrderList('', '', '', '', '', 1)
+      this.fetchShopDeliveryList()
     },
     methods: {
       fectchShopOrderList(start_time, end_time, order_state, pay_type, like_name, page) {
@@ -145,6 +153,11 @@
           this.tableData = data.list
         }).catch(error => {
           console.log(error)
+        })
+      },
+      fetchShopDeliveryList() {
+        shopDeliveryList({ page: 0 }).then(res => {
+          this.deliveryList = res.data.list
         })
       },
       handleFilter() {

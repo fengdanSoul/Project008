@@ -38,7 +38,7 @@ export function shopProductSpuSkuList(params) {
 // 店铺商品sku商品详情
 export function shopProductSkuDetails(params) {
   return request({
-    url: '/api//ShopProductSku/shopProductSkuDetails',
+    url: '/api/ShopProductSku/shopProductSkuDetails',
     method: 'post',
     data: params
   })
@@ -47,7 +47,7 @@ export function shopProductSkuDetails(params) {
 // 店铺商品sku商品删除
 export function shopProductSkuDelete(params) {
   return request({
-    url: '/api//ShopProductSku/shopProductSkuDelete',
+    url: '/api/ShopProductSku/shopProductSkuDelete',
     method: 'post',
     data: params
   })
@@ -56,7 +56,7 @@ export function shopProductSkuDelete(params) {
 // 店铺商品sku商品管理
 export function shopProductSkuFlag(params) {
   return request({
-    url: '/api//ShopProductSku/shopProductSkuFlag',
+    url: '/api/ShopProductSku/shopProductSkuFlag',
     method: 'post',
     data: params
   })
@@ -65,7 +65,7 @@ export function shopProductSkuFlag(params) {
 // 店铺商品sku商品编辑
 export function shopProductSkuModify(params) {
   return request({
-    url: '/api//ShopProductSku/shopProductSkuModify',
+    url: '/api/ShopProductSku/shopProductSkuModify',
     method: 'post',
     data: params
   })

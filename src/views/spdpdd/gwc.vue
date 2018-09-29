@@ -69,13 +69,13 @@
 
         <span style="margin-left:50px">合计：{{vip_total_price}}</span>
 
-        <el-button type='primary' class="right" :disabled="!items.length" >加单</el-button>
-        <el-select v-model="value" placeholder="请绑定会员" class="right" style="margin-right:10px">
+        <el-button type='primary' @click="addOrder" class="right" :disabled="!items.length" >加单</el-button>
+        <el-select v-model="member_id" placeholder="请绑定会员" class="right" style="margin-right:10px">
           <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
+            v-for="item in memberList"
+            :key="item.member_id"
+            :label="item.member_name"
+            :value="item.member_id">
           </el-option>
         </el-select>
 
@@ -90,6 +90,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import shopCart from '@/api/shopCart'
+import { shopMemberList, shopOrderAdd } from '@/api/shopOrder' //, shopOrderDelivery, shopOrderFlag,
+
 export default {
   data() {
     return {
@@ -100,23 +102,10 @@ export default {
       // diamond_total_price: '',
       checkAll: true,
       isIndeterminate: true,
-      options: [{
-        value: '1',
-        label: '黄金糕'
-      }, {
-        value: '2',
-        label: '双皮奶'
-      }, {
-        value: '3',
-        label: '蚵仔煎'
-      }, {
-        value: '4',
-        label: '龙须面'
-      }, {
-        value: '5',
-        label: '北京烤鸭'
-      }],
-      value: ''
+      memberList: [
+      ],
+      member_id: '',
+      product_car_id: ''
 
     }
   },
@@ -127,12 +116,14 @@ export default {
       'product_total_count',
       'vip_total_price',
       'gold_total_price',
-      'diamond_total_price'
+      'diamond_total_price',
+      'product_car_ids'
     ])
   },
   created() {
     // this.fetchProductCarList()
     this.getCartProducts()
+    this.fetchShopMemberList()
   },
   methods: {
     ...mapActions([
@@ -144,6 +135,23 @@ export default {
     fetchProductCarList() {
       shopCart.shopProductCarList().then(response => {
         this.products = response.data.list
+        this.products.forEach(item => {
+          this.product_car_id += item.product_car_id + ';'
+        })
+      })
+    },
+    fetchShopMemberList() {
+      shopMemberList({}).then(res => {
+        this.memberList = res.data.list
+      })
+    },
+    addOrder() {
+      if (this.product_car_ids.length <= 0) {
+        this.$message.error('请选择商品')
+        return
+      }
+      shopOrderAdd({ product_car_id: this.product_car_ids, member_id: this.member_id }).then(res => {
+        this.$message.success('加单成功')
       })
     },
     handleChangeProductNumber(value) {

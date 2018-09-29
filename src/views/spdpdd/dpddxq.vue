@@ -3,9 +3,13 @@
 
     <div class="filter-container">
       <div class="bg_white serchadd">
-        <p class="color_zywz inline_block top_label">常规订单信息  </p>
-        <span class="color_six right inline_block ddxxzt"  >状态：{{order_state}}</span>
-        <span class="color_six right inline_block ddxxzt" style='margin-right:20px' >店铺名：{{orderDetail.shop_name}}</span>
+        <div class="inline_block">
+          <p class="color_zywz inline_block top_label"  style="margin-right: 50px">常规订单信息  </p>
+          <span class="color_six right inline_block ddxxzt"  >状态：{{order_state}}</span>
+          <span class="color_six right inline_block ddxxzt" style='margin-right:20px' >店铺名：{{orderDetail.shop_name}}</span>
+        </div>
+        <el-button type='primary' class="right inline_block ddxxzt" @click="cancelOrder">取消</el-button>
+
         <div class="clear">
         </div>
       </div>
@@ -92,7 +96,7 @@
 
         <p class="inline_block" style="margin-left:50px">合计数量：<span class="color_danger">{{total_num}}</span>   </p>
         <p class="inline_block" style="margin-left:50px">合计金额：<span class="color_danger">{{orderDetail.order_total_price}}</span></p>
-        <el-button type='primary' class="right" disabled="true">编辑/保存</el-button>
+        <el-button type='primary' class="right" >编辑/保存</el-button>
 
         <div class="clear">
 
@@ -104,7 +108,7 @@
 </template>
 
 <script>
-import { shopOrderDetails } from '@/api/shopOrder' //, shopOrderDelivery, shopOrderFlag,
+import { shopOrderDetails, shopOrderCancel } from '@/api/shopOrder' //, shopOrderDelivery, shopOrderFlag,
 export default {
   data() {
     return {
@@ -145,6 +149,13 @@ export default {
       this.orderDetail = res.data
       this.tableData = res.data.orderDetails
     })
+  },
+  methods: {
+    cancelOrder() {
+      shopOrderCancel({ order_id: this.$route.params.id }).then(res => {
+        this.$message.success('取消成功')
+      })
+    }
   }
 }
 </script>

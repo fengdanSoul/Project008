@@ -10,7 +10,8 @@ const state = {
   gold_total_price: 0,
   diamond_total_price: 0,
   itemStatus: [],
-  allStatus: true
+  allStatus: true,
+  product_car_ids: ''
 }
 
 // getters
@@ -22,6 +23,13 @@ const getters = {
   gold_total_price: state => state.gold_total_price,
   diamond_total_price: state => state.diamond_total_price,
   allStatus: state => state.allStatus,
+  product_car_ids: (state) => {
+    let _ids = ''
+    state.items.forEach(item => {
+      _ids += item.product_car_id + ';'
+    })
+    return _ids
+  },
   // checkAllStats: state =>
   // cartProducts: (state, getters, rootState) => {
   //   return state.items.map(({ id, quantity }) => {
