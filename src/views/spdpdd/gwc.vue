@@ -182,14 +182,22 @@ export default {
       }
       this.product_car_ids = ''
       this.products.forEach(item => {
-        this.product_car_ids += item.product_car_id + ';'
+        if (item.check_status) {
+          this.product_car_ids += item.product_car_id + ';'
+        }
       })
       if (this.product_car_ids.length <= 0) {
         this.$message.error('请选择商品')
         return
       }
+      if (this.member_id.length <= 0) {
+        this.$message.error('请选择会员')
+        return
+      }
       shopOrderAdd({ product_car_id: this.product_car_ids, member_id: this.member_id }).then(res => {
         this.$message.success('加单成功')
+        this.init()
+        this.vip_total_price = 0
       })
     },
     handleDec(item) { // 递减
