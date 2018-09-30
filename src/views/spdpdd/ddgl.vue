@@ -89,7 +89,9 @@
         </el-table-column>
         <el-table-column align='center' prop="member_name" label="会员名">
         </el-table-column>
-        <el-table-column align='center' prop="delivery_id" label="配送信息">
+        <el-table-column align='center' prop="delivery_distributor" label="配送信息">
+        </el-table-column>
+        <el-table-column align='center' prop="delivery_id" label="选择配送">
           <template slot-scope="scope">
             <el-select v-model="scope.row.delivery_id">
               <el-option v-for="item in deliveryList" :key="item.id" :value="item.id" :label="item.distributor"></el-option>
@@ -193,6 +195,8 @@
       handleSend(item) {
         shopOrderDelivery({ order_id: item.order_id, delivery_id: item.delivery_id }).then(res => {
           this.$message.success(res.message)
+          this.page = 1
+          this.fectchShopOrderList(this.start_time, this.end_time, this.order_state, this.pay_type, this.like_name, this.page)
         })
       },
       handleCurrentChange(val) {

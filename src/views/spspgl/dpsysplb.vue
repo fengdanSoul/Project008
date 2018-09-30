@@ -84,6 +84,9 @@
                   <img :src="item.imgData[0]" alt="商品图片">
                 </div>
                 <div class="comtitle right">
+                  <p>
+                    {{item.product_name}}
+                  </p>
                   <el-row>
                     <el-col>VIP：{{item.vip_price}}</el-col>
                     <el-col>黄金：{{item.gold_price}}</el-col>

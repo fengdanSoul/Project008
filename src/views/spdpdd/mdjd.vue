@@ -91,9 +91,16 @@
         </el-table-column>
         <el-table-column align='center' prop="delivery_distributor" label="配送信息">
         </el-table-column>
+        <el-table-column align='center' prop="delivery_id" label="选择配送">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.delivery_id">
+              <el-option v-for="item in deliveryList" :key="item.id" :value="item.id" :label="item.distributor"></el-option>
+            </el-select>
+          </template>
+        </el-table-column>
         <el-table-column align='center' label="操作">
           <template slot-scope="scope">
-            <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">发货</el-button>
+            <el-button type="primary" size="mini" @click="handleSend(scope.row)">发货</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -112,7 +119,8 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { shopOrderList } from '@/api/shopOrder' //, shopOrderDelivery, shopOrderFlag, shopOrderDetails
+  import { shopDeliveryList } from '@/api/shop'
+  import { shopOrderList, shopOrderDelivery } from '@/api/shopOrder' //, shopOrderDelivery, shopOrderFlag, shopOrderDetails
   export default {
     data() {
       return {
@@ -120,29 +128,14 @@
         loading: false,
         tableData: [
         ],
-        form: {
-          promotion_type: '',
-          title: '',
-          content: '',
-          sort: '',
-          id: ''
-        },
-        formRules: {
-          sort: [
-            { required: true, message: '请输入数字0-999', trigger: 'blur' },
-            { type: 'number', message: '请输入数字', trigger: 'blur' }
-          ],
-          title: [{ required: true, message: '输入标题', trigger: 'blur' }],
-          content: [{ required: true, message: '输入内容', trigger: 'blur' }],
-          promotion_type: [{ required: true, message: '选择促销分类', trigger: 'blur' }]
-        },
         count: 0,
         page: 1,
         order_state: '',
         pay_type: '',
         start_time: '',
         end_time: '',
-        like_name: ''
+        like_name: '',
+        deliveryList: []
       }
     },
     computed: {
@@ -152,6 +145,7 @@
     },
     created() {
       this.fectchShopOrderList('', '', '', '', '', 1)
+      this.fetchShopDeliveryList()
     },
     methods: {
       fectchShopOrderList(start_time, end_time, order_state, pay_type, like_name, page) {
@@ -161,6 +155,11 @@
           this.tableData = data.list
         }).catch(error => {
           console.log(error)
+        })
+      },
+      fetchShopDeliveryList() {
+        shopDeliveryList({ page: 0 }).then(res => {
+          this.deliveryList = res.data.list
         })
       },
       handleFilter() {
@@ -193,35 +192,11 @@
         this.page = 1
         this.fectchShopOrderList(this.start_time, this.end_time, this.order_state, this.pay_type, this.like_name, this.page)
       },
-      onSubmit() {
-        this.$refs.form.validate(valid => {
-          if (valid) {
-            // if (this.isAdd) {
-            //   shopMessageAdd(this.form).then(response => {
-            //     this.dialogVisible = false
-            //     this.$message({
-            //       message: '添加促销公告成功',
-            //       type: 'success'
-            //     })
-            //     this.page = 1
-            //     this.fectchShopMessageList(1)
-            //   }).catch(error => {
-            //     console.log(error)
-            //   })
-            // } else {
-            //   shopMessageModify(this.form).then(response => {
-            //     this.dialogVisible = false
-            //     this.$message({
-            //       message: '修改促销公告成功',
-            //       type: 'success'
-            //     })
-            //     this.page = 1
-            //     this.fectchShopMessageList(1)
-            //   }).catch(error => {
-            //     console.log(error)
-            //   })
-            // }
-          }
+      handleSend(item) {
+        shopOrderDelivery({ order_id: item.order_id, delivery_id: item.delivery_id }).then(res => {
+          this.$message.success(res.message)
+          this.page = 1
+          this.fectchShopOrderList(this.start_time, this.end_time, this.order_state, this.pay_type, this.like_name, this.page)
         })
       },
       handleCurrentChange(val) {
