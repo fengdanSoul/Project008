@@ -1,5 +1,5 @@
 module.exports = {
   NODE_ENV: '"production"',
   ENV_CONFIG: '"prod"',
-  BASE_API: '"http://life.tstmobile.com"',
+  BASE_API: '"http://shzs.xijitech.com"',
 }

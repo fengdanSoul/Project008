@@ -31,7 +31,7 @@
       </div>
       <hr>
       <div class="form_part center">
-        <el-form ref="form" :model="form" label-width="100px">
+        <el-form ref="form" :model="form" label-width="100px" :disabled="true">
           <el-form-item label="店铺商品分类" prop="shop_category_id">
             <el-select v-model="form.shop_category_id" placeholder="请选择分类">
               <el-option v-for="item in categoryList" :label="item.category_name" :value="item.id" :key="item.id"></el-option>
@@ -100,16 +100,19 @@
 </template>
 
 <script>
-import { shopProductSkuDetails, shopCategoryList, shopProductSkuModify } from '@/api/shopGoodsManage'
+import { shopProductSpuSkuList, shopProductSkuDetails, shopCategoryList, shopProductSkuModify } from '@/api/shopGoodsManage'
 export default {
   data() {
     return {
       form: {
+        shop_category_id: '',
+        start_day: '',
+        promotion_msg: '',
+        remark: '',
         product_code: '',
         product_specification: '',
         auxiliary_code: '',
         inventory: '',
-        remark: '',
         vip_price: '',
         gold_price: '',
         diamond_price: ''
@@ -127,6 +130,11 @@ export default {
     this.fetchShopProductSkuDetails()
   },
   methods: {
+    fetchSPUData(product_spu_id) {
+      shopProductSpuSkuList({ product_spu_id }).then(res => {
+        // this.tableData = res.data
+      })
+    },
     fetchShopProductSkuDetails() {
       shopProductSkuDetails({ shop_product_sku_id: this.shop_product_sku_id }).then(res => {
         this.form = res.data

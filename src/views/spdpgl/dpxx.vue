@@ -3,9 +3,9 @@
     <div class="bg_white">
         <div class="part_top">
             <p class="color_zywz top_label">店铺状态：
-              <span class="color_warning" v-if="form.attestation_status === '0'">待激活</span>
-              <span class="color_success" v-else-if="form.attestation_status === '1'">已激活</span>
-              <span class="color_danger" v-else-if="form.attestation_status === '99'">已冻结</span>
+              <span class="color_warning" v-if="form.attestation_status === 0">待激活</span>
+              <span class="color_success" v-else-if="form.attestation_status === 1">已激活</span>
+              <span class="color_danger" v-else-if="form.attestation_status === 99">已冻结</span>
               <span class="color_info" v-else>未知</span>
 
             </p>

@@ -157,7 +157,7 @@
         })
       },
       fectchAdminShopList() {
-        adminShopList({ page: 0, attestation_status: '', like_name: '' }).then(response => {
+        adminShopList({ page: 0, attestation_status: 1, like_name: '' }).then(response => {
           const data = response.data
           this.count = Number(data.count)
           this.shopList = data.list

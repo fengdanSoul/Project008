@@ -63,9 +63,9 @@
             <div class="gwcsp_box box_shadow">
               <div class="spcheck">
                 <p class="ptsmbh">商品编码：{{item.product_code}}
-                  <span class="right color_nine" v-if="item.product_flag === '0'">未上架</span>
-                  <span class="right color_nine" v-else-if="item.product_flag === '1'">已上架</span>
-                  <span class="right color_nine" v-else-if="item.product_flag === '99'">已下架</span>
+                  <span class="right color_nine" v-if="item.product_flag === 0">未上架</span>
+                  <span class="right color_nine" v-else-if="item.product_flag === 1">已上架</span>
+                  <span class="right color_nine" v-else-if="item.product_flag === 99">已下架</span>
                   <span class="right color_nine" v-else>未知</span>
 
                 </p>
