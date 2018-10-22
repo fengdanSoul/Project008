@@ -85,11 +85,58 @@ export default {
       data: params
     })
   },
-  bootAdd: function(params) { // app
+  bootModify: function(params) { // app
     return request({
-      url: '/api/AdminBoot/bootAdd',
+      url: '/api/AdminBoot/bootModify',
       method: 'post',
       data: params
     })
+  },
+  feedbackList: function(query) { // 会员反馈列表
+    return request({
+      url: '/api/AdminFeedback/feedbackList',
+      method: 'post',
+      data: query
+    })
+  },
+  feedbackFlag: function(query) { // 会员反馈处理
+    return request({
+      url: '/api/AdminFeedback/feedbackFlag',
+      method: 'post',
+      data: query
+    })
+  },
+  feedbackDelete: function(query) { // 会员反馈删除
+    return request({
+      url: '/api/AdminFeedback/feedbackDelete',
+      method: 'post',
+      data: query
+    })
   }
 }
+
+//
+// // 会员反馈列表
+// export function feedbackList(query) {
+//   return request({
+//     url: '/api/AdminFeedback/feedbackList',
+//     method: 'post',
+//     data: query
+//   })
+// }
+// // 会员反馈处理
+// export function feedbackFlag(query) {
+//   return request({
+//     url: '/api/AdminFeedback/feedbackFlag',
+//     method: 'post',
+//     data: query
+//   })
+// }
+// // 会员反馈删除
+// export function feedbackDelete(query) {
+//   return request({
+//     url: '/api/AdminFeedback/feedbackDelete',
+//     method: 'post',
+//     data: query
+//   })
+// }

@@ -4,7 +4,7 @@
     <div class="filter-container">
       <div class="bg_white serchadd">
         <div class="inline_block">
-          <p class="color_zywz inline_block top_label"  style="margin-right: 50px">常规订单信息  </p>
+          <p class="color_zywz inline_block top_label"  style="margin-right: 50px">订单信息  </p>
           <span class="color_six right inline_block ddxxzt"  >状态：{{order_state}}</span>
           <span class="color_six right inline_block ddxxzt" style='margin-right:20px' >店铺名：{{orderDetail.shop_name}}</span>
         </div>

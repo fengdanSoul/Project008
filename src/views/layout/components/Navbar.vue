@@ -9,7 +9,10 @@
 
       <div class="right-menu-item">
         <el-badge :value="cartTotalQuantity" :max="99" class="item">
-            <svg-icon @click="gotoCart" icon-class="cart" style="width: 28px;height: 28px;display: inline-block;  vertical-align: 10px;margin-right: 20px"></svg-icon>
+          <a href="#/spdpdd/spgwc">
+            <svg-icon icon-class="cart" style="width: 28px;height: 28px;display: inline-block;  vertical-align: 10px;margin-right: 20px"></svg-icon>
+
+          </a>
         </el-badge>
       </div>
 

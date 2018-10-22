@@ -309,24 +309,24 @@ export default {
       this.adminMemberList(1, '', '', '', this.like_name)
     },
     formatSex(row) {
-      return row.sex === '1' ? '男' : row.sex === '2' ? '女' : '未知'
+      return row.sex === 1 ? '男' : row.sex === 2 ? '女' : '未知'
     },
     formatMemberevel(row) {
-      if (row.member_level === '1') {
+      if (row.member_level === 1) {
         return 'VIP'
-      } else if (row.member_level === '2') {
+      } else if (row.member_level === 2) {
         return '黄金'
-      } else if (row.member_level === '3') {
+      } else if (row.member_level === 3) {
         return '钻石'
       }
       return '未知'
     },
     formatAttestationStatus(row) {
-      if (row.attestation_status === '0') {
+      if (row.attestation_status === 0) {
         return '未激活'
-      } else if (row.attestation_status === '1') {
+      } else if (row.attestation_status === 1) {
         return '已激活'
-      } else if (row.attestation_status === '99') {
+      } else if (row.attestation_status === 99) {
         return '已冻结'
       }
       return '未知'

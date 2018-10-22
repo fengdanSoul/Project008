@@ -19,42 +19,43 @@
         </el-table-column>
         <el-table-column align='center' label="操作">
           <template slot-scope="scope">
-            <el-button type="danger" size="mini" @click="handleDelete(scope.row.id)" disabled="true">删除</el-button>
+            <el-button type="primary" size="mini" @click.native.prevent="handleEdit(scope.row)">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
 
-      <el-container style="margin-top: 20px">
-        <el-aside width="300px">
-          <div class="form_part">
-            <el-form ref="form"  :model="form" >
-              <el-form-item>
-                <el-upload
-                  class="avatar-uploader"
-                  action=""
-                  :http-request="uploadImage"
-                  :show-file-list="false"
-                  accept="image/jpeg,image/jpg,image/png,image/gif"
-                  :before-upload="beforeAvatarUpload">
-                  <i class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-              </el-form-item>
+      <!--<el-container style="margin-top: 20px">-->
+        <!--<el-aside width="300px">-->
+          <!--<div class="form_part">-->
+            <!--<el-form ref="form"  :model="form" >-->
+              <!--<el-form-item>-->
+                <!--<el-upload-->
+                  <!--class="avatar-uploader"-->
+                  <!--action=""-->
+                  <!--:http-request="uploadImage"-->
+                  <!--:show-file-list="false"-->
+                  <!--accept="image/jpeg,image/jpg,image/png,image/gif"-->
+                  <!--:before-upload="beforeAvatarUpload">-->
+                  <!--<i class="el-icon-plus avatar-uploader-icon"></i>-->
+                <!--</el-upload>-->
+              <!--</el-form-item>-->
 
-              <el-form-item>
-                <el-button type="primary" @click="onSubmit" :disabled="form.boot_src.length<=0">确定</el-button>
-              </el-form-item>
+              <!--<el-form-item>-->
 
-            </el-form>
-          </div>
-        </el-aside>
-        <el-main >
-          <img v-if="form.boot_src" :src="form.boot_src" class="avatar">
-        </el-main>
-      </el-container>
+                <!--<el-button type="primary" @click="onSubmit" :disabled="form.boot_src.length<=0">确定</el-button>-->
+              <!--</el-form-item>-->
+
+            <!--</el-form>-->
+          <!--</div>-->
+        <!--</el-aside>-->
+        <!--<el-main >-->
+          <!--<img v-if="form.boot_src" :src="form.boot_src" class="avatar">-->
+        <!--</el-main>-->
+      <!--</el-container>-->
 
 
 
-      <div v-if="bannerList.length>0" class="bottom center" style="width: 414px">
+      <div v-if="bannerList.length>0" class="bottom center" style="width: 414px;margin-top: 20px">
         <el-carousel height="736px" >
           <el-carousel-item v-for="item in bannerList" :key="item.id">
             <img width="100%" :src="item.boot_src" alt="">
@@ -73,6 +74,43 @@
         <!--</el-carousel>-->
       <!--</div>-->
     </div>
+    <el-dialog title="编辑启动图" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      <div class="form_part center">
+        <el-form ref="form" :rules="formRules" :model="form" label-width="130px">
+
+          <el-form-item label="id：" prop="id">
+            <el-input v-model="form.id"></el-input>
+          </el-form-item>
+          <!--<el-form-item label="路径：" prop="boot_src">-->
+            <!--<el-input v-model="form.boot_src"></el-input>-->
+          <!--</el-form-item>-->
+
+          <el-form-item label="启动图片：" prop="boot_src">
+            <el-upload
+              class="avatar-uploader"
+              action=""
+              :http-request="uploadImage"
+              :show-file-list="false"
+              accept="image/jpeg,image/jpg,image/png,image/gif"
+              :before-upload="beforeAvatarUpload">
+              <img v-if="form.boot_src" :src="form.boot_src" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
+
+          <!--action="http://life.tstmobile.com/api/UploadImage/uploadDisplayImage"-->
+          <!--:http-request="uploadImage"-->
+
+
+          <el-form-item>
+            <el-button type="primary" @click="addAndUpdateData">确认</el-button>
+            <el-button @click="dialogVisible = false">取消</el-button>
+          </el-form-item>
+
+        </el-form>
+      </div>
+
+    </el-dialog>
   </div>
 
 </template>
@@ -83,16 +121,10 @@
   export default {
     data() {
       return {
+        dialogVisible: false,
         form: {
-          sort: '',
+          id: '',
           boot_src: ''
-        },
-        formRules: {
-          sort: [
-            { required: true, message: '请输入数字0-999', trigger: 'blur' },
-            { type: 'number', message: '请输入数字', trigger: 'blur' }
-          ],
-          boot_src: [{ required: true, message: '上传图片', trigger: 'blur' }]
         },
         bannerList: []
       }
@@ -104,9 +136,6 @@
     },
     methods: {
       onSubmit() {
-        adminReportForm.bootAdd().then(res => {
-          this.bannerList = res.data
-        })
       },
       beforeAvatarUpload(file) {
         const isLt2M = file.size / 1024 / 1024 < 2
@@ -122,7 +151,23 @@
           console.log(error)
         })
       },
-      handleDelete(id) {
+      handleEdit(form) {
+        this.dialogVisible = true
+        this.form = form
+      },
+      addAndUpdateData() {
+        adminReportForm.bootModify(this.form).then(response => {
+          this.dialogVisible = false
+          this.$message({
+            message: '编辑成功',
+            type: 'success'
+          })
+          adminReportForm.bootList().then(res => {
+            this.bannerList = res.data
+          })
+        }).catch(error => {
+          console.log(error)
+        })
       }
     }
   }

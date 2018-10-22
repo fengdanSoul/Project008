@@ -6,7 +6,7 @@
     </div>
     <hr>
     <div class="form_part center">
-      <el-form ref="form" :rules="formRules" :model="form" label-width="130px">
+      <el-form ref="form" :rules="formRules" :model="form" label-width="130px" :disabled="true">
         <el-form-item label="店铺商品分类" prop="shop_category_id">
           <el-select v-model="form.shop_category_id" placeholder="请选择分类">
             <el-option v-for="item in categoryList" :label="item.category_name" :value="item.id" :key="item.id"></el-option>
@@ -104,8 +104,9 @@
 </template>
 
 <script type="text/javascript">
-import { shopCategoryList } from '@/api/shopGoodsManage'
+import { shopCategoryList, shopProductSpuSkuList } from '@/api/shopGoodsManage'
 import { shopProductAdd } from '@/api/shopGoodsManage'
+
 export default {
   data() {
     return {
@@ -168,8 +169,35 @@ export default {
       shopCategoryList({ page, like_name }).then(response => {
         const data = response.data
         this.categoryList = data.list
+        this.fetchSPUData(this.product_spu_id)
       }).catch(error => {
         console.log(error)
+      })
+    },
+    fetchSPUData(product_spu_id) {
+      // product_spu_id	16
+      // shop_prdouct_info_id	4
+      // product_name	伊利牛奶
+      // product_description	中国第一好牛奶
+      // brand_id	2
+      // category_id	20
+      // brand_name	品牌2
+      // category_name	分类二
+      // shop_id	9
+      // shop_category_id	25
+      // start_day	90
+      // remark	常温保存三十天
+      // promotion_msg	促销信息 购物网站 上1号店 底价狂欢 物美更超值
+      // shop_category_name	热门推荐
+      shopProductSpuSkuList({ product_spu_id }).then(res => {
+        // shop_category_id: '',
+        //   start_day: '',
+        //   remark: '',
+        //   promotion_msg: ''
+        this.form.shop_category_id = res.data.shop_category_id
+        this.form.start_day = res.data.start_day
+        this.form.remark = res.data.remark
+        this.form.promotion_msg = res.data.promotion_msg
       })
     },
     addTableForm() {

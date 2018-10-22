@@ -416,7 +416,14 @@ export const constantRouterMap = [
           title: '平台信息通知'
         }
       },
-
+      {
+        path: 'pthyfk',
+        component: () => import('@/views/spbbhz/pthyfk'),
+        name: 'pthyfk',
+        meta: {
+          title: '会员反馈'
+        }
+      },
       {
         path: 'appqdpz',
         component: () => import('@/views/spbbhz/appqdpz'),

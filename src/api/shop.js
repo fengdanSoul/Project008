@@ -94,7 +94,7 @@ export function shopDeliveryModify(query) {
 // 会员反馈列表
 export function feedbackList(query) {
   return request({
-    url: '/api/AdminFeedback/feedbackList',
+    url: '/api/ShopFeedback/feedbackList',
     method: 'post',
     data: query
   })
@@ -102,7 +102,7 @@ export function feedbackList(query) {
 // 会员反馈处理
 export function feedbackFlag(query) {
   return request({
-    url: '/api/AdminFeedback/feedbackFlag',
+    url: '/api/ShopFeedback/feedbackFlag',
     method: 'post',
     data: query
   })
@@ -110,8 +110,34 @@ export function feedbackFlag(query) {
 // 会员反馈删除
 export function feedbackDelete(query) {
   return request({
-    url: '/api/AdminFeedback/feedbackDelete',
+    url: '/api/ShopFeedback/feedbackDelete',
     method: 'post',
     data: query
   })
 }
+
+//
+// // 会员反馈列表
+// export function feedbackList(query) {
+//   return request({
+//     url: '/api/AdminFeedback/feedbackList',
+//     method: 'post',
+//     data: query
+//   })
+// }
+// // 会员反馈处理
+// export function feedbackFlag(query) {
+//   return request({
+//     url: '/api/AdminFeedback/feedbackFlag',
+//     method: 'post',
+//     data: query
+//   })
+// }
+// // 会员反馈删除
+// export function feedbackDelete(query) {
+//   return request({
+//     url: '/api/AdminFeedback/feedbackDelete',
+//     method: 'post',
+//     data: query
+//   })
+// }

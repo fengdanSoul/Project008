@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <div class="bg_white serchadd">
-        <span class="color_six top_label">特殊订单：</span>
+        <span class="color_six top_label">常规订单：</span>
         <el-input  style="width: 200px;" v-model="like_name" class="filter-item" placeholder="">
         </el-input>
         <el-button class="filter-item" type="primary" @click="handleFilter" icon="el-icon-search" >搜索</el-button>
@@ -120,7 +120,7 @@
 <script>
   import { mapGetters } from 'vuex'
   import { shopDeliveryList } from '@/api/shop'
-  import { shopOrderList, shopOrderDelivery } from '@/api/shopOrder' //, shopOrderDelivery, shopOrderFlag, shopOrderDetails
+  import { shopAppOrderList, shopOrderDelivery } from '@/api/shopOrder' //, shopOrderDelivery, shopOrderFlag, shopOrderDetails
   export default {
     data() {
       return {
@@ -149,7 +149,7 @@
     },
     methods: {
       fectchShopOrderList(start_time, end_time, order_state, pay_type, like_name, page) {
-        shopOrderList({ start_time, end_time, order_state, pay_type, like_name, page }).then(response => {
+        shopAppOrderList({ start_time, end_time, order_state, pay_type, like_name, page }).then(response => {
           const data = response.data
           this.count = Number(data.count)
           this.tableData = data.list

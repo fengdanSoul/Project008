@@ -7,6 +7,14 @@ export function shopOrderList(params) {
     data: params
   })
 }
+// 店铺订单列表
+export function shopAppOrderList(params) {
+  return request({
+    url: '/api/ShopOrder/shopAppOrderList',
+    method: 'post',
+    data: params
+  })
+}
 // 店铺订单发货
 export function shopOrderDelivery(params) {
   return request({
