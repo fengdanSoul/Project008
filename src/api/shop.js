@@ -115,16 +115,24 @@ export function feedbackDelete(query) {
     data: query
   })
 }
+// 店铺订单会员列表
+export function shopMemberList(query) {
+  return request({
+    url: '/api/ShopMember/shopMemberList',
+    method: 'post',
+    data: query
+  })
+}
+// 店铺订单会员详情
+export function shopMemberDetails(query) {
+  return request({
+    url: '/api/ShopMember/shopMemberDetails',
+    method: 'post',
+    data: query
+  })
+}
+// /api/ShopMember/shopMemberDetails
 
-//
-// // 会员反馈列表
-// export function feedbackList(query) {
-//   return request({
-//     url: '/api/AdminFeedback/feedbackList',
-//     method: 'post',
-//     data: query
-//   })
-// }
 // // 会员反馈处理
 // export function feedbackFlag(query) {
 //   return request({

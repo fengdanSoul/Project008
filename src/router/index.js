@@ -222,27 +222,6 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/spzhsz',
-    component: Layout,
-    redirect: 'spzhsz',
-    name: 'spzhsz',
-    alwaysShow: true,
-    meta: {
-      title: '账号设置',
-      icon: 'password'
-    },
-    children: [
-      {
-        path: 'xgmm',
-        component: () => import('@/views/spzhsz/xgmm'),
-        name: 'xgmm',
-        meta: {
-          title: '修改密码'
-        }
-      }
-    ]
-  },
-  {
     path: '/spyhgl',
     component: Layout,
     redirect: 'spyhgl',
@@ -438,6 +417,27 @@ export const constantRouterMap = [
         name: 'bnpz',
         meta: {
           title: 'APP banner配置'
+        }
+      }
+    ]
+  },
+  {
+    path: '/spzhsz',
+    component: Layout,
+    redirect: 'spzhsz',
+    name: 'spzhsz',
+    alwaysShow: true,
+    meta: {
+      title: '账号设置',
+      icon: 'password'
+    },
+    children: [
+      {
+        path: 'xgmm',
+        component: () => import('@/views/spzhsz/xgmm'),
+        name: 'xgmm',
+        meta: {
+          title: '修改密码'
         }
       }
     ]
