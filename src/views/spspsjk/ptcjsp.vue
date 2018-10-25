@@ -165,6 +165,7 @@
       resetForm(formName) {
         this.$refs[formName].resetFields()
         this.fileList = []
+        this.fileUrlList = []
       },
       beforeAvatarUpload(file) {
         const isLt2M = file.size / 1024 / 1024 < 2

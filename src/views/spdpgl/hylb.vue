@@ -36,14 +36,16 @@
       </el-table-column>
       <el-table-column align='center' prop="receiving_address" label="门店地址">
       </el-table-column>
+      <el-table-column align='center' prop="district_name" label="所在区域">
+      </el-table-column>
       <el-table-column align='center' prop="member_level" :formatter="formatMemberevel" label="等级">
       </el-table-column>
 
-      <el-table-column align='center' label="操作">
-        <template slot-scope="scope">
-          <el-button type="text" size="mini" @click="editCurrentRow(scope.$index)">查看</el-button>
-        </template>
-      </el-table-column>
+      <!--<el-table-column align='center' label="操作">-->
+        <!--<template slot-scope="scope">-->
+          <!--<el-button type="text" size="mini" @click="editCurrentRow(scope.$index)">查看</el-button>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
     </el-table>
 
     <div class="pagination-container">

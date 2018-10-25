@@ -44,7 +44,7 @@
       <el-table :data="tableData" border style="width: 100%">
         <el-table-column align='center' prop="create_time" label="注册时间" >
         </el-table-column>
-        <el-table-column align='center' prop="class_id" label="管理员ID" >
+        <el-table-column align='center' prop="shop_id" label="管理员ID" >
         </el-table-column>
         <el-table-column align='center' prop="company_name" label="门店铺名称" >
         </el-table-column>
@@ -66,7 +66,7 @@
         </el-table-column>
         <el-table-column align='center' label="状态操作">
           <template slot-scope="scope">
-            <el-button type="success" size="mini" @click="dealAttestationStatus(scope.$index)" >{{scope.row.attestation_status === '1' ? '冻结' : '激活'}}</el-button>
+            <el-button type="success" size="mini" @click="dealAttestationStatus(scope.$index)" >{{scope.row.attestation_status === 1 ? '冻结' : '激活'}}</el-button>
            </template>
         </el-table-column>
       </el-table>
@@ -302,11 +302,11 @@ export default {
       this.fectchAdminShopList(1, '', this.like_name)
     },
     formatAttestationStatus(row) {
-      if (row.attestation_status === '0') {
+      if (row.attestation_status === 0) {
         return '未激活'
-      } else if (row.attestation_status === '1') {
+      } else if (row.attestation_status === 1) {
         return '已激活'
-      } else if (row.attestation_status === '99') {
+      } else if (row.attestation_status === 99) {
         return '已冻结'
       }
       return '未知'

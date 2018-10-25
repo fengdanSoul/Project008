@@ -66,9 +66,9 @@
           <div class="gwcsp_box box_shadow">
               <div class="spcheck">
                 <p class="ptsmbh">商品编码：{{item.product_code}}
-                  <span class="right color_nine" v-if="item.product_flag === '0'">未上架</span>
-                  <span class="right color_nine" v-else-if="item.product_flag === '1'">已上架</span>
-                  <span class="right color_nine" v-else-if="item.product_flag === '99'">已下架</span>
+                  <span class="right color_nine" v-if="item.product_flag === 0">未上架</span>
+                  <span class="right color_nine" v-else-if="item.product_flag === 1">已上架</span>
+                  <span class="right color_nine" v-else-if="item.product_flag === 99">已下架</span>
                   <span class="right color_nine" v-else>未知</span>
 
                 </p>
@@ -92,15 +92,17 @@
 
               <div class="spamount">
 
-                  <el-button type='primary' class="right" @click="stopSale(item.id, item.product_name)"  style='margin-left:10px' v-if="item.product_flag === '1'" >下架
+                  <el-button type='primary' class="right" @click="stopSale(item.id, item.product_name)"  style='margin-left:10px' v-if="item.product_flag === 1" >下架
                   </el-button>
                 <el-button type='primary' class="right" @click="onSale(item.id, item.product_name)"  style='margin-left:10px' v-else >上架
                 </el-button>
 
                   <el-button type='primary' class="right" @click="deleteCurrentRow(item.id, item.product_name)" style='margin-left:10px'  >删除
                   </el-button>
-                  <el-button type='primary' class="right" >编辑
+
+                  <el-button type='primary' class="right" @click="editCurrentRow(item)">编辑
                   </el-button>
+
                   <div class="clear">
                   </div>
               </div>
@@ -114,6 +116,80 @@
       </div>
 
 
+      <el-dialog title="会员信息查看" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+        <div class="form_part center">
+          <el-form ref="form" :rules="formRules" :model="form" label-width="130px">
+
+            <el-form-item label="平台商品分类" prop="category_id">
+              <el-select v-model="form.category_id" placeholder="请选择">
+                <el-option
+                  v-for="item in categoryList"
+                  :key="item.id"
+                  :label="item.category_name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="平台商品品牌" prop="brand_id">
+              <el-select v-model="form.brand_id" placeholder="请选择">
+                <el-option
+                  v-for="item in brandList"
+                  :key="item.id"
+                  :label="item.brand_name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="商品名称" prop="product_name">
+              <el-input v-model="form.product_name"></el-input>
+            </el-form-item>
+            <el-form-item label="商品编码" prop="product_code">
+              <el-input v-model="form.product_code"></el-input>
+            </el-form-item>
+
+            <el-form-item label="详情描述" prop="product_description">
+              <el-input type="textarea" v-model="form.product_description"></el-input>
+            </el-form-item>
+
+            <el-form-item label="商品照片" prop="product_img">
+              <!--<el-upload-->
+              <!--class="avatar-uploader"-->
+              <!--accept="image/jpeg,image/jpg,image/png,image/gif"-->
+              <!--action=""-->
+              <!--:show-file-list="false"-->
+              <!--:before-upload="beforeAvatarUpload">-->
+              <!--<img v-if="form.product_img" :src="form.product_img" class="avatar">-->
+              <!--<i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+              <!--</el-upload>-->
+
+              <el-upload
+                class="upload-demo"
+                accept="image/jpeg,image/jpg,image/png,image/gif"
+                action=""
+                :http-request="uploadImage"
+                :on-remove="handleRemove"
+                :before-upload="beforeAvatarUpload"
+                :file-list="fileList"
+                list-type="picture">
+                <el-button size="small" type="success">点击上传图片</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传小于2M的图片文件</div>
+              </el-upload>
+            </el-form-item>
+
+            <el-form-item>
+              <el-button type="primary" :loading="loading"  @click="submitForm('form')">确认</el-button>
+              <el-button @click="cancelEdit">取消</el-button>
+
+              <!--<el-button type="primary" :loading="loading" @click="submitForm('form')">创建</el-button>-->
+              <!--<el-button @click="resetForm('form')">重置</el-button>-->
+            </el-form-item>
+
+          </el-form>
+        </div>
+
+      </el-dialog>
 
 
     </div>
@@ -124,6 +200,7 @@
 </template>
 <script>
   import { productSpuList, brandList, categoryList, productSpuDelete, productSpuFlag, productSpuModify } from '@/api/adminGoodsDB'
+  import { uploadDisplayImage } from '@/api/upload'
   export default {
     data() {
       return {
@@ -140,13 +217,17 @@
           id: ''
         },
         formRules: {
-          category_id: [{ required: true, message: '选择所在区域' }],
-          brand_id: [{ required: true, message: '输入门店名称' }],
-          product_name: [{ required: true, message: '输入店主姓名' }],
-          product_img: [{ required: true, message: '输入联系电话' }],
-          product_code: [{ required: true, message: '选择会员等级' }],
-          product_description: [{ required: true, message: '输入收货地址' }]
+          category_id: [{ required: true, message: '选择商品类型' }],
+          brand_id: [{ required: true, message: '选择品牌类型' }],
+          product_name: [{ required: true, message: '输入商品名称' }],
+          product_img: [{ required: true, message: '添加商品图片' }],
+          product_code: [{ required: true, message: '输入商品编码' }],
+          product_description: [{ required: true, message: '输入商品描述' }]
         },
+        fileList: [
+        ],
+        fileUrlList: [
+        ],
         count: 0,
         page: 1,
         category_id: '',
@@ -154,7 +235,8 @@
         product_flag: '',
         like_name: '',
         brandList: [],
-        categoryList: []
+        categoryList: [],
+        loading: false
       }
     },
     created() {
@@ -202,10 +284,18 @@
         this.page = 1
         this.fetchProductSpuList(1, this.category_id, this.brand_id, this.product_flag, '')
       },
-      editCurrentRow(index) {
+      editCurrentRow(item) {
         this.dialogVisible = true
-        this.form = this.tableData[index]
-        // this.isAdd = false
+        this.form = item
+        // this.fileUrlList.push({ name: params.file.name, uid: params.file.uid, url: response.data })
+        var arr = []
+        item.product_img.forEach(item => {
+          const filePathArr = item.split('/')
+          const len = filePathArr.length
+          arr.push({ name: filePathArr[len - 1], uid: filePathArr[len - 1].split('.')[0], url: item })
+        })
+        this.fileUrlList = arr
+        this.fileList = arr
       },
       stopSale(id, name) {
         this.$confirm('确认下架商品：' + name)
@@ -255,19 +345,6 @@
           })
           .catch(_ => {})
       },
-      updateMember() {
-        productSpuModify(this.form).then(response => {
-          this.dialogVisible = false
-          this.$message({
-            message: '修改商品信息成功',
-            type: 'success'
-          })
-          this.page = 1
-          this.fetchProductSpuList(1, '', '', '', '')
-        }).catch(error => {
-          console.log(error)
-        })
-      },
       handleCurrentChange(val) {
         // console.log(`当前页: ${val}`)
         this.fetchProductSpuList(val, this.category_id, this.brand_id, this.product_flag, this.like_name)
@@ -286,8 +363,75 @@
         this.page = 1
         this.fetchProductSpuList(1, '', '', '', this.like_name)
       },
-      activeIndex() {
-        return this.$route.path.replace('/', '#/spspsjk/ptcjsp')
+      cancelEdit() {
+        this.dialogVisible = false
+      },
+      submitForm(formName) {
+        this.setBrandImg()
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.loading = true
+            productSpuModify(this.form).then(response => {
+              const data = response
+              this.loading = false
+              if (data.status === 'ok') {
+                this.resetForm(formName)
+
+                this.dialogVisible = false
+                this.$message({
+                  message: '修改商品信息成功',
+                  type: 'success'
+                })
+                this.page = 1
+                this.fetchProductSpuList(1, '', '', '', '')
+              }
+            }).catch(error => {
+              this.$message({
+                message: error,
+                type: 'error',
+                duration: 2.5 * 1000
+              })
+              this.loading = false
+            })
+          } else {
+            return false
+          }
+        })
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields()
+        this.fileList = []
+        this.fileUrlList = []
+      },
+      beforeAvatarUpload(file) {
+        const isLt2M = file.size / 1024 / 1024 < 2
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!')
+        }
+        return isLt2M
+      },
+      handleRemove(file, fileList) {
+        this.fileList = fileList
+        this.fileUrlList = this.fileUrlList.filter(t => {
+          return t.uid !== file.uid
+        })
+        this.setBrandImg()
+      },
+      uploadImage(params) {
+        uploadDisplayImage(params.file).then(response => {
+          this.fileList.push(params.file)
+          this.fileUrlList.push({ name: params.file.name, uid: params.file.uid, url: response.data })
+          this.setBrandImg()
+        }).catch(error => {
+          console.log(error)
+        })
+      },
+      setBrandImg() {
+        var arr = []
+        this.fileUrlList.forEach(item => {
+          arr.push(item.url)
+        })
+        this.$set(this.form, 'product_img', arr.join(';'))
       }
     }
 
