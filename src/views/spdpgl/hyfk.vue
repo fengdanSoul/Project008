@@ -63,7 +63,7 @@
       </el-table-column>
       <el-table-column align='center' label="操作">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleDealFlag(scope.row.id)" :disabled="scope.row.deal_flag === '1'">{{scope.row.deal_flag === '1' ? '已处理' : '处理'}}</el-button>
+          <el-button type="primary" size="mini" @click="handleDealFlag(scope.row.id)" :disabled="scope.row.deal_flag === 1">{{scope.row.deal_flag === 1 ? '已处理' : '处理'}}</el-button>
           <el-button type="danger" size="mini" @click="handleDelete(scope.row.id)" >删除</el-button>
 
         </template>

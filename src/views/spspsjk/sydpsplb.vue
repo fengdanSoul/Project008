@@ -48,15 +48,15 @@
           <div class="gwcsp_box box_shadow">
               <div class="spcheck">
                 <p class="ptsmbh">商品编码：{{item.auxiliary_code}}
-                  <span class="right color_nine" v-if="item.sku_flag === '0'">未上架</span>
-                  <span class="right color_nine" v-else-if="item.sku_flag === '1'">已上架</span>
-                  <span class="right color_nine" v-else-if="item.sku_flag === '99'">已下架</span>
+                  <span class="right color_nine" v-if="item.sku_flag === 0">未上架</span>
+                  <span class="right color_nine" v-else-if="item.sku_flag === 1">已上架</span>
+                  <span class="right color_nine" v-else-if="item.sku_flag === 99">已下架</span>
                   <span class="right color_nine" v-else>未知</span>
                 </p>
               </div>
 
               <hr>
-              <div class="comimgtitie">
+              <div class="comimgtitie" style="height: 150px">
                   <div class="comimg left">
                     <img :src="item.imgData[0]" alt="商品图片">
                   </div>
@@ -71,8 +71,8 @@
                   </div>
               </div>
               <hr>
-            <div class="spamount">
-              <p>{{item.company_name}}</p>
+            <!--<div class="spamount">-->
+              <!--<p>{{item.company_name}}</p>-->
               <!--<el-button disabled="true" type='primary' class="right" @click="stopSale(item.id, item.product_name)"  style='margin-left:10px' v-if="item.sku_flag === '1'" >下架-->
               <!--</el-button>-->
               <!--<el-button type='primary' class="right" @click="onSale(item.id, item.product_name)"  style='margin-left:10px' v-else >上架-->
@@ -82,9 +82,9 @@
               <!--</el-button>-->
               <!--<el-button type='primary' class="right" >编辑-->
               <!--</el-button>-->
-              <div class="clear">
-              </div>
-            </div>
+              <!--<div class="clear">-->
+              <!--</div>-->
+            <!--</div>-->
 
           </div>
         </el-col>

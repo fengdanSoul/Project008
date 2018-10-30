@@ -70,6 +70,22 @@ export function shopProductSkuModify(params) {
     data: params
   })
 }
+// 基本信息
+export function shopPrdouctSkuAddIndex(params) {
+  return request({
+    url: '/api//ShopProductSku/shopPrdouctSkuAddIndex',
+    method: 'post',
+    data: params
+  })
+}
+// 店铺商品sku商品add
+export function shopProductSkuAdd(params) {
+  return request({
+    url: '/api//ShopProductSku/shopProductSkuAdd',
+    method: 'post',
+    data: params
+  })
+}
 // 店铺商品分类添加
 export function shopCategoryAdd(params) {
   return request({

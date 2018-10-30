@@ -204,6 +204,13 @@ export const constantRouterMap = [
         meta: { title: '店铺商品详情' }
       },
       {
+        path: 'dpdgcjsp/:id',
+        component: () => import('@/views/spspgl/dpdgcjsp'),
+        hidden: true,
+        name: 'dpspxq',
+        meta: { title: '店铺创建商品' }
+      },
+      {
         path: 'dpsysplb',
         component: () => import('@/views/spspgl/dpsysplb'),
         name: 'dpsysplb',

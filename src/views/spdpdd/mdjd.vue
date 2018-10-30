@@ -87,6 +87,10 @@
         </el-table-column>
         <el-table-column align='center' prop="order_total_price" label="订单金额(元)">
         </el-table-column>
+        <el-table-column align='center' prop="pay_type" :formatter="formatPayType" label="支付方式">
+        </el-table-column>
+        <el-table-column align='center' prop="order_state" :formatter="formatOrderState" label="状态">
+        </el-table-column>
         <el-table-column align='center' prop="member_name" label="会员名">
         </el-table-column>
         <el-table-column align='center' prop="delivery_distributor" label="配送信息">
@@ -209,6 +213,30 @@
             done()
           })
           .catch(_ => {})
+      },
+      formatPayType(row) {
+        if (row.pay_type === 1) {
+          return '货到付款'
+        } else if (row.pay_type === 2) {
+          return '线下转账'
+        } else if (row.pay_type === 3) {
+          return '赊账'
+        }
+        return '未知'
+      },
+      formatOrderState(row) {
+        if (row.order_state === 'wait_pay') {
+          return '待付款'
+        } else if (row.order_state === 'wait_affirm') {
+          return '待确认'
+        } else if (row.order_state === 'wait_send') {
+          return '待发货'
+        } else if (row.order_state === 'wait_receive') {
+          return '待签收'
+        } else if (row.order_state === 'end') {
+          return '已完成'
+        }
+        return '未知'
       }
     }
   }

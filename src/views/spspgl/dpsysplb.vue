@@ -208,6 +208,7 @@
       addProductToCart(product) {
         shopCart.shopProductCarAdd({ shop_product_sku_id: product.shop_product_sku_id }).then(res => {
           if (res.status === 'ok') {
+            this.$message.success('添加购物车成功')
             shopCart.shopProductCarList().then(res => {
             })
           }

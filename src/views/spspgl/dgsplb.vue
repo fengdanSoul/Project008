@@ -4,9 +4,10 @@
       <div class="bg_white serchadd">
         <p class="color_zywz inline_block top_label">平台商品编号  </p>
 
-        <a :href="'#/spspgl/dpcjsp/'+ product_spu_id">
+        <a :href="'#/spspgl/dpdgcjsp/'+ product_spu_id">
           <el-button class="filter-item right ggcxtjbtn add_btn" style="margin-left: 10px;" type="primary" icon="el-icon-edit">创建商品</el-button>
         </a>
+
         <div class="clear">
         </div>
       </div>
@@ -68,7 +69,7 @@
               <div class="spamount">
 
 
-                <el-button type='primary' class="right" @click="stopSale(item.shop_product_sku_id)"  style='margin-left:10px' v-if="item.sku_flag === '1'" >下架
+                <el-button type='primary' class="right" @click="stopSale(item.shop_product_sku_id)"  style='margin-left:10px' v-if="item.sku_flag === 1" >下架
                 </el-button>
                 <el-button type='primary' class="right" @click="onSale(item.shop_product_sku_id)"  style='margin-left:10px' v-else >上架
                 </el-button>

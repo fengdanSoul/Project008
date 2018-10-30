@@ -89,7 +89,10 @@
 
               <div class="spamount bottom">
                 <span>共{{item.shop_product_count}}种</span>
-                <a :href="'#/spspgl/dpcjsp/'+ item.product_spu_id">
+                <a :href="'#/spspgl/dpdgcjsp/'+ item.product_spu_id" v-if="item.isProductInfo === 1">
+                  <el-button type='primary' class="right" style='margin-left:10px'>创建商品</el-button>
+                </a>
+                <a :href="'#/spspgl/dpcjsp/'+ item.product_spu_id" v-else>
                   <el-button type='primary' class="right" style='margin-left:10px'>创建商品</el-button>
                 </a>
                 <a :href="'#/spspgl/dgsplb/'+ item.product_spu_id">
@@ -227,9 +230,8 @@
         this.page = 1
         this.fetchProductSpuList(1, '', '', '', this.like_name)
       },
-      createGoods(id) {
-        this.$router.push({ name: 'dpcjsp', params: { id }})
-        // this.$router.push({ path: '#/dpcjsp', query: { id }})
+      createMoreSku(product_spu_id) {
+
       },
       previewCurrentRow(id) {
         this.$router.push({ name: 'dgsplb', params: { id }})

@@ -45,7 +45,7 @@
 
 <script type="text/javascript">
   import { mapGetters } from 'vuex'
-  import { payModify } from '@/api/shop'
+  import { payModify, shopDetails } from '@/api/shop'
   const payType = ['offline_transfer_flag', 'pay_delivery_flag', 'tally_flag']
   export default{
     data() {
@@ -73,6 +73,9 @@
         token: 'token'
       })
     },
+    created() {
+      this.fetchShopDetails()
+    },
     methods: {
       onSubmit() {
         this.$refs.form.validate((valid) => {
@@ -80,12 +83,11 @@
             this.getPayWay()
             this.loading = true
             const _this = this
-            console.log(this.form)
             payModify(this.form).then(response => {
               const data = response
               this.loading = false
               if (data.status === 'ok') {
-                _this.resetForm()
+                // this.fetchShopDetails()
                 _this.$message({
                   message: data.message,
                   type: 'success',
@@ -115,10 +117,51 @@
         this.form.type.forEach((item) => {
           this.$set(this.form, item + '', 1)
         })
+      },
+      fetchShopDetails() {
+        shopDetails().then(response => {
+          const data = response.data
+          this.form.type = []
+          if (data.offline_transfer_flag === 1) {
+            this.form.type.push('offline_transfer_flag')
+          }
+          if (data.pay_delivery_flag === 1) {
+            this.form.type.push('pay_delivery_flag')
+          }
+          if (data.tally_flag === 1) {
+            this.form.type.push('tally_flag')
+          }
+          this.form.alipay_number = data.alipay_number
+          this.form.bank_number = parseInt(data.bank_number)
+          this.form.bank_name = data.bank_name
+        }).catch(error => {
+          console.log(error)
+        })
       }
     }
   }
-
+  // "district_id": "5002",
+  //   "class_id": "3",
+  //   "company_name": "光明支公司",
+  //   "admin_name": "周辉",
+  //   "shop_type": "1",
+  //   "shop_mobile": "18221568888",
+  //   "start_money": "999.00",
+  //   "business_scope": "水果，蔬菜，牛奶等",
+  //   "shop_address": "上海市浦东新区杨南路1899弄",
+  //   "shop_img": "/uploads///image/20180803/be74d5f7cc7b134fe701c628948a8982.jpg",
+  //   "business_img": "/uploads///image/20180803/be74d5f7cc7b134fe701c628948a8982.jpg",
+  //   "attestation_status": "0",
+  //   "attestation_time": "0000-00-00 00:00:00",
+  //   "offline_transfer_flag": "0",
+  //   "pay_delivery_flag": "0",
+  //   "tally_flag": "0",
+  //   "remark": "我的店全球销量第一",
+  //   "alipay_number": "",
+  //   "bank_number": "",
+  //   "bank_name": "",
+  //   "class_name": "豆汁食品",
+  //   "district_name": "上海徐汇"
 </script>
 
 <style media="screen">
