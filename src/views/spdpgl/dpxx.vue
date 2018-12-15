@@ -12,7 +12,7 @@
         </div>
         <hr>
         <div class="form_part center">
-          <el-form ref="form"  :model="form" label-width="100px">
+          <el-form ref="form"  :model="form" label-width="100px" :disabled="form.attestation_status !== 0">
             <el-form-item label="店铺名称" prop="company_name">
               <el-input v-model="form.company_name"></el-input>
             </el-form-item>
@@ -21,8 +21,8 @@
             </el-form-item>
             <el-form-item label="店铺性质" prop="shop_type">
                 <el-radio-group v-model="form.shop_type">
-                  <el-radio label="1">预售</el-radio>
-                  <el-radio label="2">日配</el-radio>
+                  <el-radio :label="1">预售</el-radio>
+                  <el-radio :label="2">日配</el-radio>
                 </el-radio-group>
               </el-form-item>
 
@@ -42,7 +42,6 @@
               <el-form-item label="所在区域" prop="district_id">
                 <el-select v-model="form.district_id" placeholder="请选择分类">
                   <el-option v-for="item in districtList" :key="item.id" :label="item.district_name" :value="item.id"></el-option>
-                  <el-option label="区域2" value="2"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="主营范围" prop="business_scope">
@@ -90,7 +89,7 @@
 
               <br/><br/>
               <el-form-item>
-                <el-button type="primary" @click="onSubmit" style="width: 200px; height: 44px; font-size: 17px">保 存</el-button>
+                <el-button type="primary" @click="onSubmit" style="width: 200px; height: 44px; font-size: 17px"  v-if="form.attestation_status === 0">保 存</el-button>
                 <!--<el-button>取消</el-button>-->
                </el-form-item>
 

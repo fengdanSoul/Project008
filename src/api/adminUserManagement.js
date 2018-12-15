@@ -139,3 +139,11 @@ export function adminShopFlag(params) {
     data: params
   })
 }
+// 卖家店铺编辑
+export function adminShopModify(params) {
+  return request({
+    url: '/api/AdminShop/adminShopModify',
+    method: 'post',
+    data: params
+  })
+}

@@ -95,16 +95,14 @@
         </el-table-column>
         <el-table-column align='center' prop="delivery_distributor" label="配送信息">
         </el-table-column>
-        <el-table-column align='center' prop="delivery_id" label="选择配送">
+
+        <el-table-column align='center' label="操作" prop="order_state">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.delivery_id">
-              <el-option v-for="item in deliveryList" :key="item.id" :value="item.id" :label="item.distributor"></el-option>
-            </el-select>
-          </template>
-        </el-table-column>
-        <el-table-column align='center' label="操作">
-          <template slot-scope="scope">
-            <el-button type="primary" size="mini" @click="handleSend(scope.row)">发货</el-button>
+            <el-button type="primary" size="mini" @click="handleSend(scope.row)" v-if="scope.row.order_state === 'wait_pay'">确认</el-button>
+            <el-button type="primary" size="mini" @click="handleSend(scope.row)" v-else-if="scope.row.order_state === 'wait_affirm'">发货</el-button>
+            <el-button type="primary" size="mini" @click="handleSend(scope.row)" v-else-if="scope.row.order_state === 'wait_send'">发货</el-button>
+            <el-button type="primary" size="mini" @click="handleSend(scope.row)" v-else-if="scope.row.order_state === 'wait_receive'">签收</el-button>
+            <el-button type="primary" size="mini" @click="handleSend(scope.row)" v-else-if="scope.row.order_state === 'end'" :disabled="scope.row.order_state === 'end'">已完成</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -114,6 +112,46 @@
         </el-pagination>
       </div>
 
+      <el-dialog title="订单确认" :visible.sync="dialogConfirmVisible">
+        <el-form ref="payForm" :model="payForm" :rules="payFormRules">
+          <el-form-item label="支付方式" label-width="120px" prop="pay_type">
+            <el-select v-model="payForm.pay_type" placeholder="请选择支付方式" v-if="payForm">
+              <!--<el-option value="1" :label="payType['1'][0]" v-if="payType['1'].length"></el-option>-->
+              <!--<el-option value="2" :label="payType['2'][0]" v-if="payType['2'].length"></el-option>-->
+              <!--<el-option value="3" :label="payType['3'][0]" v-if="payType['3'].length"></el-option>-->
+              <el-option value="1" label="线下转账"></el-option>
+              <el-option value="2" label="货到付款"></el-option>
+              <el-option value="3" label="赊销"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="支付类型" label-width="120px" prop="pay_method">
+            <el-select v-model="payForm.pay_method" placeholder="请选择支付类型">
+              <el-option value="bank" label="银行卡"></el-option>
+              <el-option value="alipay" label="支付宝"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogConfirmVisible = false">取 消</el-button>
+          <el-button type="primary" @click="confirmOrder">确 认</el-button>
+        </div>
+      </el-dialog>
+
+      <el-dialog title="选择配送人员" :visible.sync="dialogdeliveryVisible">
+        <el-form ref="deliveryForm" :model="deliveryForm" :rules="deliveryFormRules">
+          <el-form-item label="配送人" label-width="120px" prop="id">
+            <el-select v-model="deliveryForm.id">
+              <el-option v-for="item in deliveryList" :key="item.id" :value="item.id" :label="item.distributor"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogdeliveryVisible = false">取 消</el-button>
+          <el-button type="primary" @click="confirmDelivery">确 认</el-button>
+        </div>
+      </el-dialog>
 
     </div>
   </div>
@@ -124,12 +162,30 @@
 <script>
   import { mapGetters } from 'vuex'
   import { shopDeliveryList } from '@/api/shop'
-  import { shopOrderList, shopOrderDelivery } from '@/api/shopOrder' //, shopOrderDelivery, shopOrderFlag, shopOrderDetails
+  import { shopOrderList, shopOrderPay, shopPayType, shopPayNumber, shopOrderDelivery, shopOrderFlag } from '@/api/shopOrder' //, shopOrderDelivery, shopOrderFlag, shopOrderDetails,
   export default {
     data() {
       return {
         dialogVisible: false,
         loading: false,
+        payType: {},
+        payForm: {
+          order_id: '',
+          pay_type: '',
+          pay_method: ''
+        },
+        payFormRules: {
+          pay_type: [{ required: true, message: '选择支付方式', trigger: 'blur' }],
+          pay_method: [{ required: true, message: '选择支付类型', trigger: 'blur' }]
+        },
+        deliveryForm: {
+          order_id: '',
+          id: '',
+          distributor: ''
+        },
+        deliveryFormRules: {
+          id: [{ required: true, message: '选择配送员', trigger: 'blur' }]
+        },
         tableData: [
         ],
         count: 0,
@@ -139,7 +195,9 @@
         start_time: '',
         end_time: '',
         like_name: '',
-        deliveryList: []
+        deliveryList: [],
+        dialogConfirmVisible: false,
+        dialogdeliveryVisible: false
       }
     },
     computed: {
@@ -196,16 +254,59 @@
         this.page = 1
         this.fectchShopOrderList(this.start_time, this.end_time, this.order_state, this.pay_type, this.like_name, this.page)
       },
-      handleSend(item) {
-        shopOrderDelivery({ order_id: item.order_id, delivery_id: item.delivery_id }).then(res => {
-          this.$message.success(res.message)
-          this.page = 1
-          this.fectchShopOrderList(this.start_time, this.end_time, this.order_state, this.pay_type, this.like_name, this.page)
-        })
-      },
       handleCurrentChange(val) {
         // console.log(`当前页: ${val}`)
         this.fectchShopOrderList(this.start_time, this.end_time, this.order_state, this.pay_type, this.like_name, val)
+      },
+      handleSend(item) {
+        if (item.order_state === 'wait_pay') { // 确认
+          this.payForm.order_id = item.order_id
+          shopPayType().then(res => {
+            this.payType = res.data
+            this.dialogConfirmVisible = true
+          })
+          shopPayNumber().then(res => {
+            console.log(res)
+          })
+        } else if (item.order_state === 'wait_affirm' || item.order_state === 'wait_send') {
+          this.dialogdeliveryVisible = true
+          this.deliveryForm.order_id = item.order_id
+        } else if (item.order_state === 'wait_receive') {
+          shopOrderFlag({ order_id: item.order_id, order_state: 'end' }).then(res => {
+            this.$message.success('签收成功')
+            this.page = 1
+            this.fectchShopOrderList(this.start_time, this.end_time, this.order_state, this.pay_type, this.like_name, this.page)
+          })
+        }
+      },
+      confirmOrder() {
+        this.$refs.payForm.validate(valid => {
+          if (valid) {
+            shopOrderPay(this.payForm).then(response => {
+              this.dialogConfirmVisible = false
+              this.$message({
+                message: '确认成功',
+                type: 'success'
+              })
+              this.page = 1
+              this.fectchShopOrderList(this.start_time, this.end_time, this.order_state, this.pay_type, this.like_name, this.page)
+            }).catch(error => {
+              console.log(error)
+            })
+          }
+        })
+      },
+      confirmDelivery() {
+        this.$refs.deliveryForm.validate(valid => {
+          if (valid) {
+            shopOrderDelivery({ order_id: this.deliveryForm.order_id, delivery_id: this.deliveryForm.id }).then(res => {
+              this.dialogdeliveryVisible = false
+              this.$message.success(res.message)
+              this.page = 1
+              this.fectchShopOrderList(this.start_time, this.end_time, this.order_state, this.pay_type, this.like_name, this.page)
+            })
+          }
+        })
       },
       handleClose(done) {
         this.$confirm('确认关闭？')

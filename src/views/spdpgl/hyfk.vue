@@ -40,9 +40,9 @@
 
     <div class="bg_white">
       <el-tabs v-model="deal_flag" type="card" @tab-click="selectDealFlag">
-        <el-tab-pane label="全部" name="a"></el-tab-pane>
-        <el-tab-pane label="未处理" name="0"></el-tab-pane>
-        <el-tab-pane label="已处理" name="1"></el-tab-pane>
+        <el-tab-pane label="全部" name=""></el-tab-pane>
+        <el-tab-pane label="未处理" name="a"></el-tab-pane>
+        <el-tab-pane label="已处理" name="b"></el-tab-pane>
 
       </el-tabs>
     </div>
@@ -112,7 +112,7 @@
         start_time: '',
         end_time: '',
         like_name: '',
-        deal_flag: 'a'
+        deal_flag: ''
       }
     },
     computed: {
@@ -157,7 +157,13 @@
       },
       selectDealFlag() {
         this.page = 1
-        this.fectchFeedbackList(this.start_time, this.end_time, this.deal_flag, this.like_name, this.page)
+        if (this.deal_flag === 'a') {
+          this.fectchFeedbackList(this.start_time, this.end_time, 0, this.like_name, this.page)
+        } else if (this.deal_flag === 'b') {
+          this.fectchFeedbackList(this.start_time, this.end_time, 1, this.like_name, this.page)
+        } else {
+          this.fectchFeedbackList(this.start_time, this.end_time, '', this.like_name, this.page)
+        }
       },
       handleDelete(id) {
         this.$confirm('确认删除？').then(_ => {

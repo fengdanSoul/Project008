@@ -50,7 +50,7 @@
         </el-table-column>
         <el-table-column align='center' prop="admin_name" label="店铺管理员" >
         </el-table-column>
-        <el-table-column align='center' prop="class_name" label="店铺性质" >
+        <el-table-column align='center' prop="shop_type" :formatter="formatShoptype" label="店铺性质" >
         </el-table-column>
         <el-table-column align='center' prop="shop_mobile" label="联系方式" >
         </el-table-column>
@@ -76,85 +76,89 @@
         </el-pagination>
       </div>
 
-      <el-dialog title="创建公告促销" :visible.sync="dialogVisible" width="40%" :before-close="handleClose">
+      <el-dialog title="店铺编辑" :visible.sync="dialogVisible" width="40%" :before-close="handleClose">
 
         <div class="form_part center">
-          <el-form ref="form" :model="form" label-width="100px">
-
-            <el-form-item label="店铺名称">
-              <el-input v-model="form.storename"></el-input>
+          <el-form ref="form"  :model="form" label-width="100px">
+            <el-form-item label="店铺名称" prop="company_name">
+              <el-input v-model="form.company_name"></el-input>
             </el-form-item>
-            <el-form-item label="店铺管理员">
-              <el-input v-model="form.admin"></el-input>
+            <el-form-item label="店铺管理员" prop="admin_name">
+              <el-input v-model="form.admin_name"></el-input>
             </el-form-item>
-            <el-form-item label="店铺性质">
-                <el-radio-group v-model="form.nature">
-                  <el-radio label="1">预售</el-radio>
-                  <el-radio label="2">日配</el-radio>
-                </el-radio-group>
-              </el-form-item>
+            <el-form-item label="店铺性质" prop="shop_type">
+              <el-radio-group v-model="form.shop_type">
+                <el-radio :label="1">预售</el-radio>
+                <el-radio :label="2">日配</el-radio>
+              </el-radio-group>
+            </el-form-item>
 
-              <el-form-item label="店铺所属分类">
-                <el-select v-model="form.storeclass" placeholder="请选择分类">
-                  <el-option label="乳制品" value="1"></el-option>
-                  <el-option label="乳制品2" value="2"></el-option>
-                </el-select>
-              </el-form-item>
+            <el-form-item label="店铺所属分类" prop="class_id">
+              <el-select v-model="form.class_id" placeholder="请选择分类">
+                <el-option v-for="item in shopClassList" :label="item.class_name" :key="item.id" :value="item.id"></el-option>
+              </el-select>
+            </el-form-item>
 
-              <el-form-item label="店铺联系方式">
-                <el-input v-model="form.phone"></el-input>
-              </el-form-item>
+            <el-form-item label="店铺联系方式" prop="shop_mobile">
+              <el-input v-model.number="form.shop_mobile"></el-input>
+            </el-form-item>
 
-              <el-form-item label="起送金额">
-                <el-input v-model="form.startamt"></el-input>
-              </el-form-item>
-              <el-form-item label="所在区域">
-                <el-select v-model="form.area" placeholder="请选择分类">
-                  <el-option label="区域1" value="1"></el-option>
-                  <el-option label="区域2" value="2"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="主营范围">
-                <el-input type="textarea" v-model="form.scope"></el-input>
-              </el-form-item>
-              <el-form-item label="备注">
-                <el-input type="textarea" v-model="form.remarks"></el-input>
-              </el-form-item>
-              <el-form-item label="详细地址">
-                <el-input type="textarea" v-model="form.address"></el-input>
-              </el-form-item>
-              <div class="part_top">
-                  <p class="color_zywz">店铺展示图片    </p>
-              </div>
-              <hr style="margin-bottom:18px">
+            <el-form-item label="起送金额" prop="start_money">
+              <el-input v-model="form.start_money"></el-input>
+            </el-form-item>
+            <el-form-item label="所在区域" prop="district_id">
+              <el-select v-model="form.district_id" placeholder="请选择分类">
+                <el-option v-for="item in districtList" :key="item.id" :label="item.district_name" :value="item.id"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="主营范围" prop="business_scope">
+              <el-input type="textarea" v-model="form.business_scope"></el-input>
+            </el-form-item>
+            <el-form-item label="备注" prop="remark">
+              <el-input type="textarea" v-model="form.remark"></el-input>
+            </el-form-item>
+            <el-form-item label="详细地址" prop="shop_address">
+              <el-input type="textarea" v-model="form.shop_address"></el-input>
+            </el-form-item>
+            <!--<div class="part_top">-->
+            <!--<p class="color_zywz">    </p>-->
+            <!--</div>-->
+            <hr style="margin-bottom:18px">
+            <el-form-item label="店铺展示图片" prop="shop_img">
               <el-upload
                 class="avatar-uploader"
-                action="https://jsonplaceholder.typicode.com/posts/"
+                accept="image/jpeg,image/jpg,image/png,image/gif"
+                action=""
+                :http-request="uploadShopImg"
                 :show-file-list="false"
-                :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                <img v-if="form.shop_img" :src="form.shop_img" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
+            </el-form-item>
 
-              <div class="part_top">
-                  <p class="color_zywz">营业执照    </p>
-              </div>
-              <hr style="margin-bottom:18px">
+            <!--<div class="part_top">-->
+            <!--<p class="color_zywz">    </p>-->
+            <!--</div>-->
+            <hr style="margin-bottom:18px">
+            <el-form-item label="营业执照" prop="business_img">
               <el-upload
                 class="avatar-uploader"
-                action="https://jsonplaceholder.typicode.com/posts/"
+                accept="image/jpeg,image/jpg,image/png,image/gif"
+                action=""
+                :http-request="uploadBusinessImg"
                 :show-file-list="false"
-                :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                <img v-if="form.business_img" :src="form.business_img" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
-              <br/><br/>
-              <el-form-item>
-                <el-button type="primary" @click="onSubmit">保存</el-button>
-                <el-button>取消</el-button>
-               </el-form-item>
+            </el-form-item>
+
+            <br/><br/>
+            <el-form-item>
+              <el-button type="primary" @click="onSubmit" style="width: 200px; height: 44px; font-size: 17px" >保 存</el-button>
+              <!--<el-button>取消</el-button>-->
+            </el-form-item>
 
           </el-form>
         </div>
@@ -167,7 +171,9 @@
 </template>
 
 <script>
-import { adminShopList, adminShopDelete, adminShopFlag } from '@/api/adminUserManagement'
+import { adminShopList, adminShopDelete, adminShopFlag, shopList, shopDistrictList, adminShopModify } from '@/api/adminUserManagement'
+import { uploadShopImage } from '@/api/upload'
+
 export default {
   data() {
     return {
@@ -175,16 +181,38 @@ export default {
       tableData: [
       ],
       form: {
-        storename: '',
-        name: '',
-        nature: '',
-        storeclass: '',
-        phone: '',
-        startamt: '',
-        area: '',
-        remarks: '',
-        address: ''
+        shop_id: '',
+        district_id:	'',
+        class_id:	'',
+        company_name:	'',
+        admin_name:	'',
+        shop_type:	'',
+        shop_mobile: '',
+        start_money: '',
+        business_scope:	'',
+        shop_address:	'',
+        shop_img:	'',
+        business_img:	'',
+        remark: ''
       },
+      formRules: {
+        district_id: [{ required: true, message: '选择店铺区域', trigger: 'blur' }],
+        class_id: [{ required: true, message: '选择店铺分类', trigger: 'blur' }],
+        company_name: [{ required: true, message: '输入店铺名称', trigger: 'blur' }],
+        admin_name: [{ required: true, message: '输入店铺管理员姓名', trigger: 'blur' }],
+        shop_type: [{ required: true, message: '选择店铺性质', trigger: 'blur' }],
+        shop_mobile: [
+          { required: true, message: '输入手机号', trigger: 'blur' },
+          { type: 'number', message: '手机号为数字', trigger: 'blur' }
+        ],
+        start_money: [{ required: true, message: '输入起送金额', trigger: 'blur' }],
+        business_scope: [{ required: true, message: '输入店铺经营范围', trigger: 'blur' }],
+        shop_address: [{ required: true, message: '输入店铺地址', trigger: 'blur' }],
+        shop_img: [{ required: true, message: '请上传店铺图片', trigger: 'blur' }],
+        business_img: [{ required: true, message: '请上传店铺营业执照', trigger: 'blur' }]
+      },
+      shopClassList: [],
+      districtList: [],
       count: 0,
       page: 1,
       attestation_status: '',
@@ -192,6 +220,8 @@ export default {
     }
   },
   created() {
+    this.fetchShopClassList()
+    this.fetchShopDistrictList()
     this.fectchAdminShopList(1, '', '')
   },
   methods: {
@@ -200,6 +230,20 @@ export default {
         const data = response.data
         this.count = Number(data.count)
         this.tableData = data.list
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    fetchShopClassList() {
+      shopList().then(response => {
+        this.shopClassList = response.data.list
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    fetchShopDistrictList() {
+      shopDistrictList().then(response => {
+        this.districtList = response.data.list
       }).catch(error => {
         console.log(error)
       })
@@ -311,22 +355,50 @@ export default {
       }
       return '未知'
     },
+    formatShoptype(row) {
+      if (row.shop_type === 1) {
+        return '预售'
+      } else if (row.shop_type === 2) {
+        return '日配'
+      }
+      return '未知'
+    },
     onSubmit() {
-      console.log('submit!')
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          adminShopModify(this.form).then(response => {
+            this.$message.success('修改店铺信息成功')
+            this.dialogVisible = false
+            this.fetchShopDetails()
+          }).catch(error => {
+            console.log(error)
+          })
+        }
+      })
     },
     handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw)
+      // this.imageUrl = URL.createObjectURL(file.raw)
     },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg'
       const isLt2M = file.size / 1024 / 1024 < 2
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!')
-      }
       if (!isLt2M) {
         this.$message.error('上传头像图片大小不能超过 2MB!')
       }
-      return isJPG && isLt2M
+      return isLt2M
+    },
+    uploadShopImg(params) {
+      uploadShopImage(params.file).then(response => {
+        this.$set(this.form, 'shop_img', response.data)
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    uploadBusinessImg(params) {
+      uploadShopImage(params.file).then(response => {
+        this.$set(this.form, 'business_img', response.data)
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }

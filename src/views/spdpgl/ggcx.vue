@@ -12,7 +12,8 @@
 
     <div class="bg_white">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="全部" name=""></el-tab-pane>
+        <el-tab-pane label="全部" name="">
+        </el-tab-pane>
         <el-tab-pane label="预报公告" name="1"></el-tab-pane>
         <el-tab-pane label="店铺促销" name="2"></el-tab-pane>
 
@@ -115,7 +116,8 @@
           promotion_type: [{ required: true, message: '选择促销分类', trigger: 'blur' }]
         },
         count: 0,
-        page: 1
+        page: 1,
+        activeName: ''
       }
     },
     computed: {
@@ -124,11 +126,11 @@
       })
     },
     created() {
-      this.fectchShopMessageList(1)
+      this.fectchShopMessageList(1, '')
     },
     methods: {
-      fectchShopMessageList(page) {
-        shopMessageList({ page }).then(response => {
+      fectchShopMessageList(page, promotion_type) {
+        shopMessageList({ page, promotion_type }).then(response => {
           const data = response.data
           this.count = Number(data.count)
           this.tableData = data.list
@@ -137,7 +139,7 @@
         })
       },
       selectPromotionType() {
-        this.fectchShopMessageList(1)
+        this.fectchShopMessageList(1, '')
       },
       editCurrentRow(index) {
         this.dialogVisible = true
@@ -154,7 +156,7 @@
                 type: 'success'
               })
               this.page = 1
-              this.fectchShopMessageList(1)
+              this.fectchShopMessageList(1, '')
             }).catch(error => {
               console.log(error)
             })
@@ -171,6 +173,9 @@
         this.$set(this.form, 'shop_id', this.shopId)
         this.isAdd = true
       },
+      handleClick() {
+        this.fectchShopMessageList(1, this.activeName)
+      },
       onSubmit() {
         this.$refs.form.validate(valid => {
           if (valid) {
@@ -182,7 +187,7 @@
                   type: 'success'
                 })
                 this.page = 1
-                this.fectchShopMessageList(1)
+                this.fectchShopMessageList(1, '')
               }).catch(error => {
                 console.log(error)
               })
@@ -194,7 +199,7 @@
                   type: 'success'
                 })
                 this.page = 1
-                this.fectchShopMessageList(1)
+                this.fectchShopMessageList(1, '')
               }).catch(error => {
                 console.log(error)
               })
@@ -214,9 +219,9 @@
           .catch(_ => {})
       },
       formatterPromotionType(row) {
-        if (row.promotion_type === '1') {
+        if (row.promotion_type === 1) {
           return '预告分类'
-        } else if (row.promotion_type === '2') {
+        } else if (row.promotion_type === 2) {
           return '店铺促销'
         }
         return '其他'
