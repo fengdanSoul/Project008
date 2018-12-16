@@ -98,8 +98,8 @@
 
         <el-table-column align='center' label="操作" prop="order_state">
           <template slot-scope="scope">
-            <el-button type="primary" size="mini" @click="handleSend(scope.row)" v-if="scope.row.order_state === 'wait_pay'">确认</el-button>
-            <el-button type="primary" size="mini" @click="handleSend(scope.row)" v-else-if="scope.row.order_state === 'wait_affirm'">发货</el-button>
+            <el-button type="primary" size="mini" @click="handleSend(scope.row)" v-if="scope.row.order_state === 'wait_pay'">付款</el-button>
+            <el-button type="primary" size="mini" @click="handleSend(scope.row)" v-else-if="scope.row.order_state === 'wait_affirm'">确认</el-button>
             <el-button type="primary" size="mini" @click="handleSend(scope.row)" v-else-if="scope.row.order_state === 'wait_send'">发货</el-button>
             <el-button type="primary" size="mini" @click="handleSend(scope.row)" v-else-if="scope.row.order_state === 'wait_receive'">签收</el-button>
             <el-button type="primary" size="mini" @click="handleSend(scope.row)" v-else-if="scope.row.order_state === 'end'" :disabled="scope.row.order_state === 'end'">已完成</el-button>

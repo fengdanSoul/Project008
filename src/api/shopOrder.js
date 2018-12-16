@@ -97,3 +97,12 @@ export function shopPayNumber(params) {
     data: params
   })
 }
+
+// 订单编辑信息
+export function shopOrderInventoryModify(params) {
+  return request({
+    url: '/api/ShopOrder/shopOrderInventoryModify',
+    method: 'post',
+    data: params
+  })
+}
