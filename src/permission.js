@@ -1,9 +1,10 @@
 import router from './router'
-// import store from './store'
-// import { Message } from 'element-ui'
+import store from './store'
+import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
 import { getToken } from '@/utils/auth' // getToken from cookie
+import { asyncRouterMap13, asyncRouterMap2, constantRouterMap } from '@/router'
 
 NProgress.configure({ showSpinner: false })// NProgress Configuration
 
@@ -15,7 +16,32 @@ router.beforeEach((to, from, next) => {
       next({ path: '/' })
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
-      next()
+      console.log('role', store.getters.role)
+      if (store.getters.role === 1 || store.getters.role === 3) {
+        router.addRoutes(constantRouterMap.concat(asyncRouterMap13)) // 动态添加可访问路由表
+        next({ ...to, replace: true })
+      } else if (store.getters.role === 2) {
+        router.addRoutes(constantRouterMap.concat(asyncRouterMap2)) // 动态添加可访问路由表
+        next({ ...to, replace: true })
+      } else {
+        store.dispatch('FedLogOut').then(() => {
+          Message.error('Verification failed, please login again')
+          next({ path: '/' })
+        })
+      // if (store.getters.role.length !== 0) { // 判断当前用户是否已拉取完user_info信息
+      //   const role = store.getters.role // note: roles must be a array! such as: ['editor','develop']
+      //   store.dispatch('GenerateRoutes', { role }).then(() => { // 根据roles权限生成可访问的路由表
+      //     router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+      //     next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
+      //   })
+        // store.dispatch('GetUserInfo').then(res => { // 拉取user_info
+        // }).catch((err) => {
+        //   store.dispatch('FedLogOut').then(() => {
+        //     Message.error(err || 'Verification failed, please login again')
+        //     next({ path: '/' })
+        //   })
+        // })
+      }
       // if (store.getters.roles.length === 0) {
       //   store.dispatch('GetInfo').then(res => { // 拉取用户信息
       //     next()
