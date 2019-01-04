@@ -79,10 +79,10 @@
         <el-table-column align='center' prop="product_number" label="商品数量" width="150">
           <template slot-scope="scope">
             <div class="counter">
-              <!--v-if="orderDetail.order_state === 'wait_pay' || orderDetail.order_state === 'wait_affirm'"-->
-              <el-button @click="handleDec(scope.row)" size="mini" >-</el-button>
+              <!--v-if="orderDetail.order_state === 'wait_affirm'"-->
+              <el-button @click="handleDec(scope.row)" size="mini" v-if="orderDetail.order_state === 'wait_affirm'">-</el-button>
               <p class="num">{{scope.row.product_number}}</p>
-              <el-button @click="handleInc(scope.row)" size="mini">+</el-button>
+              <el-button @click="handleInc(scope.row)" size="mini" v-if="orderDetail.order_state === 'wait_affirm'">+</el-button>
             </div>
           </template>
         </el-table-column>
@@ -308,13 +308,13 @@ export default {
       })
     },
     handleDec(item) { // 递减
-      if (item.product_number <= 1) {
+      if (item.product_number <= 0) {
         // this.$message.success('加单成功')
         return
       }
       item.product_number--
-      shopOrderInventoryModify({ child_order_id: item.product_car_id, product_number: item.product_number }).then(res => {
-        this.refreshData()
+      shopOrderInventoryModify({ child_order_id: item.child_order_id, product_number: item.product_number }).then(res => {
+        this.fetchShopOrderDetails()
       }).catch(error => {
         console.log(error)
         item.product_number++
@@ -322,8 +322,8 @@ export default {
     },
     handleInc(item) { // 递增
       item.product_number++
-      shopOrderInventoryModify({ child_order_id: item.product_car_id, product_number: item.product_number }).then(res => {
-        this.refreshData()
+      shopOrderInventoryModify({ child_order_id: item.child_order_id, product_number: item.product_number }).then(res => {
+        this.fetchShopOrderDetails()
       }).catch(error => {
         console.log(error)
         item.product_number--

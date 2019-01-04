@@ -48,36 +48,18 @@ export const constantRouterMap = [
     // meta: { title: '店铺商品详情' }
   },
   {
-    path: '',
+    path: '/',
     component: Layout,
-    redirect: 'spdashboard',
+    redirect: 'start',
     children: [{
-      path: 'spdashboard',
-      component: () => import('@/views/spindex/index'),
-      name: 'spdashboard',
-      meta: { title: '首页', icon: 'dashboard', noCache: true }
-    }]
-  },
-  {
-    path: '/spzhsz',
-    component: Layout,
-    redirect: 'spzhsz',
-    name: 'spzhsz',
-    alwaysShow: true,
-    meta: {
-      title: '账号设置',
-      icon: 'password'
-    },
-    children: [
-      {
-        path: 'xgmm',
-        component: () => import('@/views/spzhsz/xgmm'),
-        name: 'xgmm',
-        meta: {
-          title: '修改密码'
-        }
+      path: 'start',
+      component: () => import('@/views/spindex/start'),
+      name: 'start',
+      meta: {
+        title: '生活专送',
+        noCache: true
       }
-    ]
+    }]
   }
 ]
 
@@ -87,23 +69,26 @@ export default new Router({
   routes: constantRouterMap
 })
 
-export const asyncRouterMap13 = [
-  // {
-  //   path: '',
-  //   component: Layout,
-  //   redirect: 'spdashboard',
-  //   children: [{
-  //     path: 'spdashboard',
-  //     component: () => import('@/views/spindex/index'),
-  //     name: 'spdashboard',
-  //     meta: {
-  //       title: '首页',
-  //       icon: 'dashboard',
-  //       noCache: true,
-  //       roles: ['1', '3']
-  //     }
-  //   }]
-  // },
+export const asyncRouterMap = [
+  {
+    path: '/spdashboard',
+    component: Layout,
+    meta: {
+      roles: ['2'],
+      noCache: true
+    },
+    children: [{
+      path: 'spdashboard',
+      component: () => import('@/views/spindex/index'),
+      name: 'spdashboard',
+      meta: {
+        title: '首页',
+        icon: 'dashboard',
+        roles: ['2'],
+        noCache: true
+      }
+    }]
+  },
   {
     path: '/spdpgl',
     component: Layout,
@@ -112,7 +97,7 @@ export const asyncRouterMap13 = [
     meta: {
       title: '店铺管理',
       icon: 'component',
-      roles: ['1', '3']
+      roles: ['2']
     },
     children: [
       {
@@ -120,8 +105,7 @@ export const asyncRouterMap13 = [
         component: () => import('@/views/spdpgl/dpxx'),
         name: 'dpxx',
         meta: {
-          title: '店铺信息',
-          roles: ['1', '3']
+          title: '店铺信息'
         }
       },
       {
@@ -129,8 +113,7 @@ export const asyncRouterMap13 = [
         component: () => import('@/views/spdpgl/zffs'),
         name: 'zffs',
         meta: {
-          title: '支付方式',
-          roles: ['1', '3']
+          title: '支付方式'
         }
       },
       {
@@ -138,8 +121,7 @@ export const asyncRouterMap13 = [
         component: () => import('@/views/spdpgl/ggcx'),
         name: 'ggcx',
         meta: {
-          title: '公告促销',
-          roles: ['1', '3']
+          title: '公告促销'
         }
       },
       {
@@ -147,8 +129,7 @@ export const asyncRouterMap13 = [
         component: () => import('@/views/spdpgl/psxx'),
         name: 'psxx',
         meta: {
-          title: '配送信息',
-          roles: ['1', '3']
+          title: '配送信息'
         }
       },
       {
@@ -156,8 +137,7 @@ export const asyncRouterMap13 = [
         component: () => import('@/views/spdpgl/hyfk'),
         name: 'hyfk',
         meta: {
-          title: '会员反馈',
-          roles: ['1', '3']
+          title: '会员反馈'
         }
       },
       {
@@ -165,8 +145,7 @@ export const asyncRouterMap13 = [
         component: () => import('@/views/spdpgl/hylb'),
         name: 'hylb',
         meta: {
-          title: '会员列表',
-          roles: ['1', '3']
+          title: '会员列表'
         }
       }
 
@@ -180,7 +159,7 @@ export const asyncRouterMap13 = [
     meta: {
       title: '店铺订单',
       icon: 'clipboard',
-      roles: ['1', '3']
+      roles: ['2']
     },
     children: [
       {
@@ -188,8 +167,7 @@ export const asyncRouterMap13 = [
         component: () => import('@/views/spdpdd/ddgl'),
         name: 'ddgl',
         meta: {
-          title: '订单管理',
-          roles: ['1', '3']
+          title: '订单管理'
         }
       },
       {
@@ -198,8 +176,7 @@ export const asyncRouterMap13 = [
         name: 'dpddxq',
         hidden: true,
         meta: {
-          title: '订单详情',
-          roles: ['1', '3']
+          title: '订单详情'
         }
       },
       {
@@ -207,8 +184,7 @@ export const asyncRouterMap13 = [
         component: () => import('@/views/spdpdd/mdjd'),
         name: 'mdjd',
         meta: {
-          title: '门店加单（会员）',
-          roles: ['1', '3']
+          title: '门店加单（会员）'
         }
       },
       {
@@ -216,8 +192,7 @@ export const asyncRouterMap13 = [
         component: () => import('@/views/spdpdd/gwc'),
         name: 'gwc',
         meta: {
-          title: '购物车',
-          roles: ['1', '3']
+          title: '购物车'
         }
       }
     ]
@@ -230,7 +205,7 @@ export const asyncRouterMap13 = [
     meta: {
       title: '商品管理',
       icon: 'example',
-      roles: ['1', '3']
+      roles: ['2']
     },
     children: [
       {
@@ -238,8 +213,7 @@ export const asyncRouterMap13 = [
         component: () => import('@/views/spspgl/ptsplb'),
         name: 'ptsplb',
         meta: {
-          title: '平台商品列表',
-          roles: ['1', '3']
+          title: '平台商品列表'
         }
       },
       {
@@ -248,8 +222,7 @@ export const asyncRouterMap13 = [
         hidden: true,
         name: 'dpcjsp',
         meta: {
-          title: '店铺创建商品',
-          roles: ['1', '3']
+          title: '店铺创建商品'
         }
       },
       {
@@ -258,8 +231,7 @@ export const asyncRouterMap13 = [
         hidden: true,
         name: 'dgsplb',
         meta: {
-          title: '单个SPU商品列表',
-          roles: ['1', '3']
+          title: '单个SPU商品列表'
         }
       },
       {
@@ -268,8 +240,7 @@ export const asyncRouterMap13 = [
         hidden: true,
         name: 'dpspxq',
         meta: {
-          title: '店铺商品详情',
-          roles: ['1', '3']
+          title: '店铺商品详情'
         }
       },
       {
@@ -278,8 +249,7 @@ export const asyncRouterMap13 = [
         hidden: true,
         name: 'dpspxq',
         meta: {
-          title: '店铺创建商品',
-          roles: ['1', '3']
+          title: '店铺创建商品'
         }
       },
       {
@@ -287,8 +257,7 @@ export const asyncRouterMap13 = [
         component: () => import('@/views/spspgl/dpsysplb'),
         name: 'dpsysplb',
         meta: {
-          title: '店铺所有商品列表',
-          roles: ['1', '3']
+          title: '店铺所有商品列表'
         }
       },
       {
@@ -296,16 +265,11 @@ export const asyncRouterMap13 = [
         component: () => import('@/views/spspgl/dpspfl'),
         name: 'dpspfl',
         meta: {
-          title: '店铺商品分类',
-          roles: ['1', '3']
+          title: '店铺商品分类'
         }
       }
     ]
-  }
-
-]
-
-export const asyncRouterMap2 = [
+  },
   {
     path: '/spyhgl',
     component: Layout,
@@ -313,7 +277,8 @@ export const asyncRouterMap2 = [
     name: 'spyhgl',
     meta: {
       title: '用户管理',
-      icon: 'peoples'
+      icon: 'peoples',
+      roles: ['1', '3']
     },
     children: [
       {
@@ -365,7 +330,8 @@ export const asyncRouterMap2 = [
     name: 'spspsjk',
     meta: {
       title: '商品数据库',
-      icon: 'chart'
+      icon: 'chart',
+      roles: ['1', '3']
     },
     children: [
       {
@@ -418,7 +384,8 @@ export const asyncRouterMap2 = [
     name: 'spbbhz',
     meta: {
       title: '报表汇总',
-      icon: 'table'
+      icon: 'table',
+      roles: ['1', '3']
     },
     children: [
       {
@@ -514,7 +481,8 @@ export const asyncRouterMap2 = [
     alwaysShow: true,
     meta: {
       title: '账号设置',
-      icon: 'password'
+      icon: 'password',
+      roles: ['1', '2', '3']
     },
     children: [
       {
@@ -527,5 +495,5 @@ export const asyncRouterMap2 = [
       }
     ]
   }
-
 ]
+

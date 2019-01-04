@@ -79,7 +79,17 @@ const user = {
         })
       })
     },
-
+    // 获取用户信息
+    GetUserInfo({ commit, state }) {
+      return new Promise((resolve, reject) => {
+        if (state.role) {
+          commit('SET_ROLES', [state.role.toString()])
+          resolve({ data: { roles: [state.role.toString()] }})
+        } else {
+          reject('getInfo: roles must be a non-null array !')
+        }
+      })
+    },
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {

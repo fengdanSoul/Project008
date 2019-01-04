@@ -270,7 +270,14 @@
           shopPayNumber().then(res => {
             console.log(res)
           })
-        } else if (item.order_state === 'wait_affirm' || item.order_state === 'wait_send') {
+        } else if (item.order_state === 'wait_affirm') {
+          shopOrderFlag({ order_id: item.order_id, order_state: 'wait_send' }).then(res => {
+            this.$message.success('确认成功')
+            this.page = 1
+            this.fectchShopOrderList(this.start_time, this.end_time, this.order_state, this.pay_type, this.like_name, this.page)
+          })
+          this.deliveryForm.order_id = item.order_id
+        } else if (item.order_state === 'wait_send') {
           this.dialogdeliveryVisible = true
           this.deliveryForm.order_id = item.order_id
         } else if (item.order_state === 'wait_receive') {
