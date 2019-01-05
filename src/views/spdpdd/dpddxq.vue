@@ -43,10 +43,13 @@
           <span  class="color_nine  ddxq_span"> &nbsp;&nbsp;&nbsp;{{orderDetail.member_name}}</span>
         </div>
         <div class="ss_part">
+          <span  class="color_six  top_label ">联系方式：</span>
+          <span  class="color_nine  ddxq_span"> &nbsp;&nbsp;&nbsp;{{orderDetail.phone}}</span>
+        </div>
+        <div class="ss_part">
           <span  class="color_six  top_label ">收货地址：</span>
           <span  class="color_nine  ddxq_span"> &nbsp;&nbsp;&nbsp;{{orderDetail.receiving_address}}</span>
         </div>
-
       </div>
       <!--0	{…}-->
       <!--child_order_id	62-->
