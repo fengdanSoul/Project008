@@ -143,7 +143,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { todayRemind, shopOrder, platformeminding } from '@/api/homeInfo'
+import { todayRemind, shopOrder } from '@/api/homeInfo'
+import { shopMessageList, shopMessageDetails } from '@/api/shop'
+
 export default {
   data() {
     return {
@@ -161,7 +163,7 @@ export default {
   created() {
     this.fetchData()
     this.fetchShopOrder()
-    this.fetchRmeminding()
+    this.fectchShopMessageList(1, '')
     // if (!this.roles.includes('admin')) {
     //   this.currentRole = 'editorDashboard'
     // }
@@ -182,9 +184,12 @@ export default {
         console.log(error)
       })
     },
-    fetchRmeminding() {
-      platformeminding(this.role).then(response => {
-        this.tableData.push(response.data)
+    fectchShopMessageList(page, promotion_type) {
+      shopMessageList({ page, promotion_type }).then(response => {
+        const data = response.data.list
+        shopMessageDetails({ id: data[0]['id'] }).then(response => {
+          this.$set(this.tableData, 0, response.data)
+        })
       }).catch(error => {
         console.log(error)
       })

@@ -21,7 +21,7 @@ export function shopOrder() {
 // 平台提示信息
 export function platformeminding(id) {
   return request({
-    url: '/api/AdminMessage/messageDetails',
+    url: '/api/ShopMessage/shopMessageDetails',
     method: 'post',
     data: {
       id

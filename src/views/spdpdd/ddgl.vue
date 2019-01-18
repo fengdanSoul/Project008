@@ -6,6 +6,8 @@
         <el-input  style="width: 200px;" v-model="like_name" class="filter-item" placeholder="">
         </el-input>
         <el-button class="filter-item" type="primary" @click="handleFilter" icon="el-icon-search" >搜索</el-button>
+
+
       </div>
       <div class="bg_white ss_box">
         <div  class="ss_part">
@@ -73,7 +75,7 @@
       <!--district_id	5002-->
       <!--receiving_address	上海浦东新区13号-->
       <!--product_total	0-->
-      <el-table :data="tableData" border style="width: 100%">
+      <el-table :data="tableData" border style="width: 100%" >
         <el-table-column align='center' prop="order_time" label="下单时间" width="180">
         </el-table-column>
         <el-table-column align='center'  label="订单号" width="180">

@@ -58,6 +58,14 @@ export function shopMessageModify(query) {
     data: query
   })
 }
+// 公告促销编辑
+export function shopMemberDetails(query) {
+  return request({
+    url: '/api/ShopMember/shopMemberDetails',
+    method: 'post',
+    data: query
+  })
+}
 // 配送信息列表
 export function shopDeliveryList(query) {
   return request({
@@ -124,9 +132,9 @@ export function shopMemberList(query) {
   })
 }
 // 店铺订单会员详情
-export function shopMemberDetails(query) {
+export function shopMessageDetails(query) {
   return request({
-    url: '/api/ShopMember/shopMemberDetails',
+    url: '/api/ShopMessage/shopMessageDetails',
     method: 'post',
     data: query
   })

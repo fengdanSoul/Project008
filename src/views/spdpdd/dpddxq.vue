@@ -20,6 +20,8 @@
       </div>
 
       <div class="bg_white ss_box">
+        <el-button class="filter-item right" type="primary" @click="dialogPrintVisible = true" >打印/导出Excel</el-button>
+
         <div class="ss_part">
           <span  class="color_six top_label" style="margin-right:20px">订单号:{{orderDetail.order_number}}</span>
 
@@ -68,7 +70,7 @@
       <!--0	/uploads///image/20180803/be74d5f7cc7b134fe701c628948a8982.jpg-->
       <!--1	/uploads///image/20180803/be74d5f7cc7b134fe701c628948a8982.jpg-->
       <!--2	/uploads///image/20180803/be74d5f7cc7b134fe701c628948a8982.jpg-->
-      <el-table :data="tableData" border style="width: 100%">
+      <el-table :data="tableData" border style="width: 100%" >
         <el-table-column align='center' prop="child_order_id" label="ID">
         </el-table-column>
         <el-table-column align='center' prop="product_code" label="商品编码">
@@ -155,19 +157,156 @@
         <el-button type="primary" @click="confirmDelivery">确 认</el-button>
       </div>
     </el-dialog>
+
+
+
+    <el-dialog title="订单" :visible.sync="dialogPrintVisible"  width="80%">
+        <vue-easy-print tableShow ref="easyPrint" >
+          <div style="width: 800px; margin: auto">
+            <p style="text-align: center">销货单</p>
+            <el-row>
+              <el-col :span="8">
+                <div class="grid-content">
+                  店铺名：{{orderDetail.shop_name}}
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="grid-content ">
+                  下单日期：{{orderDetail.order_time}}
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="grid-content ">
+                </div>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="8">
+                <div class="grid-content">
+                  订单编号：{{orderDetail.order_number}}
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="grid-content ">
+                  预期送货日期：{{orderDetail.delivery_time}}
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="grid-content ">
+                </div>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="8">
+                <div class="grid-content">
+                  送货地址：{{orderDetail.receiving_address}}
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="grid-content ">
+                  联系人：{{orderDetail.member_name}}
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="grid-content ">
+                  联系电话：{{orderDetail.phone}}
+                </div>
+              </el-col>
+            </el-row>
+
+
+
+            <el-table :data="tableData" show-summary :summary-method="getSummaries" border  >
+              <el-table-column align='center' prop="product_code" label="商品编码">
+              </el-table-column>
+              <el-table-column align='center' prop="product_name" label="商品名称">
+              </el-table-column>
+              <el-table-column align='center' prop="product_specification" label="规格">
+              </el-table-column>
+              <el-table-column align='center' prop="product_unit" label="单位">
+                <!--<template slot-scope="scope">-->
+                  <!--<span>件</span>-->
+                <!--</template>-->
+              </el-table-column>
+              <el-table-column align='center' prop="product_number" label="商品数量">
+              </el-table-column>
+              <el-table-column align='center' prop="product_price" label="商品单价">
+              </el-table-column>
+              <el-table-column align='center' prop="product_total_price" label="金额">
+              </el-table-column>
+            </el-table>
+
+            <el-row>
+              <el-col :span="8">
+                <div class="grid-content">
+                  制单人：{{admin_name}}
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="grid-content ">
+                  送货人：{{orderDetail.delivery_distributor}}
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="grid-content ">
+                  收货人：{{orderDetail.member_name}}
+                </div>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="8">
+                <div class="grid-content">
+                  打印日期：{{dateFormat(new Date(), "yyyy/mm/dd")}}
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="grid-content ">
+                  打印人：{{admin_name}}
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="grid-content ">
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+
+
+        </vue-easy-print>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogPrintVisible = false">取 消</el-button>
+        <el-button type="primary" @click="print">确认打印</el-button>
+        <el-button  :loading="downloadLoading" type="primary" @click="handleDownload">导出Excel</el-button>
+
+      </div>
+    </el-dialog>
   </div>
 
 </template>
 
 <script>
+import { parseTime } from '@/utils'
+import { shopDetails } from '@/api/shop'
 import { shopOrderDetails, shopOrderCancel } from '@/api/shopOrder' //, shopOrderDelivery, shopOrderFlag,
 import { shopDeliveryList } from '@/api/shop'
 import { shopPayType, shopPayNumber, shopOrderPay, shopOrderDelivery, shopOrderFlag, shopOrderInventoryModify } from '@/api/shopOrder' // shopOrderDelivery, shopOrderDelivery, shopOrderFlag, shopOrderDetails
+import vueEasyPrint from 'vue-easy-print'
+var dateFormat = require('dateformat')
 export default {
+  components: {
+    vueEasyPrint
+  },
   data() {
     return {
+      company_name:	'',
+      admin_name:	'',
       tableData: [
       ],
+      dateFormat: dateFormat,
       tatol: '66',
       tatolamt: '999.99',
       orderDetail: {},
@@ -199,13 +338,17 @@ export default {
       end_time: '',
       like_name: '',
       dialogConfirmVisible: false,
-      dialogdeliveryVisible: false
+      dialogdeliveryVisible: false,
+      dialogPrintVisible: false,
+      filename: '',
+      autoWidth: true,
+      bookType: 'xlsx',
+      downloadLoading: false
     }
   },
   computed: {
     order_state() {
       const state = this.orderDetail.order_state
-      console.log('状态', state)
       if (state === 'wait_pay') {
         return '待付款'
       } else if (state === 'wait_affirm') {
@@ -228,14 +371,27 @@ export default {
     }
   },
   created() {
+    this.fetchShopDetails()
     this.fetchShopOrderDetails()
   },
   methods: {
+    fetchShopDetails() {
+      shopDetails().then(response => {
+        this.company_name = response.data.company_name
+        this.admin_name = response.data.admin_name
+      }).catch(error => {
+        console.log(error)
+      })
+    },
     fetchShopOrderDetails() {
       shopOrderDetails({ order_id: this.$route.params.id }).then(res => {
-        // console.log(res)
         this.orderDetail = res.data
         this.tableData = res.data.orderDetails
+
+        this.tableData.forEach(item => {
+          this.$set(item, 'product_unit', '件')
+        })
+        this.filename = this.orderDetail.order_number
       })
     },
     cancelOrder() {
@@ -334,10 +490,87 @@ export default {
     },
     shopOrderModify() {
       // shopOrderInventoryModify().
+    },
+    print() {
+      // Pass the element id here
+      this.$refs.easyPrint.print()
+    },
+    getSummaries(param) {
+      const { columns, data } = param
+      const sums = []
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = '总价'
+          return
+        } else if (index === 1 || index === 2 || index === 3 || index === 5) {
+          sums[index] = ''
+          return
+        }
+        const values = data.map(item => Number(item[column.property]))
+        if (!values.every(value => isNaN(value))) {
+          sums[index] = values.reduce((prev, curr) => {
+            const value = Number(curr)
+            if (!isNaN(value)) {
+              return prev + curr
+            } else {
+              return prev
+            }
+          }, 0)
+        } else {
+          sums[index] = ''
+        }
+      })
+
+      return sums
+    },
+    handleDownload() {
+    // <el-table-column align='center' prop="product_code" label="商品编码">
+    //     </el-table-column>
+    //     <el-table-column align='center' prop="product_name" label="商品名称">
+    //     </el-table-column>
+    //     <el-table-column align='center' prop="product_specification" label="规格">
+    //     </el-table-column>
+    //     <el-table-column align='center' prop="product_specification" label="单位">
+    //     <template slot-scope="scope">
+    //     <span>件</span>
+    //     </template>
+    //     </el-table-column>
+    //     <el-table-column align='center' prop="product_number" label="商品数量">
+    //     </el-table-column>
+    //     <el-table-column align='center' prop="product_price" label="商品单价">
+    //     </el-table-column>
+    //     <el-table-column align='center' prop="product_total_price" label="金额">
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['商品编码', '商品名称', '规格', '单位', '商品数量', '商品单价', '金额']
+        const filterVal = ['product_code', 'product_name', 'product_specification', 'product_unit', 'product_number', 'product_price', 'product_total_price']
+        const list = this.tableData
+        const data = this.formatJson(filterVal, list)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: this.filename,
+          autoWidth: this.autoWidth,
+          bookType: this.bookType
+        })
+        this.downloadLoading = false
+      })
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'timestamp') {
+          return parseTime(v[j])
+        } else {
+          return v[j]
+        }
+      }))
     }
   }
 }
 </script>
 
 <style lang="css">
+  .grid-content {
+    min-height: 30px;
+  }
 </style>
