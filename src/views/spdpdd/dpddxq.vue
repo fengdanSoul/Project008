@@ -273,9 +273,96 @@
               </el-col>
             </el-row>
           </div>
-
-
         </vue-easy-print>
+
+      <table id="tableExcel" v-show="false">
+        <!--头部-->
+        <thead>
+        <tr>
+          <td>店铺名：</td>
+          <td>{{orderDetail.shop_name}}</td>
+          <td>下单日期：</td>
+          <td>{{orderDetail.order_time}}</td>
+        </tr>
+        <tr>
+          <td>订单编号：</td>
+          <td>{{orderDetail.order_number}}</td>
+          <td>预期送货日期：</td>
+          <td>{{orderDetail.delivery_time}}</td>
+        </tr>
+        <tr>
+          <td>送货地址：</td>
+          <td>{{orderDetail.receiving_address}}</td>
+          <td>联系人：</td>
+          <td>{{orderDetail.member_name}}</td>
+          <td>联系电话：</td>
+          <td>{{orderDetail.phone}}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        </thead>
+        <!--内容-->
+        <tbody>
+        <tr>
+          <td>商品编码</td>
+          <td>商品名称</td>
+          <td>规格</td>
+          <td>单位</td>
+          <td>商品数量</td>
+          <td>商品单价</td>
+          <td>金额</td>
+        </tr>
+        <tr v-for="item in tableData">
+          <td>{{ item.product_code }}</td>
+          <td>{{ item.product_name }}</td>
+          <td>{{ item.product_specification }}</td>
+          <td>{{ item.product_unit }}</td>
+          <td>{{ item.product_number }}</td>
+          <td>{{ item.product_price }}</td>
+          <td>{{ item.product_total_price }}</td>
+        </tr>
+        <tr>
+          <td>总价</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>{{ total_num }}</td>
+          <td></td>
+          <td>{{orderDetail.order_total_price}}</td>
+        </tr>
+        </tbody>
+        <!--底部-->
+        <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>制单人：</td>
+          <td>{{admin_name}}</td>
+          <td>送货人：</td>
+          <td>{{orderDetail.delivery_distributor}}</td>
+          <td>收货人：</td>
+          <td>{{orderDetail.member_name}}</td>
+        </tr>
+        <tr>
+          <td>打印日期：</td>
+          <td>{{dateFormat(new Date(), "yyyy/mm/dd")}}</td>
+          <td>打印人：</td>
+          <td>{{admin_name}}</td>
+        </tr>
+        </tfoot>
+      </table>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogPrintVisible = false">取 消</el-button>
@@ -295,6 +382,7 @@ import { shopOrderDetails, shopOrderCancel } from '@/api/shopOrder' //, shopOrde
 import { shopDeliveryList } from '@/api/shop'
 import { shopPayType, shopPayNumber, shopOrderPay, shopOrderDelivery, shopOrderFlag, shopOrderInventoryModify } from '@/api/shopOrder' // shopOrderDelivery, shopOrderDelivery, shopOrderFlag, shopOrderDetails
 import vueEasyPrint from 'vue-easy-print'
+var tableExport = require('table-export')
 var dateFormat = require('dateformat')
 export default {
   components: {
@@ -524,37 +612,25 @@ export default {
       return sums
     },
     handleDownload() {
-    // <el-table-column align='center' prop="product_code" label="商品编码">
-    //     </el-table-column>
-    //     <el-table-column align='center' prop="product_name" label="商品名称">
-    //     </el-table-column>
-    //     <el-table-column align='center' prop="product_specification" label="规格">
-    //     </el-table-column>
-    //     <el-table-column align='center' prop="product_specification" label="单位">
-    //     <template slot-scope="scope">
-    //     <span>件</span>
-    //     </template>
-    //     </el-table-column>
-    //     <el-table-column align='center' prop="product_number" label="商品数量">
-    //     </el-table-column>
-    //     <el-table-column align='center' prop="product_price" label="商品单价">
-    //     </el-table-column>
-    //     <el-table-column align='center' prop="product_total_price" label="金额">
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['商品编码', '商品名称', '规格', '单位', '商品数量', '商品单价', '金额']
-        const filterVal = ['product_code', 'product_name', 'product_specification', 'product_unit', 'product_number', 'product_price', 'product_total_price']
-        const list = this.tableData
-        const data = this.formatJson(filterVal, list)
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: this.filename,
-          autoWidth: this.autoWidth,
-          bookType: this.bookType
-        })
-        this.downloadLoading = false
-      })
+      console.log('-----------------')
+      // dom id, filename, type: json, txt, csv, xml, doc, xsl, image, pdf
+      tableExport('tableExcel', this.filename, 'xls')
+
+      // this.downloadLoading = true
+      // import('@/vendor/Export2Excel').then(excel => {
+      //   const tHeader = ['商品编码', '商品名称', '规格', '单位', '商品数量', '商品单价', '金额']
+      //   const filterVal = ['product_code', 'product_name', 'product_specification', 'product_unit', 'product_number', 'product_price', 'product_total_price']
+      //   const list = this.tableData
+      //   const data = this.formatJson(filterVal, list)
+      //   excel.export_json_to_excel({
+      //     header: tHeader,
+      //     data,
+      //     filename: this.filename,
+      //     autoWidth: this.autoWidth,
+      //     bookType: this.bookType
+      //   })
+      //   this.downloadLoading = false
+      // })
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
