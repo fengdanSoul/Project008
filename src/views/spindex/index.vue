@@ -4,7 +4,7 @@
       今日提醒
     </p>
     <el-row :gutter='20'>
-      <el-col :span="6" v-if="jrtxs.promotion_1">
+      <el-col :span="12" v-if="jrtxs.promotion_1">
         <el-card shadow="always">
           <div class="jrtx_box">
               <div class="jrtx_left">
@@ -18,7 +18,7 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="6" v-if="jrtxs.promotion_2">
+      <el-col :span="12" v-if="jrtxs.promotion_2">
         <el-card shadow="always">
           <div class="jrtx_box">
             <div class="jrtx_left">

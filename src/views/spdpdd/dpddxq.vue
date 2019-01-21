@@ -162,7 +162,7 @@
 
     <el-dialog title="订单" :visible.sync="dialogPrintVisible"  width="80%">
         <vue-easy-print tableShow ref="easyPrint" >
-          <div style="width: 800px; margin: auto">
+          <div  class="tablePrint" style="width: 800px; margin: auto;font-size: 13px;font-family: “Arial”,”Microsoft YaHei”,”黑体”,”宋体”,sans-serif;">
             <p style="text-align: center">销货单</p>
             <el-row>
               <el-col :span="8">
@@ -216,27 +216,65 @@
               </el-col>
             </el-row>
 
+            <table border="0" cellspacing="0" cellpadding="0" width="100%">
+              <!--内容-->
+              <tbody>
+              <tr>
+                <td>商品编码</td>
+                <td>商品名称</td>
+                <td>规格</td>
+                <td>单位</td>
+                <td>商品数量</td>
+                <td>商品单价</td>
+                <td>金额</td>
+              </tr>
+              <tr v-for="item in tableData">
+                <td>{{ item.product_code }}</td>
+                <td>{{ item.product_name }}</td>
+                <td>{{ item.product_specification }}</td>
+                <td>{{ item.product_unit }}</td>
+                <td>{{ item.product_number }}</td>
+                <td>{{ item.product_price }}</td>
+                <td>{{ item.product_total_price }}</td>
+              </tr>
+              <tr>
+                <td>总价</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ total_num }}</td>
+                <td></td>
+                <td>{{orderDetail.order_total_price}}</td>
+              </tr>
+              </tbody>
 
+            </table>
 
-            <el-table :data="tableData" show-summary :summary-method="getSummaries" border  >
-              <el-table-column align='center' prop="product_code" label="商品编码">
-              </el-table-column>
-              <el-table-column align='center' prop="product_name" label="商品名称">
-              </el-table-column>
-              <el-table-column align='center' prop="product_specification" label="规格">
-              </el-table-column>
-              <el-table-column align='center' prop="product_unit" label="单位">
-                <!--<template slot-scope="scope">-->
-                  <!--<span>件</span>-->
-                <!--</template>-->
-              </el-table-column>
-              <el-table-column align='center' prop="product_number" label="商品数量">
-              </el-table-column>
-              <el-table-column align='center' prop="product_price" label="商品单价">
-              </el-table-column>
-              <el-table-column align='center' prop="product_total_price" label="金额">
-              </el-table-column>
-            </el-table>
+            <!--<el-table-->
+              <!--:data="tableData"-->
+              <!--show-summary-->
+              <!--:summary-method="getSummaries"-->
+              <!--size="mini"-->
+              <!--cellspacing="0" cellpadding="0"-->
+              <!--style="font-size: 12px; width: 100%;border: 1px black solid ;">-->
+              <!--<el-table-column align='center' prop="product_code" label="商品编码">-->
+              <!--</el-table-column>-->
+              <!--<el-table-column align='center' prop="product_name" label="商品名称" width="300">-->
+              <!--</el-table-column>-->
+              <!--<el-table-column align='center' prop="product_specification" label="规格" >-->
+              <!--</el-table-column>-->
+              <!--<el-table-column align='center' prop="product_unit" label="单位" >-->
+                <!--&lt;!&ndash;<template slot-scope="scope">&ndash;&gt;-->
+                  <!--&lt;!&ndash;<span>件</span>&ndash;&gt;-->
+                <!--&lt;!&ndash;</template>&ndash;&gt;-->
+              <!--</el-table-column>-->
+              <!--<el-table-column align='center' prop="product_number" label="商品数量" >-->
+              <!--</el-table-column>-->
+              <!--<el-table-column align='center' prop="product_price" label="商品单价" >-->
+              <!--</el-table-column>-->
+              <!--<el-table-column align='center' prop="product_total_price" label="金额" >-->
+              <!--</el-table-column>-->
+            <!--</el-table>-->
 
             <el-row>
               <el-col :span="8">
@@ -646,6 +684,11 @@ export default {
 </script>
 
 <style lang="css">
+  /*.tablePrint table{text-align: center ;border-right:1px solid #000;border-bottom:1px solid #000}*/
+  /*.tablePrint table td{border-left:1px solid #000;border-top:1px solid #000}*/
+
+  .tablePrint table{border:0.5px solid #000;border-collapse: collapse;text-align: center ;}
+  .tablePrint table td{border:0.5px solid #000;}
   .grid-content {
     min-height: 30px;
   }
